@@ -1,4 +1,4 @@
-package com.example.turnpage.global.config.security;
+package com.example.turnpage.global.config.security.member;
 
 import com.example.turnpage.domain.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;

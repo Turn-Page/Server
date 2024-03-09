@@ -41,6 +41,11 @@ logging:
   pattern:
   dateformat: yyyy-MM-dd HH:mm:ss.SSS, Asia/Seoul
 
+jwt:
+  secret: SuminKangyeonarestudyingTogether
+  access-token-validity-in-seconds: 36000
+  refresh-token-validity-in-seconds:
+
 
 cloud:
   aws:
