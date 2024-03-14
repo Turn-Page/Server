@@ -14,12 +14,12 @@ public class MemberSignupRequestDto {
     private String username;
     private String password;
 
-    public Member toEntity() {
+    public Member toEntity(String role) {
         return Member.builder()
-                .name(username.split("@")[0])
+                .name(username)
                 .email(username)
                 .password(password)
-                .role("USER")
+                .role(role)
                 .inviteCode(RandomStringUtils.random(10, true, true))
                 .build();
     }
