@@ -1,4 +1,4 @@
-package com.example.turnpage.global.config.security.member;
+package com.example.turnpage.global.config.security.service;
 
 import com.example.turnpage.domain.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;
@@ -23,9 +23,9 @@ public class MemberDetails implements UserDetails {
     }
 
     @Override
+    @Deprecated
     public String getPassword() {
-        // 우리 프로젝트는 OAuth 이용 예정이므로, 현재 연습 구현 시 비밀번호는 "password"로 통일한다.
-        return member.getPassword();
+        return null;
     }
 
     @Override

@@ -12,6 +12,7 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -32,15 +33,15 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private String email;
 
-    // OAuth 적용 전까지 임시로 사용된다. 모든 계정의 비밀번호는 "password"로 설정.
-    @Column(nullable = false)
-    private String password;
-
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
     private String image;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SocialType socialType;
 
     @Column(name = "invite_code", nullable = false)
     private String inviteCode;
@@ -49,14 +50,14 @@ public class Member extends BaseTimeEntity {
     private int point;
 
     @Builder
-    public Member(String name, String email, String password, String role, String image, String inviteCode) {
+    public Member(String name, String email, String password, String role, String image, String socialType) {
         this.id = null;
         this.name = name;
         this.email = email;
-        this.password = password;
         this.role = Role.valueOf(role);
         this.image = image;
-        this.inviteCode = inviteCode;
+        this.socialType = SocialType.valueOf(socialType);
+        this.inviteCode = RandomStringUtils.random(10, true, true);
         this.point = 0;
     }
 

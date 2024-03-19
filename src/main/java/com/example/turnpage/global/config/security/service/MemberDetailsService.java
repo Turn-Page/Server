@@ -1,4 +1,4 @@
-package com.example.turnpage.global.config.security.member;
+package com.example.turnpage.global.config.security.service;
 
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.repository.MemberRepository;

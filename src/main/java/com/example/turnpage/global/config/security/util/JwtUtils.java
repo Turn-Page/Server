@@ -1,12 +1,10 @@
 package com.example.turnpage.global.config.security.util;
 
-import com.example.turnpage.domain.member.entity.Member;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
@@ -14,6 +12,9 @@ import org.springframework.stereotype.Component;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -27,25 +28,20 @@ public class JwtUtils {
     private static final String SIGNATURE_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private static final String PAYLOAD_AUTHORITIES_KEY = "authorities";
     private static final String PAYLOAD_MEMBER_ID_KEY = "memberId";
-    @Value("${jwt.access-token-validity-in-seconds}")
-    private Long expiredMs;
 
     JwtUtils(@Value("${jwt.secret}") String secret) {
         System.out.println("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SIGNATURE_ALGORITHM);
     }
 
-    // 필요한 메소드 목록
-    // JWT 발급 메소드
-    // JWT 검증 메소드
 
-    public String getUsername(String token) {
+    public String getEmail(String token) {
         return Jwts.parser()
                 .verifyWith(secretKey)
                 .build()
                 .parseSignedClaims(token)
                 .getPayload()
-                .get("username", String.class);
+                .get("email", String.class);
     }
 
     public String getRole(String token) {
@@ -66,12 +62,16 @@ public class JwtUtils {
                 .getExpiration().before(new Date());
     }
 
-    public String createJwt(String username, String role) {
+    public String createJwt(String email, String role, Long seconds) {
+        final LocalDateTime now = LocalDateTime.now();
+        final Date issuedDate = localDateTimeToDate(now);
+        final Date expiredDate = localDateTimeToDate(now.plusSeconds(seconds));
+
         return Jwts.builder()
-                .claim("username", username)
-                .claim("authorities", role)
-                .issuedAt(new Date(System.currentTimeMillis()))
-                .expiration(new Date(System.currentTimeMillis() + expiredMs * 10))
+                .claim("email", email)
+                .claim("role", role)
+                .issuedAt(issuedDate)
+                .expiration(expiredDate)
                 .signWith(secretKey)
                 .compact();
     }
@@ -94,5 +94,10 @@ public class JwtUtils {
         final Long memberId = payload.get(PAYLOAD_MEMBER_ID_KEY, Long.class);
         final User principal = new User(String.valueOf(memberId), "", authorities);
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
+    }
+
+    private Date localDateTimeToDate(LocalDateTime localDateTime) {
+        Instant instant = localDateTime.atZone(ZoneId.systemDefault()).toInstant();
+        return Date.from(instant);
     }
 }
