@@ -26,7 +26,7 @@ public class JwtUtils {
 
     // "HMACSHA256" 알고리즘명을 저장
     private static final String SIGNATURE_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
-    private static final String PAYLOAD_AUTHORITIES_KEY = "authorities";
+    private static final String PAYLOAD_ROLE_KEY = "role";
     private static final String PAYLOAD_MEMBER_ID_KEY = "memberId";
 
     JwtUtils(@Value("${jwt.secret}") String secret) {
@@ -84,7 +84,7 @@ public class JwtUtils {
                 .getPayload();
 
         final List<SimpleGrantedAuthority> authorities = Arrays.stream(
-                payload.get(PAYLOAD_AUTHORITIES_KEY).toString().split(","))
+                payload.get(PAYLOAD_ROLE_KEY).toString().split(","))
                 .map(authority -> "ROLE_" + authority)
                 .map(authority -> new SimpleGrantedAuthority(authority))
                 .collect(Collectors.toList());
