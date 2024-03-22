@@ -2,10 +2,8 @@ package com.example.turnpage.global.config.security.service;
 
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.repository.MemberRepository;
+import com.example.turnpage.global.config.security.attribute.OAuthAttribute;
 import com.example.turnpage.global.config.security.user.CustomOAuth2User;
-import com.example.turnpage.global.config.security.attribute.GoogleAttribute;
-import com.example.turnpage.global.config.security.attribute.KakaoAttribute;
-import com.example.turnpage.global.config.security.attribute.OAuth2Attribute;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -34,28 +32,23 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
         Map<String, Object> originAttributes = oAuth2User.getAttributes();
         String registrationId = userRequest.getClientRegistration().getRegistrationId();
 
-        final OAuth2Attribute oAuth2Attribute;
-        if (registrationId.equals(KakaoAttribute.KAKAO_PROVIDER)) {
-            oAuth2Attribute = new KakaoAttribute(originAttributes);
-        } else if (registrationId.equals(GoogleAttribute.GOOGLE_PROVIDER)) {
-            oAuth2Attribute = new GoogleAttribute(originAttributes);
-        } else {
+        final OAuthAttribute oAuthAttribute = OAuthAttribute.of(registrationId, originAttributes);
+        if (oAuthAttribute == null) {
             return null;
         }
 
-        Member member = saveOrUpdate(oAuth2Attribute);
+        Member member = saveOrUpdate(oAuthAttribute);
         Set<GrantedAuthority> authorities = Collections.singleton(new SimpleGrantedAuthority(member.getRole().toString()));
 
-        return new CustomOAuth2User(authorities, oAuth2Attribute.getAttributes(), oAuth2Attribute.getNameAttributesKey(),
-                oAuth2Attribute);
+        return new CustomOAuth2User(authorities, oAuthAttribute.getAttributes(), oAuthAttribute.getUsernameAttributeKey(),
+                oAuthAttribute);
     }
 
-    // 이미 가입된 회원인지 판단 후, 그에 따라 DB 저장 및 변경 수행
-    public Member saveOrUpdate(OAuth2Attribute oAuth2Attribute) {
-        Member member = memberRepository.findByEmail(oAuth2Attribute.getEmail())
-                // member를 update해야 하는가? 소셜 플랫폼의 정보와 우리 서비스의 정보는 별도로 관리할 건데.
-                // .map(member -> member.update(oAuth2Attribute.getNickname()))
-                .orElse(oAuth2Attribute.toEntity());
+    // 이미 가입된 회원인지 판단 후, 결과에 따라 데이터 변경 및 저장 수행
+    public Member saveOrUpdate(OAuthAttribute oAuthAttribute) {
+        Member member = memberRepository.findByEmail(oAuthAttribute.getEmail())
+                .map(entity -> entity.update(oAuthAttribute.getName(), oAuthAttribute.getProfileImage()))
+                .orElse(oAuthAttribute.toEntity());
 
         return memberRepository.save(member);
     }

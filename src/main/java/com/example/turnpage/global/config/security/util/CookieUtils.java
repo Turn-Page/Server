@@ -20,15 +20,14 @@ public class CookieUtils {
         // HTTPS 적용 시 함께 적용
         // cookie.setSecure(true);
         // cookie.setHttpOnly(true);
-
         response.addCookie(cookie);
     }
 
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response,
                                     String name) {
-        Cookie cookie = WebUtils.getCookie(request, name);
-        if (cookie != null) {
-            cookie.setValue(null);
+        Cookie targetCookie = WebUtils.getCookie(request, name);
+        if (targetCookie != null) {
+            Cookie cookie = new Cookie(targetCookie.getName(), null);
             cookie.setDomain(DOMAIN);
             cookie.setPath("/");
             cookie.setMaxAge(0);
@@ -43,7 +42,6 @@ public class CookieUtils {
 
     // 쿠키를 역직렬화 해 객체로 변환
     public static <T> T deserialize(Cookie cookie, Class<T> cls) {
-        return cls.cast(
-                SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
+        return cls.cast(SerializationUtils.deserialize(Base64.getUrlDecoder().decode(cookie.getValue())));
     }
 }

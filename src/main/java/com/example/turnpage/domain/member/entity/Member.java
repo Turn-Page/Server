@@ -28,10 +28,10 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @Column(nullable = false)
-    private String name;
+    private String email;
 
     @Column(nullable = false)
-    private String email;
+    private String name;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -59,6 +59,13 @@ public class Member extends BaseTimeEntity {
         this.socialType = SocialType.valueOf(socialType);
         this.inviteCode = RandomStringUtils.random(10, true, true);
         this.point = 0;
+    }
+
+    public Member update(String name, String image) {
+        this.name = name;
+        this.image = image;
+
+        return this;
     }
 
 }

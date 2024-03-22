@@ -1,6 +1,6 @@
 package com.example.turnpage.global.config.security.user;
 
-import com.example.turnpage.global.config.security.attribute.OAuth2Attribute;
+import com.example.turnpage.global.config.security.attribute.OAuthAttribute;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.DefaultOAuth2User;
 
@@ -8,19 +8,19 @@ import java.util.Collection;
 import java.util.Map;
 
 public class CustomOAuth2User extends DefaultOAuth2User {
-    private OAuth2Attribute oAuth2Attribute;
+    private OAuthAttribute oAuthAttribute;
 
     public CustomOAuth2User(Collection<? extends GrantedAuthority> authorities, Map<String, Object> attributes, String nameAttributeKey,
-                            OAuth2Attribute oAuth2Attribute) {
+                            OAuthAttribute oAuthAttribute) {
         super(authorities,attributes,nameAttributeKey);
-        this.oAuth2Attribute = oAuth2Attribute;
+        this.oAuthAttribute = oAuthAttribute;
     }
 
-    public OAuth2Attribute getoAuth2Attribute() {
-        return oAuth2Attribute;
+    public OAuthAttribute getoAuthAttribute() {
+        return oAuthAttribute;
     }
 
     public String getEmail() {
-        return this.oAuth2Attribute.getEmail();
+        return this.oAuthAttribute.getEmail();
     }
 }

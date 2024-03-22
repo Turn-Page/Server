@@ -23,7 +23,6 @@ import java.io.IOException;
 @RequiredArgsConstructor
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
-    private static final String JWT_PREFIX = "Bearer ";
     private final JwtUtils jwtUtils;
     private final RefreshTokenService refreshTokenService;
     private final MemberRepository memberRepository;
@@ -53,7 +52,6 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
 
         // access token
         String accessToken = jwtUtils.createJwt(email, role, ACCESS_TOKEN_VALIDITY_IN_SECONDS);
-        response.addHeader(AUTHORIZATION_HEADER, accessToken);
         CookieUtils.addCookie(response, AUTHORIZATION_HEADER, accessToken, ACCESS_TOKEN_VALIDITY_IN_SECONDS.intValue());
 
         // refresh token
@@ -61,7 +59,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         refreshTokenService.saveRefreshToken(member.getId(), refreshToken);
         CookieUtils.addCookie(response, REFRESH_TOKEN_KEY, refreshToken, REFRESH_TOKEN_VALIDITY_IN_SECONDS.intValue());
 
-        // clearAuthenticationAttributes(request, response);
+        clearAuthenticationAttributes(request, response);
         response.sendRedirect("http://localhost.com:8080/public");
     }
 

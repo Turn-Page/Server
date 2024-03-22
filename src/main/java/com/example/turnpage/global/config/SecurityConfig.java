@@ -44,7 +44,6 @@ public class SecurityConfig {
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
         return new OAuth2LoginSuccessHandler(jwtUtils, refreshTokenService, memberRepository, oAuth2AuthorizationRequestBasedOnCookieRepository());
-                // refreshTokenRepository, memberService, oAuth2AuthorizationRequestBasedOnCookieRepository());
     }
 
     @Bean
