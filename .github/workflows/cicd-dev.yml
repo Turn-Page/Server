@@ -44,9 +44,9 @@ jobs:
       # docker compose에 사용될 환경 변수들을 위해 env파일 만들기
       - name: Set up environment variables
         run: |
-          echo "DOCKER_USER_NAME=${{ secrets.DOCKER_USERNAME }}" >> dev.env
-          echo "DOCKER_IMAGE_NAME=${{ secrets.DOCKER_IMAGENAME }}" >> dev.env
-          echo "DOCKER_IMAGE_TAG=${{ secrets.DOCKER_TAG }}" >> dev.env
+          echo "DOCKER_USER_NAME=${{ secrets.DOCKERHUB_USERNAME }}" >> dev.env
+          echo "DOCKER_IMAGE_NAME=${{ secrets.DOCKERHUB_IMAGENAME }}" >> dev.env
+          echo "DOCKER_IMAGE_TAG=${{ secrets.DOCKERHUB_TAG }}" >> dev.env
           echo "SPRING_OUTER_PORT=${{ secrets.SPRING_OUTER_PORT }}" >> dev.env
           echo "SPRING_INNER_PORT=${{ secrets.SPRING_INNER_PORT }}" >> dev.env
 
