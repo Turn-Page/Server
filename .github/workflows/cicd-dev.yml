@@ -1,0 +1,69 @@
+name: Docker Hub Dev Deploy
+
+on:
+  push:
+    branches:
+      - develop
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      
+      - name: make application.yml
+        run: |
+          # create application.yml
+          cd ./src/main
+          cd ./resources
+
+          # application.yml 파일 생성하기
+          touch ./application.yml
+
+          # Secrets에 저장한 값을 application.yml 파일에 쓰기
+          echo "${{ secrets.DEV_YML }}" >> ./application.yml
+     
+      
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+     
+        
+      - name: Build
+        run: docker build --no-cache -t ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME }}:${{secrets.DOCKERHUB_TAG}} .
+
+      - name: Dockerhub login
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN_READ_WRITE }}
+
+      - name: Push
+        run: docker push ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME}}:${{secrets.DOCKERHUB_TAG }}
+
+      - name: Copy docker-compose.yml
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: /home/ubuntu
+
+    
+      - name: Deploy to server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SSH_HOST }}
+          port: ${{ secrets.SSH_PORT }}
+          username: ${{ secrets.SSH_USERNAME }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /home/ubuntu
+            sudo docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_TOKEN_READ_ONLY }}
+            sudo docker container stop turnpage-dev
+            sudo docker container rm turnpage-dev
+            sudo docker image rm  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME}}:${{secrets.DOCKERHUB_TAG }}
+            sudo docker-compose -f docker-compose.yml up -d
+            sudo docker container prune -f
+            sudo docker image prune -a -f
