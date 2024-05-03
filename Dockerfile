@@ -22,3 +22,7 @@ WORKDIR /app
 
 # jar파일 가져오기 , 이전 스테이지 builder에서 생성된 jar파일을 복사해옴
 COPY --from=builder /app/build/libs/*.jar /app/turnpage.jar
+
+EXPOSE 8080
+
+ENTRYPOINT java -jar /app/turnpage.jar 
