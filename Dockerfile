@@ -10,7 +10,7 @@ COPY gradle ./gradle
 COPY src ./src
 
 # jar파일 생성
-RUN ./gradlw bootJar
+RUN ./gradlew bootJar
 
 #두번째 레이어
 
