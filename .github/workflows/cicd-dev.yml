@@ -75,6 +75,6 @@ jobs:
             sudo docker container stop turnpage-dev
             sudo docker container rm turnpage-dev
             sudo docker image rm  ${{ secrets.DOCKERHUB_USERNAME }}/${{ secrets.DOCKERHUB_IMAGENAME}}:${{secrets.DOCKERHUB_TAG }}
-            sudo docker compose --env-file dev.env -f docker-compose.yml up -d
-            sudo docker container prune -f
-            sudo docker image prune -a -f
+            sudo docker compose --env-file dev.env -f docker-compose.yml up -d  
+          # sudo docker container prune -f
+          # sudo docker image prune -a -f
