@@ -20,7 +20,6 @@ public class MemberSignupRequestDto {
                 .email(username)
                 .password(password)
                 .role(role)
-                .inviteCode(RandomStringUtils.random(10, true, true))
                 .build();
     }
 }

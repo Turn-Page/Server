@@ -1,36 +1,32 @@
 package com.example.turnpage.domain.member.controller;
 
 import com.example.turnpage.domain.member.dto.MemberLoginRequestDto;
-import com.example.turnpage.domain.member.dto.MemberSignupRequestDto;
+import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.member.entity.redis.RefreshToken;
 import com.example.turnpage.domain.member.service.MemberService;
+import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
+import com.example.turnpage.global.config.security.util.CookieUtils;
+import com.example.turnpage.global.config.security.util.JwtUtils;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.util.WebUtils;
 
 @RequiredArgsConstructor
 @Controller
 public class AuthController {
+    @Value("${jwt.access-token-validity-in-seconds}")
+    private Long ACCESS_TOKEN_VALIDITY_IN_SECONDS;
+    private static final String AUTHORIZATION_HEADER = "Authorization";
     private final MemberService memberService;
-
-    @GetMapping("/auth/signup")
-    public String signup() {
-        return "signup";
-    }
-
-    @PostMapping("/auth/signup")
-    @ResponseBody
-    public String signup(@RequestParam String username, String password) {
-        MemberSignupRequestDto memberSignupRequestDto = new MemberSignupRequestDto();
-        memberSignupRequestDto.setUsername(username);
-        memberSignupRequestDto.setPassword(password);
-
-        Long memberId = memberService.signup(memberSignupRequestDto);
-        return "회원가입에 성공하였습니다. 새로 등록된 회원의 memberId: " + memberId;
-    }
+    private final RefreshTokenService refreshTokenService;
+    private final JwtUtils jwtUtils;
 
     @GetMapping("/auth/login")
     public String login() {
@@ -41,4 +37,18 @@ public class AuthController {
     public @ResponseBody String loginProcess(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
         return "hi";
     }
+
+    @GetMapping("/auth/reissue")
+    @ResponseBody
+    public String reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
+        String refreshTokenStr = WebUtils.getCookie(request, "refresh_token").getValue();
+        RefreshToken refreshToken = refreshTokenService.findByRefreshToken(refreshTokenStr);
+        Member member = memberService.findMember(refreshToken.getMemberId());
+
+        String accessToken = jwtUtils.createJwt(member.getEmail(), member.getRole().toString(), ACCESS_TOKEN_VALIDITY_IN_SECONDS);
+        response.addHeader(AUTHORIZATION_HEADER, accessToken);
+        CookieUtils.addCookie(response, AUTHORIZATION_HEADER, accessToken, ACCESS_TOKEN_VALIDITY_IN_SECONDS.intValue());
+        return "reissue";
+    }
+
 }

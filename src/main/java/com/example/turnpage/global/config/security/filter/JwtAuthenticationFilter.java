@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Base64;
 
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_TYPE = "Bearer ";
@@ -19,11 +20,12 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.jwtUtils = jwtUtils;
     }
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
+
         String authorization = request.getHeader("Authorization");
 
-        if (authorization == null || !authorization.startsWith(AUTHORIZATION_TYPE)) {
-            System.out.println("토큰이 존재하지 않거나, 인증 타입이 Bearer가 아닙니다.");
+        if (!validateJwtIsPresent(authorization)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -40,5 +42,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
+    }
+
+    private boolean validateJwtIsPresent(String authorization) {
+        if (authorization == null || !authorization.startsWith(AUTHORIZATION_TYPE)) {
+            System.out.println("토큰이 존재하지 않거나, 인증 타입이 Bearer가 아닙니다.");
+            return false;
+        }
+
+        return true;
     }
 }
