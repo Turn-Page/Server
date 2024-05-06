@@ -59,7 +59,7 @@ public class OAuthAttribute {
                 .name(name)
                 // 임시로 OAuth 가입 시 USER로 권한 세팅함. 추후 고민
                 .role(Role.USER.toString())
-                .image(null)
+                .image(profileImage)
                 .socialType(provider.toString())
                 .build();
     }
