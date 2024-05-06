@@ -3,6 +3,7 @@ package com.example.turnpage.global.config;
 import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
 import com.example.turnpage.global.config.security.filter.JwtAuthenticationFilter;
+import com.example.turnpage.global.config.security.handler.CustomAccessDeniedHandler;
 import com.example.turnpage.global.config.security.handler.OAuth2LoginSuccessHandler;
 import com.example.turnpage.global.config.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.turnpage.global.config.security.service.CustomOAuth2UserService;
@@ -10,6 +11,7 @@ import com.example.turnpage.global.config.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -35,6 +37,7 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final RefreshTokenService refreshTokenService;
+    private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
     @Bean
     public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
@@ -52,6 +55,9 @@ public class SecurityConfig {
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
+                .sessionManagement((session) -> session
+                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
@@ -65,9 +71,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .sessionManagement((session) -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                )
+                .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler))
                 .oauth2Login(oauth2 -> oauth2
                                 .loginPage("/auth/login")
                         .authorizationEndpoint(endpoint -> endpoint

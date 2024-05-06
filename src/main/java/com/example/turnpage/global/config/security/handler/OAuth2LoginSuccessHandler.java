@@ -60,7 +60,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         CookieUtils.addCookie(response, REFRESH_TOKEN_KEY, refreshToken, REFRESH_TOKEN_VALIDITY_IN_SECONDS.intValue());
 
         clearAuthenticationAttributes(request, response);
-        response.sendRedirect("http://localhost.com:8080/public");
+        response.sendRedirect("/public");
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

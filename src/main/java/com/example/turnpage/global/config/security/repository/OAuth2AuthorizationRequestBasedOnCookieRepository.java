@@ -21,9 +21,11 @@ public class OAuth2AuthorizationRequestBasedOnCookieRepository implements Author
         }
 
         Cookie authorizationRequestCookie = WebUtils.getCookie(request, OAUTH2_AUTHORIZATION_REQUEST_COOKIE_NAME);
-        OAuth2AuthorizationRequest authorizationRequest = CookieUtils.deserialize(authorizationRequestCookie, OAuth2AuthorizationRequest.class);
-        if (authorizationRequest != null && stateParameter.equals(authorizationRequest.getState())) {
-            return authorizationRequest;
+        if (authorizationRequestCookie != null) {
+            OAuth2AuthorizationRequest authorizationRequest = CookieUtils.deserialize(authorizationRequestCookie, OAuth2AuthorizationRequest.class);
+            if (stateParameter.equals(authorizationRequest.getState()))
+                return authorizationRequest;
+            else return null;
         } else {
             return null;
         }
