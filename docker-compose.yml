@@ -1,5 +1,3 @@
-version: '3.8'
-
 services:
   spring-application:
     container_name: turnpage-dev
