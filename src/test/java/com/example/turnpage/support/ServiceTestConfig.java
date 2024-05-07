@@ -27,6 +27,9 @@ public abstract class ServiceTestConfig {
                         .role(Role.USER)
                         .socialType(SocialType.GOOGLE)
                         .point(0)
+                        .reportCount(0)
+                        .purchaseCount(0)
+                        .saleCount(0)
                         .build()
         );
     }

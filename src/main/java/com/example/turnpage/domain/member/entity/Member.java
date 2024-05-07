@@ -51,6 +51,16 @@ public class Member extends BaseTimeEntity {
     @ColumnDefault("0")
     private int point;
 
+    @ColumnDefault("0")
+    private int reportCount;
+
+    @ColumnDefault("0")
+    private int saleCount;
+
+    @ColumnDefault("0")
+    private int purchaseCount;
+
+
     @Builder
     public Member(String name, String email, String role, String image, String socialType) {
         this.name = name;

@@ -47,6 +47,9 @@ public abstract class ControllerTestConfig {
                 .inviteCode("sefuhdjs")
                 .point(0)
                 .socialType(SocialType.GOOGLE)
+                .reportCount(0)
+                .purchaseCount(0)
+                .saleCount(0)
                 .image(null).build();
     }
 
