@@ -41,16 +41,17 @@ public abstract class ControllerTestConfig {
     protected Member createMember() {
         return Member.builder()
                 .id(1L)
-                .role(Role.USER)
-                .email("sumin@gmail.com")
                 .name("수밈")
-                .inviteCode("sefuhdjs")
-                .point(0)
+                .email("sumin@gmail.com")
+                .inviteCode("aaaaaa")
+                .image("http://t1.kakaocdn.net/account_images/default_profile.jpeg.twg.thumb.R640x640")
+                .role(Role.USER)
                 .socialType(SocialType.GOOGLE)
+                .point(0)
                 .reportCount(0)
                 .purchaseCount(0)
                 .saleCount(0)
-                .image(null).build();
+                .build();
     }
 
 
