@@ -8,17 +8,17 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE member SET deleted_at = CURRENT_TIMESTAMP WHERE member_id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class Member extends BaseTimeEntity {
@@ -48,11 +48,11 @@ public class Member extends BaseTimeEntity {
     private String inviteCode;
 
     @Column(nullable = false)
+    @ColumnDefault("0")
     private int point;
 
     @Builder
-    public Member(String name, String email, String password, String role, String image, String socialType) {
-        this.id = null;
+    public Member(String name, String email, String role, String image, String socialType) {
         this.name = name;
         this.email = email;
         this.role = Role.valueOf(role);
