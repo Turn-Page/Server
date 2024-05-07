@@ -37,6 +37,7 @@ public class Member extends BaseTimeEntity {
     @Column(nullable = false)
     private Role role;
 
+    @Column(columnDefinition = "TEXT")
     private String image;
 
     @Enumerated(EnumType.STRING)
