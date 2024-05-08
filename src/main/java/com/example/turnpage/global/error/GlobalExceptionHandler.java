@@ -56,7 +56,7 @@ public class GlobalExceptionHandler {
 
     // multipart/form-data 요청에 특정 문제가 생길 시 발생하는 예외 처리
     // ex) 파일 데이터 일부 손실
-    @ExceptionHandler
+    @ExceptionHandler(value = MissingServletRequestPartException.class)
     protected ResponseEntity<ErrorResponse> handleMissingServletRequestPartException(
             MissingServletRequestPartException e) {
         final ErrorResponse response = ErrorResponse.of(INVALID_INPUT.getErrorCode(), e.getRequestPartName());
@@ -64,7 +64,7 @@ public class GlobalExceptionHandler {
     }
 
     // 요청에 포함되어 있어야 하는 쿠키가 없어 매핑되지 못할 경우 발생하는 예외 처리
-    @ExceptionHandler
+    @ExceptionHandler(value = MissingRequestCookieException.class)
     protected ResponseEntity<ErrorResponse> handleMissingServletRequestPartException(
             MissingRequestCookieException e) {
         final ErrorResponse response = ErrorResponse.of(INVALID_INPUT.getErrorCode(), e.getCookieName());
@@ -72,7 +72,7 @@ public class GlobalExceptionHandler {
     }
 
     // enum 타입으로 값을 매핑할 때, 대응하는 enum 상수가 없을 경우 발생하는 예외 처리
-    @ExceptionHandler
+    @ExceptionHandler(value = MethodArgumentTypeMismatchException.class)
     protected ResponseEntity<ErrorResponse> handleMethodArgumentTypeMismatchException(
             MethodArgumentTypeMismatchException e) {
         final ErrorResponse response = ErrorResponse.of(e);
@@ -80,14 +80,14 @@ public class GlobalExceptionHandler {
     }
 
     // JSON 파싱 시 JSON 형식을 지키지 않았거나, Request Body와 구조가 다른 이유 등으로 Converter가 데이터를 읽지 못할 경우 발생하는 예외 처리
-    @ExceptionHandler
+    @ExceptionHandler(value = HttpMessageNotReadableException.class)
     protected ResponseEntity<ErrorResponse> handleHttpMessageNotReadableException(HttpMessageNotReadableException e) {
         final ErrorResponse response = ErrorResponse.of(GlobalErrorCode.HTTP_MESSAGE_NOT_READABLE.getErrorCode());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
 
     // 현재 요청의 HTTP METHOD를 지원하지 않을 경우 발생하는 예외 처리
-    @ExceptionHandler
+    @ExceptionHandler(value = HttpRequestMethodNotSupportedException.class)
     protected ResponseEntity<ErrorResponse> handleHttpRequestMethodNotSupportedException(
             HttpRequestMethodNotSupportedException e) {
         final List<ErrorResponse.FieldError> errors = new ArrayList<>();
