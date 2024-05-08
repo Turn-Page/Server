@@ -1,8 +1,6 @@
 package com.example.turnpage.global.error;
 
 import com.example.turnpage.global.error.domain.GlobalErrorCode;
-import com.example.turnpage.global.error.exception.BusinessException;
-import com.example.turnpage.global.error.exception.EntityNotFoundException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -94,13 +92,6 @@ public class GlobalExceptionHandler {
         errors.add(new ErrorResponse.FieldError("http method", e.getMethod(), GlobalErrorCode.METHOD_NOT_ALLOWED.getMessage()));
         final ErrorResponse response = ErrorResponse.of(GlobalErrorCode.HTTP_HEADER_INVALID.getErrorCode(), errors);
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
-    }
-
-    // DB의 테이블을 조회해 반환받은 엔티티 클래스가 없을 경우 발생하는 예외 처리
-    @ExceptionHandler(value = EntityNotFoundException.class)
-    protected ResponseEntity<ErrorResponse> handleEntityNotFoundException(EntityNotFoundException e) {
-        ErrorResponse errorResponse = ErrorResponse.of(e.getErrorCode());
-        return new ResponseEntity<>(errorResponse, HttpStatus.NOT_FOUND);
     }
 
     // 비즈니스 로직 단에서 발생하는 예외 처리

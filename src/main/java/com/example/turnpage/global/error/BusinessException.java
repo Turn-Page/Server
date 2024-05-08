@@ -1,7 +1,5 @@
-package com.example.turnpage.global.error.exception;
+package com.example.turnpage.global.error;
 
-import com.example.turnpage.global.error.ErrorCode;
-import com.example.turnpage.global.error.ErrorResponse;
 import lombok.Getter;
 
 import java.util.ArrayList;

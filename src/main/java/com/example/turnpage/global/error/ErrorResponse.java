@@ -1,9 +1,6 @@
 package com.example.turnpage.global.error;
 
 import com.example.turnpage.global.error.domain.GlobalErrorCode;
-import com.example.turnpage.global.error.exception.BusinessException;
-import com.example.turnpage.global.result.ResultCode;
-import com.example.turnpage.global.result.ResultResponse;
 import jakarta.validation.ConstraintViolation;
 import lombok.AccessLevel;
 import lombok.Getter;
