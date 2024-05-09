@@ -1,6 +1,5 @@
 package com.example.turnpage.domain.member.controller;
 
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.service.MemberService;
@@ -55,10 +54,8 @@ public class MemberControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                // TODO : BaseResponse 생성 후 주석 해제
-                //.andExpect(jsonPath("$.code").value("COMMON200"))
-                //.andExpect(jsonPath("$.message").value("요청에 성공하였습니다."))
-                .andExpect(jsonPath("$.result.name").value("수밈"))
+                .andExpect(jsonPath("$.code").value("SM001"))
+                .andExpect(jsonPath("$.data.name").value("수밈"))
                 ;
 
         verify(memberService).getMyPageInfo(member);

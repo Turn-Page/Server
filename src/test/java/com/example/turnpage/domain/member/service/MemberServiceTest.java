@@ -1,10 +1,11 @@
 package com.example.turnpage.domain.member.service;
 
 
-
+import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.entity.Role;
 import com.example.turnpage.domain.member.entity.SocialType;
+import com.example.turnpage.global.error.BusinessException;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ public class MemberServiceTest extends ServiceTestConfig {
         //then
         assertEquals("수밈", memberInfo.getName());
         assertEquals("sumin@gmail.com", memberInfo.getEmail());
-        assertEquals(member.getImage(), memberInfo.getImage());
+        assertEquals(member.getImage(), memberInfo.getProfileImage());
         assertEquals(0, memberInfo.getPoint());
         assertEquals(0, memberInfo.getReportCount());
         assertEquals(0, memberInfo.getSaleCount());
