@@ -1,12 +1,13 @@
 package com.example.turnpage.global.config.security.util;
 
+import com.example.turnpage.global.config.security.service.MemberDetails;
+import com.example.turnpage.global.config.security.service.MemberDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
@@ -23,13 +24,15 @@ import java.util.stream.Collectors;
 @Component
 public class JwtUtils {
     private final SecretKey secretKey;
+    private final MemberDetailsService memberDetailsService;
 
     // "HMACSHA256" 알고리즘명을 저장
     private static final String SIGNATURE_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private static final String PAYLOAD_ROLE_KEY = "role";
     private static final String PAYLOAD_MEMBER_ID_KEY = "memberId";
 
-    JwtUtils(@Value("${jwt.secret}") String secret) {
+    JwtUtils(@Value("${jwt.secret}") String secret, MemberDetailsService memberDetailsService) {
+        this.memberDetailsService = memberDetailsService;
         System.out.println("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SIGNATURE_ALGORITHM);
     }
@@ -89,10 +92,8 @@ public class JwtUtils {
                 .map(authority -> new SimpleGrantedAuthority(authority))
                 .collect(Collectors.toList());
 
-        // 사용자 정의로 구현한 MemberDetails나 Member 엔티티 대신 기존에 제공하는 User 클래스를 사용한다.
-        // 추후 우리가 구현한 것으로 대체할 수 있는지 고려 필요함
-        final Long memberId = payload.get(PAYLOAD_MEMBER_ID_KEY, Long.class);
-        final User principal = new User(String.valueOf(memberId), "", authorities);
+        // 사용자 정의로 구현한 MemberDetails 사용
+        final MemberDetails principal = memberDetailsService.loadUserByUsername(getEmail(token));
         return new UsernamePasswordAuthenticationToken(principal, token, authorities);
     }
 

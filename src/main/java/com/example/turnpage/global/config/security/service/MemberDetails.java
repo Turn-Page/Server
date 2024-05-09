@@ -9,10 +9,15 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class MemberDetails implements UserDetails {
+
     private final Member member;
 
     public MemberDetails(Member member) {
         this.member = member;
+    }
+
+    public final Member getMember() {
+        return member;
     }
 
     @Override
