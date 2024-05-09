@@ -27,13 +27,6 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final JwtUtils jwtUtils;
 
-
-
-    @GetMapping("/auth/login")
-    public String login() {
-        return "login";
-    }
-
     @GetMapping("/auth/reissue")
     @ResponseBody
     public String reissueAccessToken(HttpServletRequest request, HttpServletResponse response) {
