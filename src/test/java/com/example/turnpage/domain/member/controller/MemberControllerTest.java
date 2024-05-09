@@ -1,5 +1,7 @@
 package com.example.turnpage.domain.member.controller;
 
+import com.example.turnpage.domain.member.dto.MemberResponse;
+import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -36,7 +38,7 @@ public class MemberControllerTest extends ControllerTestConfig {
                 .name(member.getName())
                 .email(member.getEmail())
                 .inviteCode(member.getInviteCode())
-                .image(member.getImage())
+                .profileImage(member.getImage())
                 .point(member.getPoint())
                 .reportCount(member.getReportCount())
                 .saleCount(member.getSaleCount())

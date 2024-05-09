@@ -21,9 +21,8 @@ public class MemberServiceTest extends ServiceTestConfig {
     @Autowired MemberService memberService;
 
     @Test
-    @DisplayName("내 정보 조회 성공 테스트")
     @Transactional
-    public void getMyProfileInfoTest() {
+    public void 마이페이지_내정보_조회() {
 
         //when
         MyPageInfo memberInfo =  memberService.getMyPageInfo(member);
@@ -40,9 +39,8 @@ public class MemberServiceTest extends ServiceTestConfig {
     }
 
     @Test
-    @DisplayName("내 정보 조회 실패 테스트 - DB에서 해당 멤버를 찾을 수 없음")
     @Transactional
-    public void getMyProfileInfoFailTest() {
+    public void 마이페이지_내정보_조회_실패_해당멤버없음() {
 
         //given
         Member newMember =  Member.builder()
