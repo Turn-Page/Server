@@ -5,8 +5,8 @@ import lombok.Getter;
 @Getter
 public class ResultResponse<T> {
     private final int status;
-    private String code;
-    private String message;
+    private final String code;
+    private final String message;
     private T data;
     public ResultResponse(ResultCode resultCode, T data) {
         this.status = resultCode.getStatus();
