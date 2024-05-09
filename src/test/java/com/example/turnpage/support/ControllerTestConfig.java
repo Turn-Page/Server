@@ -6,6 +6,7 @@ import com.example.turnpage.domain.member.entity.SocialType;
 import com.example.turnpage.global.config.security.service.MemberDetails;
 import com.example.turnpage.global.config.security.service.MemberDetailsService;
 import com.example.turnpage.global.config.security.util.JwtUtils;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -23,9 +24,11 @@ public abstract class ControllerTestConfig {
     @Autowired
     protected MockMvc mockMvc;
     @Autowired
-    JwtUtils jwtUtils;
+    protected ObjectMapper objectMapper;
+    @Autowired
+    protected JwtUtils jwtUtils;
     @MockBean
-    MemberDetailsService memberDetailsService;
+    protected MemberDetailsService memberDetailsService;
     protected String jwt;
     @Value("${jwt.access-token-validity-in-seconds}")
     private Long ACCESS_TOKEN_VALIDITY_IN_SECONDS;

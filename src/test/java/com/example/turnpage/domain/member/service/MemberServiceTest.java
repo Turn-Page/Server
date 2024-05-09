@@ -45,6 +45,7 @@ public class MemberServiceTest extends ServiceTestConfig {
 
         //given
         Member newMember =  Member.builder()
+                .id(3L)
                 .name("새멤버")
                 .email("new@gmail.com")
                 .inviteCode("aaaaaa")
@@ -59,5 +60,39 @@ public class MemberServiceTest extends ServiceTestConfig {
 
         //when && then
         assertThrows(BusinessException.class , () -> memberService.getMyPageInfo(newMember));
+    }
+
+    @Test
+    @Transactional
+    public void 마이페이지_내정보_수정() {
+
+        //when
+        EditMyPageInfo memberInfo =  memberService.editMyPageInfo(member);
+
+        //then
+        assertEquals("수밈", memberInfo.getName());
+        assertEquals("sumin@gmail.com", memberInfo.getEmail());
+        assertEquals(member.getImage(), memberInfo.getProfileImage());
+        assertEquals(0, memberInfo.getPoint());
+        assertEquals(0, memberInfo.getReportCount());
+        assertEquals(0, memberInfo.getSaleCount());
+        assertEquals(0, memberInfo.getPurchaseCount());
+
+    }
+
+    @Test
+    @Transactional
+    public void 포인트_충전() {
+
+        //given
+        int point = 500;
+
+        //when
+        ChargeMyPoint myPoint =  memberService.chargeMyPoint(member, point);
+
+        //then
+        assertEquals(1L, myPoint.getMemberId());
+        assertEquals(500, myPoint.getTotalPoint());
+
     }
 }
