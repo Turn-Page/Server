@@ -33,12 +33,10 @@ public class S3FileComponent {
 
         /*
         1. multipartFile의 stream을 읽고, PutObejctRequest 객체 생성
-        2. 파일을 외부에서 읽을 수 있도록 하기 위해 withCannedAcl 설정
-        3. 생성된 객체를 amazonS3Client를 통해 S3로 전송
+        2. 생성된 객체를 amazonS3Client를 통해 S3로 전송
          */
         try(InputStream inputStream = multipartFile.getInputStream()) {
-            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata)
-                    .withCannedAcl(CannedAccessControlList.PublicRead));
+            amazonS3Client.putObject(new PutObjectRequest(bucket, fileName, inputStream, objectMetadata));
         } catch (IOException e) {
             throw new BusinessException(S3ErrorCode.FAILED_UPLOAD_S3);
         }
