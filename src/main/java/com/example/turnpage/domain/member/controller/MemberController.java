@@ -1,6 +1,5 @@
 package com.example.turnpage.domain.member.controller;
 
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberId;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPoint;
@@ -44,7 +43,7 @@ public class MemberController {
             "파라미터로 충전할 포인트를 주세요.")
     @PatchMapping(value = "/myPoint")
     public ResultResponse<MyPoint> chargeMyPoint(@LoginMember Member member,
-                                                 @RequestParam("point") int point) {
+                                                 @RequestParam(value = "point") int point) {
         return ResultResponse.of(CHARGE_MY_POINT.getResultCode(), memberService.chargeMyPoint(member, point));
     }
 }
