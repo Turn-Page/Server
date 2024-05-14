@@ -7,6 +7,8 @@ import com.example.turnpage.domain.member.dto.MemberResponse.MemberId;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.repository.MemberRepository;
+import com.example.turnpage.global.error.BusinessException;
+import com.example.turnpage.global.error.domain.MemberErrorCode;
 import com.example.turnpage.global.utils.S3FileComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,7 +35,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findMember(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("해당 memberId를 가진 회원이 존재하지 않습니다."));
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
     }
 
     @Override

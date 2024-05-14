@@ -27,9 +27,8 @@ import static org.mockito.BDDMockito.given;
 @DisplayName("Member Service의")
 @SpringBootTest
 public class MemberServiceTest extends ServiceTestConfig {
-    @Autowired MemberService memberService;
-    @MockBean
-    S3FileComponent s3FileComponent;
+    @Autowired protected MemberService memberService;
+    @MockBean protected S3FileComponent s3FileComponent;
 
     @Test
     @Transactional
@@ -100,10 +99,10 @@ public class MemberServiceTest extends ServiceTestConfig {
         int point = 500;
 
         //when
-        MemberResponse.MyPoint myPoint =  memberService.chargeMyPoint(member, point);
+        MemberResponse.MyPoint myPoint = memberService.chargeMyPoint(member, point);
 
         //then
-        assertEquals(1, myPoint.getMemberId());
+        assertEquals(member.getId(), myPoint.getMemberId());
         assertEquals(500, myPoint.getTotalPoint());
     }
 }

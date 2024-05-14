@@ -10,8 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
 public abstract class ServiceTestConfig {
-    @Autowired
-    protected MemberRepository memberRepository;
+    @Autowired protected MemberRepository memberRepository;
     protected Member member;
 
     @BeforeEach
