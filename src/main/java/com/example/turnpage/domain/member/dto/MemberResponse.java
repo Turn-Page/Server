@@ -1,6 +1,9 @@
 package com.example.turnpage.domain.member.dto;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 public class MemberResponse {
 
@@ -16,5 +19,12 @@ public class MemberResponse {
         private int reportCount;
         private int saleCount;
         private int purchaseCount;
+    }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class MemberId {
+        private Long memberId;
     }
 }

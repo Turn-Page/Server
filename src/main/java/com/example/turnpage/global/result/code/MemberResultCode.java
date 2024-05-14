@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 @Getter
 @RequiredArgsConstructor
 public enum MemberResultCode implements ResultCodeInterface {
-    MYPAGE_INFO(200, "SM001", "내 정보를 성공적으로 조회하였습니다.")
+    MYPAGE_INFO(200, "SM001", "내 정보를 성공적으로 조회하였습니다."),
+    EDIT_MYPAGE_INFO(200, "SM002", "내 정보를 성공적으로 수정하였습니다."),
 
     ;
     private final int status;
