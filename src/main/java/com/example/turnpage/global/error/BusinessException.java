@@ -9,7 +9,7 @@ import java.util.List;
 public class BusinessException extends RuntimeException {
 
     private final ErrorCodeInterface errorCode;
-    private final List<ErrorResponse.FieldError> errors = new ArrayList<>();
+    private List<ErrorResponse.FieldError> errors = new ArrayList<>();
 
     public BusinessException(String message, ErrorCodeInterface errorCode) {
         super(message);
@@ -18,6 +18,12 @@ public class BusinessException extends RuntimeException {
 
     public BusinessException(ErrorCodeInterface errorCode) {
         super(errorCode.getErrorCode().getMessage());
+        this.errorCode = errorCode;
+    }
+
+    public BusinessException(ErrorCodeInterface errorCode, List<ErrorResponse.FieldError> errors) {
+        super(errorCode.getErrorCode().getMessage());
+        this.errors = errors;
         this.errorCode = errorCode;
     }
     public ErrorCode getErrorCode() {
