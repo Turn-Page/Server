@@ -41,7 +41,7 @@ public class MemberServiceImpl implements MemberService {
     public MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage) {
         Member member = findMember(loginMember.getId());
 
-        member.update(request.getName(), uploadProfileImage(member, profileImage));
+        member.update(request.getName(), updateProfileImage(member, profileImage));
 
         return new MemberId(member.getId());
     }
@@ -56,13 +56,22 @@ public class MemberServiceImpl implements MemberService {
         return memberConverter.toMyPoint(member.getId(), totalPoint);
     }
 
-    private String uploadProfileImage(Member member, MultipartFile profileImage) {
+    private String updateProfileImage(Member member, MultipartFile profileImage) {
+        //프로필 이미지가 수정되어 파라피터로 들어왔을 때
         if (profileImage != null) {
-            if (member.getImage() != null)
+            //s3에서 이전 프로필 이미지 삭제
+            if (member.getImage() != null && !checkSocialProfileImage(member.getImage()))
                 s3FileComponent.deleteFile(member.getImage());
+            //s3에 수정된 이미지 업로드
             return s3FileComponent.uploadFile("member", profileImage);
         }
         return member.getImage();
+    }
+
+    //소셜로그인에서 받아온 프로필 이미지인지 확인
+    private boolean checkSocialProfileImage(String imageUrl) {
+        return imageUrl.startsWith("https://lh3.googleusercontent.com") ||
+                        imageUrl.startsWith("https://t1.kakaocdn.net");
     }
 
 
