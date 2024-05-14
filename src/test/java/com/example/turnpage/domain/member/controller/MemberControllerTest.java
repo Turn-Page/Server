@@ -3,6 +3,7 @@ package com.example.turnpage.domain.member.controller;
 import com.example.turnpage.domain.member.dto.MemberRequest;
 import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
+import com.example.turnpage.domain.member.dto.MemberResponse.MyPoint;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -17,11 +18,11 @@ import org.springframework.test.web.servlet.ResultActions;
 import java.nio.charset.StandardCharsets;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -36,7 +37,7 @@ public class MemberControllerTest extends ControllerTestConfig {
     public void getMyPageInfoTest() throws Exception {
 
         //given
-        final String url = "/members/mypage";
+        final String url = "/members/myPage";
         MyPageInfo response = MyPageInfo.builder()
                 .name(member.getName())
                 .email(member.getEmail())
@@ -70,7 +71,7 @@ public class MemberControllerTest extends ControllerTestConfig {
     public void editMyPageInfoTest() throws Exception {
 
         //given
-        final String url = "/members/mypage";
+        final String url = "/members/myPage";
 
         MemberRequest.EditMyPageRequest editMyPageRequest = new MemberRequest.EditMyPageRequest("수정된 닉네임");
         MemberResponse.MemberId response = new MemberResponse.MemberId(member.getId());
@@ -108,10 +109,10 @@ public class MemberControllerTest extends ControllerTestConfig {
     public void chargeMyPointTest() throws Exception {
 
         //given
-        final String url = "/members/point";
+        final String url = "/members/myPoint";
         int point = 500;
 
-        ChargeMyPoint response = ChargeMyPoint.builder()
+        MyPoint response = MyPoint.builder()
                 .memberId(1L)
                 .totalPoint(500) //충전 후 현재 나의 총 포인트
                 .build();
@@ -119,7 +120,7 @@ public class MemberControllerTest extends ControllerTestConfig {
         given(memberService.chargeMyPoint(any(Member.class), eq(point))).willReturn(response);
 
         //when
-        ResultActions resultActions = mockMvc.perform(post(url).param("point", String.valueOf(point))
+        ResultActions resultActions = mockMvc.perform(patch(url).param("point", String.valueOf(point))
                 .header("Authorization", "Bearer " + jwt)
         );
 
@@ -127,11 +128,12 @@ public class MemberControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SM002"))
-                .andExpect(jsonPath("$.data.id").value("1L"))
+                .andExpect(jsonPath("$.code").value("SM003"))
+                .andExpect(jsonPath("$.data.memberId").value("1"))
+                .andExpect(jsonPath("$.data.totalPoint").value("500"))
         ;
 
-        verify(memberService).chargeMyPoint(member);
+        verify(memberService).chargeMyPoint(any(Member.class), eq(point));
     }
 
 }

@@ -1,7 +1,6 @@
 package com.example.turnpage.domain.member.service;
 
 import com.example.turnpage.domain.member.converter.MemberConverter;
-import com.example.turnpage.domain.member.dto.MemberRequest;
 import com.example.turnpage.domain.member.dto.MemberRequest.EditMyPageRequest;
 import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberId;
@@ -45,6 +44,16 @@ public class MemberServiceImpl implements MemberService {
         member.update(request.getName(), uploadProfileImage(member, profileImage));
 
         return new MemberId(member.getId());
+    }
+
+    @Override
+    @Transactional
+    public MemberResponse.MyPoint chargeMyPoint(Member loginMember, int point) {
+        Member member = findMember(loginMember.getId());
+
+        int totalPoint = member.chargePoint(point);
+
+        return memberConverter.toMyPoint(member.getId(), totalPoint);
     }
 
     private String uploadProfileImage(Member member, MultipartFile profileImage) {

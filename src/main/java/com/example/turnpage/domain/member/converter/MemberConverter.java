@@ -2,6 +2,7 @@ package com.example.turnpage.domain.member.converter;
 
 import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
+import com.example.turnpage.domain.member.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,6 +19,13 @@ public class MemberConverter {
                 .reportCount(reportCount)
                 .saleCount(saleCount)
                 .purchaseCount(purchaseCount)
+                .build();
+    }
+
+    public MemberResponse.MyPoint toMyPoint(Long memberId, int totalPoint) {
+        return MemberResponse.MyPoint.builder()
+                .memberId(memberId)
+                .totalPoint(totalPoint)
                 .build();
     }
 }

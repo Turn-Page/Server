@@ -100,11 +100,10 @@ public class MemberServiceTest extends ServiceTestConfig {
         int point = 500;
 
         //when
-        ChargeMyPoint myPoint =  memberService.chargeMyPoint(member, point);
+        MemberResponse.MyPoint myPoint =  memberService.chargeMyPoint(member, point);
 
         //then
-        assertEquals(1L, myPoint.getMemberId());
+        assertEquals(1, myPoint.getMemberId());
         assertEquals(500, myPoint.getTotalPoint());
-
     }
 }

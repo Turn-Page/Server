@@ -79,4 +79,9 @@ public class Member extends BaseTimeEntity {
         return this;
     }
 
+    public int chargePoint(int point) {
+        this.point += point;
+        return this.point;
+    }
+
 }

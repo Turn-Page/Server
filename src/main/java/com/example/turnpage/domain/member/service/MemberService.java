@@ -13,4 +13,6 @@ public interface MemberService {
     Member findMember(Long memberId);
     MyPageInfo getMyPageInfo(Member loginMember);
     MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage);
+
+    MyPoint chargeMyPoint(Member loginMember, int point);
 }

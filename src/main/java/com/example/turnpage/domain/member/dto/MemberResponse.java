@@ -27,4 +27,13 @@ public class MemberResponse {
     public static class MemberId {
         private Long memberId;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @NoArgsConstructor
+    @Builder
+    public static class MyPoint {
+        private Long memberId;
+        private int totalPoint;
+    }
 }
