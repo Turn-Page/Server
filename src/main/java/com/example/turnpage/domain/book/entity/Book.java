@@ -48,5 +48,5 @@ public class Book extends BaseTimeEntity {
     private String publisher;
 
     @Column(name = "publication_date", nullable = false)
-    private LocalDate publicationDate;
+    private String publicationDate;
 }
