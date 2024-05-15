@@ -39,7 +39,7 @@ public class Book extends BaseTimeEntity {
 
     private String cover;
 
-    private int rank;
+    private Integer rank;
 
     @Lob
     private String description;
