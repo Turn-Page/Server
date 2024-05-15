@@ -5,6 +5,7 @@ import com.example.turnpage.domain.member.entity.Role;
 import com.example.turnpage.domain.member.entity.SocialType;
 import lombok.Builder;
 import lombok.Getter;
+import org.apache.commons.lang3.RandomStringUtils;
 
 import java.util.Map;
 
@@ -57,10 +58,11 @@ public class OAuthAttribute {
         return Member.builder()
                 .email(email)
                 .name(name)
+                .inviteCode(RandomStringUtils.random(10, true, true))
                 // 임시로 OAuth 가입 시 USER로 권한 세팅함. 추후 고민
-                .role(Role.USER.toString())
+                .role(Role.USER)
                 .image(profileImage)
-                .socialType(provider.toString())
+                .socialType(provider)
                 .build();
     }
 

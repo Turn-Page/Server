@@ -1,6 +1,5 @@
 package com.example.turnpage.domain.member.controller;
 
-import com.example.turnpage.domain.member.dto.MemberLoginRequestDto;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.entity.redis.RefreshToken;
 import com.example.turnpage.domain.member.service.MemberService;
@@ -27,16 +26,6 @@ public class AuthController {
     private final MemberService memberService;
     private final RefreshTokenService refreshTokenService;
     private final JwtUtils jwtUtils;
-
-    @GetMapping("/auth/login")
-    public String login() {
-        return "login";
-    }
-
-    @PostMapping("/auth/login")
-    public @ResponseBody String loginProcess(@RequestBody MemberLoginRequestDto memberLoginRequestDto) {
-        return "hi";
-    }
 
     @GetMapping("/auth/reissue")
     @ResponseBody

@@ -1,21 +1,18 @@
 package com.example.turnpage.domain.member.service;
 
-import com.example.turnpage.domain.member.dto.MemberSignupRequestDto;
+import com.example.turnpage.domain.member.dto.MemberRequest;
+import com.example.turnpage.domain.member.dto.MemberResponse;
+import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.member.repository.MemberRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
-@RequiredArgsConstructor
-@Service
-public class MemberService {
-    private final MemberRepository memberRepository;
+import static com.example.turnpage.domain.member.dto.MemberRequest.*;
+import static com.example.turnpage.domain.member.dto.MemberResponse.*;
 
+public interface MemberService {
+    Member findMember(Long memberId);
+    MyPageInfo getMyPageInfo(Member loginMember);
+    MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage);
 
-    public Member findMember(Long memberId) {
-        return memberRepository.findById(memberId)
-                .orElseThrow(() -> new RuntimeException("해당 memberId를 가진 회원이 존재하지 않습니다."));
-    }
-
+    MyPoint chargeMyPoint(Member loginMember, int point);
 }
