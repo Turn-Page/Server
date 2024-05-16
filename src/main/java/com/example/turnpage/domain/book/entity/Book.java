@@ -33,7 +33,7 @@ public class Book extends BaseTimeEntity {
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String isbn;
 
     @ColumnDefault("0")
@@ -43,7 +43,7 @@ public class Book extends BaseTimeEntity {
 
     private Integer bestSellerRank;
 
-    @Lob
+    @Column(length = 1000)
     private String description;
 
     @Column(nullable = false)
