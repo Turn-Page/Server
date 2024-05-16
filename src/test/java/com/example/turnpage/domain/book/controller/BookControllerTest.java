@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -9,6 +10,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -70,22 +74,20 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/bestSeller";
 
-        BookPageInfos response = new  BookPageInfos.<BestSellerInfo>builder()
+        BookResponse.BookPageInfos response = BookResponse.BookPageInfos.builder()
                 .page(0)
                 .totalPages(1)
                 .totalBooks(1)
-                .bestSellerInfos(new ArrayList<BestSellerInfo>())
+                .bestSellerInfos(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();
 
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Order.desc("rank")));
-
-        given(bookService.fetchBestSeller(any(Pageable.class))).willReturn(response);
+        given(bookService.fetchBestSeller(any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                get(url).param("page", "0"));
+                MockMvcRequestBuilders.get(url).param("page", "0").param("size","20"));
 
         //then
         resultActions
@@ -95,6 +97,6 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.totalBooks").value(1))
         ;
 
-        verify(bookService).fetchBestSeller(any(Pageable.class));
+        verify(bookService).fetchBestSeller(any());
     }
 }

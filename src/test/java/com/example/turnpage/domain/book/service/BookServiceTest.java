@@ -7,8 +7,11 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
+import static com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
@@ -63,12 +66,12 @@ public class BookServiceTest extends ServiceTestConfig {
             bookService.saveBook(book);
         }
         //when
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Order.desc("rank")));
-        BookPageInfos<BestSellerInfo> bestSellerInfos = bookService.fetchBestSeller(pageable);
+        Pageable pageable = PageRequest.of(0, 20);
+        BookPageInfos bestSellerInfos = bookService.fetchBestSeller(pageable);
 
         //then
         assertEquals(11, bestSellerInfos.getTotalBooks());
-        assertEquals(1, bestSellerInfos.getBestSellerInfos().get(0).getIsbn());
+        assertEquals(1, bestSellerInfos.getBestSellerInfos().get(0).getRank());
     }
 
 }

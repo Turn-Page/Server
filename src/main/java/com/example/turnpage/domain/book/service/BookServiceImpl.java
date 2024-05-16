@@ -1,14 +1,16 @@
 package com.example.turnpage.domain.book.service;
 
 
+import com.example.turnpage.domain.book.client.BestSellerClient;
 import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
-import com.example.turnpage.domain.book.client.BestSellerClient;
 import com.example.turnpage.global.error.BusinessException;
 import com.example.turnpage.global.error.domain.BookErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,6 +46,13 @@ public class BookServiceImpl implements BookService {
         //TODO : 이미 있는 BOOK인지 확인, 있는 BOOK이면 rank update, 없는 BOOK이면 saveBook
         bestSellerBooks.forEach(this::saveBook);
     }
+
+    @Override
+   public BookPageInfos fetchBestSeller(Pageable pageable) {
+        return bookConverter.toBookPageInfos(
+                bookRepository.findAllByRankingNotNullOrderByRanking(pageable));
+    }
+
 
     @Override
     public Book findBook(Long bookId) {

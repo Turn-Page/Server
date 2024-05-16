@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class BookResponse {
 
     @Getter
@@ -27,5 +30,18 @@ public class BookResponse {
         private String publicationDate;
         private String description;
         private Integer rank;
+    }
+
+    @Getter
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class BookPageInfos {
+        private List<BestSellerInfo> bestSellerInfos = new ArrayList<>();
+        private int page;
+        private int totalPages;
+        private int totalBooks;
+        private Boolean isFirst;
+        private Boolean isLast;
     }
 }
