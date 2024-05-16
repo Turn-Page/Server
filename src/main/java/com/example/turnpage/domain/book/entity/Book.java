@@ -8,6 +8,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
@@ -35,11 +36,12 @@ public class Book extends BaseTimeEntity {
     @Column(nullable = false, unique = true)
     private String isbn;
 
+    @ColumnDefault("0")
     private Double star;
 
     private String cover;
 
-    private Integer rank;
+    private Integer bestSellerRank;
 
     @Lob
     private String description;
