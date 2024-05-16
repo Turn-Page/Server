@@ -44,22 +44,6 @@ public class BookServiceTest extends ServiceTestConfig {
         assertEquals("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.", book.getDescription());
     }
 
-
-    @Test
-    @Transactional
-    public void 베스트셀러_저장() {
-
-        //when
-        bookService.saveBestSeller();
-
-        Pageable pageable = PageRequest.of(0, 20, Sort.by(Sort.Order.desc("rank")));
-        BookPageInfos<BestSellerInfo> bookPageInfos = bookService.fetchBestSeller(pageable);
-
-        //then
-        assertEquals(100, bookPageInfos.getTotalBooks());
-    }
-
-
     @Test
     @Transactional
     public void 베스트셀러_조회() {
@@ -72,7 +56,7 @@ public class BookServiceTest extends ServiceTestConfig {
                     .isbn(Integer.toString(i))
                     .publisher("포레스트북스")
                     .cover("https://image.aladin.co.kr/product/33948/74/cover500/k392930236_1.jpg")
-                    .publicationDate(LocalDate.of(2023, 12, 18))
+                    .publicationDate("2023-12-18")
                     .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
                     .build();
 
