@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum BookErrorCode implements ErrorCodeInterface {
     BOOK_NOT_FOUND(400, "EB001", "해당 bookId 가진 책이 존재하지 않습니다."),
+    BEST_SELLER_JSON_PARSE_ERROR(400, "EB002", "베스트셀러 목록 json을 파싱할 수 없습니다."),
     ;
 
     private final int status;

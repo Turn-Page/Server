@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 public class BookScheduler {
     private final BookService bookService;
     @Scheduled(cron = "0 0 4 * * MON") //초 분 시 일 월 요일
+    //TEST 용
+    //@Scheduled(cron = "10 * * * * *") //초 분 시 일 월 요일
     public void saveBestSeller() {
         try {
             bookService.saveBestSeller();
