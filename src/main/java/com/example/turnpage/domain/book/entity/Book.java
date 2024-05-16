@@ -41,7 +41,7 @@ public class Book extends BaseTimeEntity {
 
     private String cover;
 
-    private Integer bestSellerRank;
+    private Integer ranking;
 
     @Column(length = 1000)
     private String description;
