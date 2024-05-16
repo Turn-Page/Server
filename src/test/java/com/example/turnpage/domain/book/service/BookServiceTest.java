@@ -1,17 +1,13 @@
 package com.example.turnpage.domain.book.service;
 
+import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.LocalDate;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -90,6 +86,5 @@ public class BookServiceTest extends ServiceTestConfig {
         assertEquals(11, bestSellerInfos.getTotalBooks());
         assertEquals(1, bestSellerInfos.getBestSellerInfos().get(0).getIsbn());
     }
-
 
 }

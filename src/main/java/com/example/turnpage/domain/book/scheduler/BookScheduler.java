@@ -1,5 +1,6 @@
 package com.example.turnpage.domain.book.scheduler;
 
+import com.example.turnpage.domain.book.service.BookService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -15,9 +16,6 @@ public class BookScheduler {
         try {
             bookService.saveBestSeller();
             log.info("베스트셀러 저장이 완료되었습니다.");
-
-        } catch (InterruptedException e) {
-            log.info("Thread가 강제 종료되었습니다. Message: {}", e.getMessage());
         } catch (Exception e) {
             log.info("Batch 시스템이 예기치 않게 종료되었습니다. Message: {}", e.getMessage());
         }

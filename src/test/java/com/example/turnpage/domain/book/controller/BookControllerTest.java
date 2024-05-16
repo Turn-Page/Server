@@ -1,22 +1,18 @@
 package com.example.turnpage.domain.book.controller;
 
+import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -50,15 +46,18 @@ public class BookControllerTest extends ControllerTestConfig {
         //when
         ResultActions resultActions = mockMvc.perform(
                 post(url)
-                .content(request)
-                .contentType(MediaType.APPLICATION_JSON));
+                    .content(objectMapper.writeValueAsString(request))
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .header("Authorization", "Bearer " + jwt)
+        );
+
 
         //then
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SB001"))
-                .andExpect(jsonPath("$.data.isbn").value("12987349382"))
+                .andExpect(jsonPath("$.data.bookId").value("1"))
         ;
 
         verify(bookService).saveBook(any(SaveBookRequest.class));
