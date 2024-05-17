@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.global.result.ResultResponse;
@@ -12,14 +13,11 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static com.example.turnpage.domain.book.dto.BookResponse.*;
 import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
-import static com.example.turnpage.global.result.code.BookResultCode.FETCH_BESTSELLER;
-import static com.example.turnpage.global.result.code.BookResultCode.SAVE_BOOK;
+import static com.example.turnpage.global.result.code.BookResultCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -46,5 +44,15 @@ public class BookController {
                                                               @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(FETCH_BESTSELLER.getResultCode(), bookService.fetchBestSeller(pageable));
     }
+
+    @GetMapping("/{bookId}")
+    @Parameters(value = {
+            @Parameter(name = "bookId", description = "path variable로 bookId를 주세요."),
+    })
+    @Operation(summary = "책 정보 상세 조회 API", description = " 책 정보 상세 조회 API 입니다.")
+    public ResultResponse<BookInfo> getBookInfos(@PathVariable("bookId") Long bookId) {
+        return ResultResponse.of(BOOK_INFO.getResultCode(), bookService.getBookInfo(bookId));
+    }
+
 
 }

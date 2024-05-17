@@ -1,6 +1,8 @@
 package com.example.turnpage.domain.book.service;
 
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +14,7 @@ public interface BookService {
     BookId saveBook(SaveBookRequest request);
     void saveBestSeller();
     BookPageInfos fetchBestSeller(Pageable pageable);
+    BookInfo getBookInfo(Long bookId);
 
 
 }

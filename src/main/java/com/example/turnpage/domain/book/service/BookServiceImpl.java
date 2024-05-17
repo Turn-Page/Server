@@ -3,6 +3,7 @@ package com.example.turnpage.domain.book.service;
 
 import com.example.turnpage.domain.book.client.BestSellerClient;
 import com.example.turnpage.domain.book.converter.BookConverter;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
@@ -53,6 +54,10 @@ public class BookServiceImpl implements BookService {
                 bookRepository.findAllByRankingNotNullOrderByRanking(pageable));
     }
 
+    @Override
+    public BookResponse.BookInfo getBookInfo(Long bookId) {
+        return bookConverter.toBookInfo(findBook(bookId));
+    }
 
     @Override
     public Book findBook(Long bookId) {

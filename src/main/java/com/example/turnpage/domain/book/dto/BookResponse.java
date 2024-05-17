@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,16 +12,13 @@ import java.util.List;
 public class BookResponse {
 
     @Getter
-    @NoArgsConstructor
     @AllArgsConstructor
     public static class BookId {
         private Long bookId;
     }
 
     @Getter
-    @Builder
-    @NoArgsConstructor
-    @AllArgsConstructor
+    @SuperBuilder
     public static class BestSellerInfo {
         private String title;
         private String author;
@@ -30,6 +28,12 @@ public class BookResponse {
         private String publicationDate;
         private String description;
         private Integer rank;
+    }
+
+    @Getter
+    @SuperBuilder
+    public static class BookInfo extends BestSellerInfo {
+        private Double star;
     }
 
     @Getter

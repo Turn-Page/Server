@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.book.converter;
 
 import com.example.turnpage.domain.book.dto.BookResponse.BestSellerInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Page;
@@ -21,6 +22,7 @@ public class BookConverter {
                 .publicationDate(publicationDate)
                 .description(description)
                 .ranking(rank)
+                .star(0.0)
                 .build();
     }
 
@@ -50,5 +52,20 @@ public class BookConverter {
                 .isFirst(books.isFirst())
                 .isLast(books.isLast())
                 .build();
+    }
+
+    public BookInfo toBookInfo(Book book) {
+        return BookInfo.builder()
+                .title(book.getTitle())
+                .author(book.getAuthor())
+                .cover(book.getCover())
+                .isbn(book.getIsbn())
+                .publisher(book.getPublisher())
+                .publicationDate(book.getPublicationDate())
+                .description(book.getDescription())
+                .rank(book.getRanking())
+                .star(book.getStar())
+                .build();
+
     }
 }

@@ -3,6 +3,7 @@ package com.example.turnpage.domain.book.controller;
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -87,7 +89,7 @@ public class BookControllerTest extends ControllerTestConfig {
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                MockMvcRequestBuilders.get(url).param("page", "0").param("size","20"));
+                get(url).param("page", "0").param("size","20"));
 
         //then
         resultActions
@@ -98,5 +100,40 @@ public class BookControllerTest extends ControllerTestConfig {
         ;
 
         verify(bookService).fetchBestSeller(any());
+    }
+
+    @Test
+    @DisplayName("책 상세 조회 테스트")
+    public void getBookInfo() throws Exception {
+
+        //given
+        final String url = "/books/{bookId}";
+
+        BookInfo response = BookInfo.builder()
+                .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
+                .author("브로디, 노아")
+                .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
+                .isbn("12987349382")
+                .publisher("포레스트북스")
+                .publicationDate("2023-12-18")
+                .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
+                .rank(null)
+                .star(0.0)
+                .build();
+
+        given(bookService.getBookInfo(any())).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(get(url, 1L));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SB003"))
+                .andExpect(jsonPath("$.data.isbn").value("12987349382"))
+        ;
+
+        verify(bookService).getBookInfo(any());
     }
 }
