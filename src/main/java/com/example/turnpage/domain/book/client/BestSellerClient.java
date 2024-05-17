@@ -70,6 +70,7 @@ public class BestSellerClient {
     private SaveBookRequest itemToSaveBookRequest (Object objectItem) {
         JSONObject item = (JSONObject) objectItem;
         return SaveBookRequest.builder()
+                .itemId(Long.parseLong(item.get("itemId").toString()))
                 .title(item.get("title").toString())
                 .author(item.get("author").toString())
                 .cover(item.get("cover").toString())

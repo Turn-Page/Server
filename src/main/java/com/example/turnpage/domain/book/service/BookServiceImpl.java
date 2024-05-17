@@ -32,7 +32,7 @@ public class BookServiceImpl implements BookService {
     public BookId saveBook(SaveBookRequest request) {
         String coverUrl = changeCoverImageSize(request.getCover());
 
-        Book book = bookRepository.save(bookConverter.toEntity(
+        Book book = bookRepository.save(bookConverter.toEntity(request.getItemId(),
                 request.getTitle(),request.getAuthor(), coverUrl, request.getIsbn(),
                 request.getPublisher(), request.getPublicationDate(),
                 request.getDescription(), request.getRank()));

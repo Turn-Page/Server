@@ -27,6 +27,9 @@ public class Book extends BaseTimeEntity {
     @Column(name = "book_id")
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private Long itemId;
+
     @Column(nullable = false)
     private String title;
 

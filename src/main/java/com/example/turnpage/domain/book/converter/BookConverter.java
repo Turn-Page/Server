@@ -11,9 +11,10 @@ import java.util.List;
 
 @Component
 public class BookConverter {
-    public Book toEntity(String title, String author, String cover, String isbn,
+    public Book toEntity(Long itemId, String title, String author, String cover, String isbn,
                          String publisher, String publicationDate, String description, Integer rank) {
         return Book.builder()
+                .itemId(itemId)
                 .title(title)
                 .author(author)
                 .cover(cover)
@@ -39,7 +40,7 @@ public class BookConverter {
                 .build();
     }
 
-    public BookPageInfos toBookPageInfos (Page<Book> books) {
+    public BookPageInfos toBookPageInfos(Page<Book> books) {
 
         List<BestSellerInfo> bestSellerInfos = books.stream()
                 .map(this::toBestSellerInfo).toList();

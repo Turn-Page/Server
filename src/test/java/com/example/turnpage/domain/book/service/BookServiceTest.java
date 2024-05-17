@@ -56,6 +56,7 @@ public class BookServiceTest extends ServiceTestConfig {
         for(int i=1;i<=11;i++) {
             SaveBookRequest book = SaveBookRequest.builder()
                     .rank(i)
+                    .itemId(1L +i)
                     .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                     .author("브로디, 노아")
                     .isbn(Integer.toString(i))
@@ -82,6 +83,7 @@ public class BookServiceTest extends ServiceTestConfig {
         //given
         SaveBookRequest request = SaveBookRequest.builder()
                 .rank(null)
+                .itemId(1L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
                 .isbn("12987349382")

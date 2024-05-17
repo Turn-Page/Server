@@ -12,6 +12,7 @@ public class BookRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SaveBookRequest {
+        private Long itemId;
         private String title;
         private String author;
         private String cover;
