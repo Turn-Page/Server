@@ -43,9 +43,23 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public void saveBestSeller() {
+        //이미 있는 BOOK인지 확인, 있는 BOOK이면 rank update, 없는 BOOK이면 saveBook
         List<SaveBookRequest> bestSellerBooks = bestSellerClient.getBestSellerBooks();
-        //TODO : 이미 있는 BOOK인지 확인, 있는 BOOK이면 rank update, 없는 BOOK이면 saveBook
-        bestSellerBooks.forEach(this::saveBook);
+        List<Long> oldBestSellerItemId =  bookRepository.findAllItemIdByRankingNotNull();
+        // rank 초기화
+        bookRepository.updateRankToNull();
+
+        bestSellerBooks.forEach(book -> {
+            if(oldBestSellerItemId.contains(book.getItemId()))
+                updateRanking(book.getItemId(),book.getRank());
+            else saveBook(book);
+        });
+
+    }
+
+    private void updateRanking(Long itemId, int rank) {
+        Book book = bookRepository.findByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
+        book.updateRanking(rank);
     }
 
     @Override

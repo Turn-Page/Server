@@ -1,7 +1,6 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.global.result.ResultResponse;
@@ -15,8 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.turnpage.domain.book.dto.BookResponse.*;
 import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import static com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import static com.example.turnpage.global.result.code.BookResultCode.*;
 
 @RestController

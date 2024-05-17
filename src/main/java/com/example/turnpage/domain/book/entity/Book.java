@@ -54,4 +54,8 @@ public class Book extends BaseTimeEntity {
 
     @Column(name = "publication_date", nullable = false)
     private String publicationDate;
+
+    public void updateRanking(int rank) {
+        this.ranking = rank;
+    }
 }
