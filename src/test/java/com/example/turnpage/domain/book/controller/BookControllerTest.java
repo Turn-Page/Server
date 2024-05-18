@@ -111,6 +111,7 @@ public class BookControllerTest extends ControllerTestConfig {
         final String url = "/books/{bookId}";
 
         BookInfo response = BookInfo.builder()
+                .bookId(1L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
                 .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
@@ -132,6 +133,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SB003"))
+                .andExpect(jsonPath("$.data.bookId").value(1))
                 .andExpect(jsonPath("$.data.isbn").value("12987349382"))
         ;
 

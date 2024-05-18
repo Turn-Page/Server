@@ -20,20 +20,21 @@ public class BookResponse {
     @Getter
     @SuperBuilder
     public static class BestSellerInfo {
+        private Long bookId;
         private String title;
         private String author;
         private String cover;
-        private String isbn;
         private String publisher;
         private String publicationDate;
-        private String description;
         private Integer rank;
+        private Double star;
     }
 
     @Getter
     @SuperBuilder
     public static class BookInfo extends BestSellerInfo {
-        private Double star;
+        private String isbn;
+        private String description;
     }
 
     @Getter
@@ -41,6 +42,7 @@ public class BookResponse {
     @AllArgsConstructor
     @Builder
     public static class BookPageInfos {
+        @Builder.Default
         private List<BestSellerInfo> bestSellerInfos = new ArrayList<>();
         private int page;
         private int totalPages;

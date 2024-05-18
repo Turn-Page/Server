@@ -29,14 +29,14 @@ public class BookConverter {
 
     public BestSellerInfo toBestSellerInfo(Book book) {
         return BestSellerInfo.builder()
+                .bookId(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .cover(book.getCover())
-                .isbn(book.getIsbn())
                 .publisher(book.getPublisher())
                 .publicationDate(book.getPublicationDate())
-                .description(book.getDescription())
                 .rank(book.getRanking())
+                .star(book.getStar())
                 .build();
     }
 
