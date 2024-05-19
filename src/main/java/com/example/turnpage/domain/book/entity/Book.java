@@ -7,17 +7,18 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
 
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
 @SQLDelete(sql = "UPDATE book SET deleted_at = CURRENT_TIMESTAMP WHERE book_id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class Book extends BaseTimeEntity {
@@ -26,25 +27,35 @@ public class Book extends BaseTimeEntity {
     @Column(name = "book_id")
     private Long id;
 
+    @Column(nullable = false, unique = true)
+    private Long itemId;
+
     @Column(nullable = false)
     private String title;
 
     @Column(nullable = false)
     private String author;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private String isbn;
 
+    @ColumnDefault("0")
     private Double star;
 
-    private String image;
+    private String cover;
 
-    @Lob
+    private Integer ranking;
+
+    @Column(length = 1000)
     private String description;
 
     @Column(nullable = false)
     private String publisher;
 
     @Column(name = "publication_date", nullable = false)
-    private LocalDate publicationDate;
+    private String publicationDate;
+
+    public void updateRanking(int rank) {
+        this.ranking = rank;
+    }
 }

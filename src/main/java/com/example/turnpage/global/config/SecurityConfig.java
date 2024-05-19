@@ -11,6 +11,7 @@ import com.example.turnpage.global.config.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -55,11 +56,11 @@ public class SecurityConfig {
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/error/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",
                                 "/v3/api-docs/**").permitAll()
-                        .requestMatchers("/private/**").hasRole("USER")
                         .requestMatchers("/members/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
