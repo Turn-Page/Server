@@ -41,6 +41,7 @@ public class BookResponse {
     @AllArgsConstructor
     @Builder
     public static class BookPageInfos {
+        @Builder.Default
         private List<BestSellerInfo> bestSellerInfos = new ArrayList<>();
         private int page;
         private int totalPages;
