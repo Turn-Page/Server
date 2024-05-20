@@ -39,11 +39,4 @@ public class AuthController {
         CookieUtils.addCookie(response, AUTHORIZATION_HEADER, accessToken, ACCESS_TOKEN_VALIDITY_IN_SECONDS.intValue());
         return "reissue";
     }
-
-    // 기존 콜백: http://localhost:8080/callback/kakao
-    @GetMapping("/callback/oauth2/code/{registrationId}")
-    @ResponseBody
-    public ResultResponse<String> testCallback() {
-        return ResultResponse.of(MemberResultCode.LOGIN.getResultCode());
-    }
 }
