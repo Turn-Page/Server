@@ -41,9 +41,9 @@ public class AuthController {
     }
 
     // 기존 콜백: http://localhost:8080/callback/kakao
-    @GetMapping("/callback/kakao")
+    @GetMapping("/callback/oauth2/code/{registrationId}")
     @ResponseBody
-    public ResultResponse<String> testLogin() {
+    public ResultResponse<String> testCallback() {
         return ResultResponse.of(MemberResultCode.LOGIN.getResultCode());
     }
 }

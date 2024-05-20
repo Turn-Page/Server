@@ -44,12 +44,9 @@ public class SecurityConfig {
     private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
     private final MemberConverter memberConverter;
 
-    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
-    public String TURNPAGE_REDIRECT_URI;
-
     public CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter(AuthenticationManager authenticationManager) {
         CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter = new CustomOAuth2LoginAuthenticationFilter(
-                clientRegistrationRepository, oAuth2AuthorizedClientRepository, TURNPAGE_REDIRECT_URI, authenticationManager);
+                clientRegistrationRepository, oAuth2AuthorizedClientRepository, authenticationManager);
 
         customOAuth2LoginAuthenticationFilter.setAuthenticationSuccessHandler(oAuth2LoginSuccessHandler());
         return customOAuth2LoginAuthenticationFilter;
@@ -84,7 +81,7 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/callback/**").permitAll()
+                        .requestMatchers("/callback/oauth2/code/**").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .requestMatchers(
@@ -93,14 +90,12 @@ public class SecurityConfig {
                                 "/v3/api-docs/**").permitAll()
                         .requestMatchers("/members/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
-                        .requestMatchers("/result").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler))
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
                                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
-//                        .tokenEndpoint(token -> token.accessTokenResponseClient(this.accessTokenResponseClient()))
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler())

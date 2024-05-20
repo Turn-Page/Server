@@ -1,5 +1,6 @@
 package com.example.turnpage.global.config.security.filter;
 
+import com.example.turnpage.global.error.BusinessException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Value;
@@ -32,11 +33,12 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 import java.util.function.Consumer;
 
+import static com.example.turnpage.global.error.domain.MemberErrorCode.CLIENT_REGISTRATION_NOT_FOUND;
+
 public class CustomOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthenticationFilter {
     public static final String TURNPAGE_FILTER_PROCESSES_URI = "/auth/login/*";
 
     private static final String CLIENT_REGISTRATION_NOT_FOUND_ERROR_CODE = "client_registration_not_found";
-    private final String redirectUri;
     private ClientRegistrationRepository clientRegistrationRepository;
     private OAuth2AuthorizedClientRepository authorizedClientRepository;
     private AuthorizationRequestRepository<OAuth2AuthorizationRequest> authorizationRequestRepository;
@@ -46,10 +48,9 @@ public class CustomOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthentica
     };
 
     public CustomOAuth2LoginAuthenticationFilter(ClientRegistrationRepository clientRegistrationRepository, OAuth2AuthorizedClientRepository authorizedClientRepository,
-                                                 String redirectUri, AuthenticationManager authenticationManager) {
+                                                 AuthenticationManager authenticationManager) {
         super(clientRegistrationRepository, authorizedClientRepository, TURNPAGE_FILTER_PROCESSES_URI);
         this.setAuthenticationManager(authenticationManager);
-        this.redirectUri = redirectUri;
         this.clientRegistrationRepository = clientRegistrationRepository;
         this.authorizedClientRepository = authorizedClientRepository;
     }
@@ -72,7 +73,14 @@ public class CustomOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthentica
             throw new OAuth2AuthenticationException(oauth2Error, oauth2Error.toString());
         }
 
-        OAuth2AuthorizationResponse authorizationResponse = convert(params, redirectUri);
+        final OAuth2AuthorizationResponse authorizationResponse;
+        if (registrationId.equals("kakao")) {
+            authorizationResponse = convert(params, clientRegistration.getRedirectUri());
+        } else if (registrationId.equals("google")) {
+            authorizationResponse = convert(params, clientRegistration.getRedirectUri());
+        } else {
+            throw new BusinessException(CLIENT_REGISTRATION_NOT_FOUND);
+        }
 
         Object authenticationDetails = this.authenticationDetailsSource.buildDetails(request);
         OAuth2AuthorizationRequest authorizationRequest = createAuthorizationRequest(clientRegistration, String.valueOf(params.get("state").get(0)));
@@ -101,7 +109,7 @@ public class CustomOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthentica
         OAuth2AuthorizationRequest.Builder builder = OAuth2AuthorizationRequest.authorizationCode();
         builder.clientId(clientRegistration.getClientId())
                 .authorizationUri(clientRegistration.getProviderDetails().getAuthorizationUri())
-                .redirectUri(this.redirectUri)
+                .redirectUri(clientRegistration.getRedirectUri())
                 .scopes(clientRegistration.getScopes())
                 .state(state);
         this.authorizationRequestCustomizer.accept(builder);
