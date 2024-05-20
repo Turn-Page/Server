@@ -75,6 +75,4 @@ public class MemberServiceImpl implements MemberService {
         return imageUrl.startsWith("https://lh3.googleusercontent.com") ||
                         imageUrl.startsWith("https://t1.kakaocdn.net");
     }
-
-
 }

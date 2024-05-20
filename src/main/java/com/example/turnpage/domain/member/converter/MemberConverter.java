@@ -2,7 +2,6 @@ package com.example.turnpage.domain.member.converter;
 
 import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
-import com.example.turnpage.domain.member.entity.Member;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -26,6 +25,14 @@ public class MemberConverter {
         return MemberResponse.MyPoint.builder()
                 .memberId(memberId)
                 .totalPoint(totalPoint)
+                .build();
+    }
+
+    public MemberResponse.LoginInfo toLoginInfo(Long memberId, String accessToken, String refreshToken) {
+        return MemberResponse.LoginInfo.builder()
+                .memberId(memberId)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
                 .build();
     }
 }
