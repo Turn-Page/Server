@@ -36,4 +36,13 @@ public class MemberResponse {
         private Long memberId;
         private int totalPoint;
     }
+
+    @Getter
+    @AllArgsConstructor
+    @Builder
+    public static class LoginInfo {
+        private final Long memberId;
+        private final String accessToken;
+        private final String refreshToken;
+    }
 }
