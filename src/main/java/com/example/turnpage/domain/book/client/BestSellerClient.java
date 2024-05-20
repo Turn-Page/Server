@@ -18,7 +18,7 @@ import java.util.List;
 public class BestSellerClient {
     private final WebClient webClient;
 
-    public BestSellerClient(WebClient.Builder webClientBuilder, @Value("${public-data.bestseller.url}") String url) {
+    public BestSellerClient(WebClient.Builder webClientBuilder, @Value("${public-data.bestseller.base-url}") String url) {
         this.webClient = webClientBuilder
                 .baseUrl(url)
                 .build();

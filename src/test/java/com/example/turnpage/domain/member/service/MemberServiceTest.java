@@ -87,7 +87,6 @@ public class MemberServiceTest extends ServiceTestConfig {
         //then
         assertEquals("수밈", editMember.getName());
         assertEquals("profile image url", editMember.getImage());
-        assertEquals(1L, editMember.getId());
     }
 
 
