@@ -32,6 +32,7 @@ public class BookServiceTest extends ServiceTestConfig {
                 .author("브로디, 노아")
                 .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
                 .isbn("12987349382")
+                .itemId(1L)
                 .publisher("포레스트북스")
                 .publicationDate("2023-12-18")
                 .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
@@ -48,6 +49,8 @@ public class BookServiceTest extends ServiceTestConfig {
         assertEquals("2023-12-18", book.getPublicationDate());
         assertEquals("포레스트북스", book.getPublisher());
         assertEquals("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.", book.getDescription());
+        assertEquals(1L, book.getItemId());
+
     }
 
     @Test

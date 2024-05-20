@@ -1,7 +1,5 @@
 package com.example.turnpage.global.utils;
 
-import com.example.turnpage.global.error.ErrorCode;
-import com.example.turnpage.global.error.ErrorResponse;
 import com.example.turnpage.global.result.ResultResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.ServletException;

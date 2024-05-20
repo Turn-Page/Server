@@ -6,8 +6,6 @@ import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
 import com.example.turnpage.global.config.security.util.CookieUtils;
 import com.example.turnpage.global.config.security.util.JwtUtils;
-import com.example.turnpage.global.result.ResultResponse;
-import com.example.turnpage.global.result.code.MemberResultCode;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;

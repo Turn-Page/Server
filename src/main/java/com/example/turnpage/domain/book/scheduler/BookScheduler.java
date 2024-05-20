@@ -13,7 +13,7 @@ public class BookScheduler {
     private final BookService bookService;
     @Scheduled(cron = "0 0 4 * * MON") //초 분 시 일 월 요일
     //TEST 용
-   // @Scheduled(cron = "10 * * * * *") //초 분 시 일 월 요일
+    //@Scheduled(cron = "10 * * * * *") //초 분 시 일 월 요일
     public void saveBestSeller() {
         try {
             bookService.saveBestSeller();
@@ -21,7 +21,5 @@ public class BookScheduler {
         } catch (Exception e) {
             log.info("Batch 시스템이 예기치 않게 종료되었습니다. Message: {}", e.getMessage());
         }
-
-
     }
 }
