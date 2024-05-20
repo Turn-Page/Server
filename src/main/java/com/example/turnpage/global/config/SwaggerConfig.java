@@ -5,10 +5,12 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.servers.Server;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 public class SwaggerConfig {
@@ -19,10 +21,16 @@ public class SwaggerConfig {
                 .in(SecurityScheme.In.HEADER).name("Authorization");
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
+        Server server = new Server();
+        server.setUrl("http://43.203.224.233");
+
+        Server local = new Server();
+        local.setUrl("http://localhost:8080");
+
         return new OpenAPI()
                 .components(new Components().addSecuritySchemes("bearerAuth", securityScheme))
                 .security(Arrays.asList(securityRequirement))
-                .info(apiInfo());
+                .info(apiInfo()).servers(List.of(server,local));
     }
 
     private Info apiInfo() {
