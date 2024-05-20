@@ -28,4 +28,12 @@ public class MemberConverter {
                 .totalPoint(totalPoint)
                 .build();
     }
+
+    public MemberResponse.LoginInfo toLoginInfo(Long memberId, String accessToken, String refreshToken) {
+        return MemberResponse.LoginInfo.builder()
+                .memberId(memberId)
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
+    }
 }

@@ -7,7 +7,7 @@ import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfi
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 import org.springframework.scheduling.annotation.EnableScheduling;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.TimeZone;
 
 @EnableJpaAuditing
@@ -21,6 +21,6 @@ public class TurnpageApplication {
 	@PostConstruct
 	public void setTimeZone(){
 		TimeZone.setDefault(TimeZone.getTimeZone("Asia/Seoul"));
-		System.out.println("타임존 설정 후 현재 시각: " + LocalDate.now());
+		System.out.println("타임존 설정 후 현재 시각: " + LocalDateTime.now());
 	}
 }

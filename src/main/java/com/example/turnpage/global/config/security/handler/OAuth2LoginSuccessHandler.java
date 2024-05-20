@@ -1,15 +1,17 @@
 package com.example.turnpage.global.config.security.handler;
 
+import com.example.turnpage.domain.member.converter.MemberConverter;
+import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
 import com.example.turnpage.global.config.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.turnpage.global.config.security.user.CustomOAuth2User;
-import com.example.turnpage.global.config.security.util.CookieUtils;
 import com.example.turnpage.global.config.security.util.JwtUtils;
+import com.example.turnpage.global.result.ResultResponse;
+import com.example.turnpage.global.utils.HandlerUtils;
 import jakarta.persistence.EntityNotFoundException;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +22,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+import static com.example.turnpage.global.result.code.MemberResultCode.LOGIN;
+
 @RequiredArgsConstructor
 @Component
 public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
@@ -28,6 +32,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
     private final MemberRepository memberRepository;
     private final OAuth2AuthorizationRequestBasedOnCookieRepository
             oAuth2AuthorizationRequestBasedOnCookieRepository;
+    private final MemberConverter memberConverter;
     @Value("${jwt.access-token-validity-in-seconds}")
     private Long ACCESS_TOKEN_VALIDITY_IN_SECONDS;
     @Value("${jwt.refresh-token-validity-in-seconds}")
@@ -50,17 +55,19 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
                 .next()
                 .getAuthority();
 
-        // access token
+        // access token, refresh token 생성
         String accessToken = jwtUtils.createJwt(email, role, ACCESS_TOKEN_VALIDITY_IN_SECONDS);
-        CookieUtils.addCookie(response, AUTHORIZATION_HEADER, accessToken, ACCESS_TOKEN_VALIDITY_IN_SECONDS.intValue());
-
-        // refresh token
         String refreshToken = jwtUtils.createJwt(email, role, REFRESH_TOKEN_VALIDITY_IN_SECONDS);
         refreshTokenService.saveRefreshToken(member.getId(), refreshToken);
-        CookieUtils.addCookie(response, REFRESH_TOKEN_KEY, refreshToken, REFRESH_TOKEN_VALIDITY_IN_SECONDS.intValue());
+
+        System.out.println("accessToken = " + accessToken);
+        System.out.println("refreshToken = " + refreshToken);
 
         clearAuthenticationAttributes(request, response);
-        response.sendRedirect("http://localhost:3000/");
+        // 굳이 컨트롤러 보내지 말고, 여기서 response 만들어서 응답하자.
+
+        MemberResponse.LoginInfo loginInfo = memberConverter.toLoginInfo(member.getId(), accessToken, refreshToken);
+        HandlerUtils.writeResponse(request, response, ResultResponse.of(LOGIN.getResultCode(), loginInfo));
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {

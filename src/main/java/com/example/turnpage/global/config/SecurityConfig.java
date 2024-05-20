@@ -1,7 +1,9 @@
 package com.example.turnpage.global.config;
 
+import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
+import com.example.turnpage.global.config.security.filter.CustomOAuth2LoginAuthenticationFilter;
 import com.example.turnpage.global.config.security.filter.JwtAuthenticationFilter;
 import com.example.turnpage.global.config.security.handler.CustomAccessDeniedHandler;
 import com.example.turnpage.global.config.security.handler.OAuth2LoginSuccessHandler;
@@ -9,16 +11,21 @@ import com.example.turnpage.global.config.security.repository.OAuth2Authorizatio
 import com.example.turnpage.global.config.security.service.CustomOAuth2UserService;
 import com.example.turnpage.global.config.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
 import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
+import org.springframework.security.oauth2.client.web.OAuth2AuthorizedClientRepository;
 import org.springframework.security.oauth2.client.web.OAuth2LoginAuthenticationFilter;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -33,6 +40,21 @@ public class SecurityConfig {
     private final RefreshTokenService refreshTokenService;
     private final CustomAccessDeniedHandler customAccessDeniedHandler;
 
+    private final ClientRegistrationRepository clientRegistrationRepository;
+    private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
+    private final MemberConverter memberConverter;
+
+    @Value("${spring.security.oauth2.client.registration.kakao.redirect-uri}")
+    public String TURNPAGE_REDIRECT_URI;
+
+    public CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter(AuthenticationManager authenticationManager) {
+        CustomOAuth2LoginAuthenticationFilter customOAuth2LoginAuthenticationFilter = new CustomOAuth2LoginAuthenticationFilter(
+                clientRegistrationRepository, oAuth2AuthorizedClientRepository, TURNPAGE_REDIRECT_URI, authenticationManager);
+
+        customOAuth2LoginAuthenticationFilter.setAuthenticationSuccessHandler(oAuth2LoginSuccessHandler());
+        return customOAuth2LoginAuthenticationFilter;
+    }
+
     @Bean
     public OAuth2AuthorizationRequestBasedOnCookieRepository oAuth2AuthorizationRequestBasedOnCookieRepository() {
         return new OAuth2AuthorizationRequestBasedOnCookieRepository();
@@ -40,21 +62,29 @@ public class SecurityConfig {
 
     @Bean
     public OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler() {
-        return new OAuth2LoginSuccessHandler(jwtUtils, refreshTokenService, memberRepository, oAuth2AuthorizationRequestBasedOnCookieRepository());
+        return new OAuth2LoginSuccessHandler(jwtUtils, refreshTokenService, memberRepository,
+                oAuth2AuthorizationRequestBasedOnCookieRepository(), memberConverter);
     }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        AuthenticationManagerBuilder amBuilder = http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManager authenticationManager = amBuilder.build();
+
+        http.authenticationManager(authenticationManager);
+
         http
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                        .disable()
                 )
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers("/images/**").permitAll()
                         .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/callback/**").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .requestMatchers(
@@ -63,16 +93,20 @@ public class SecurityConfig {
                                 "/v3/api-docs/**").permitAll()
                         .requestMatchers("/members/**").hasRole("USER")
                         .requestMatchers("/admin/**").hasRole("ADMIN")
+                        .requestMatchers("/result").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler))
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
                                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
+//                        .tokenEndpoint(token -> token.accessTokenResponseClient(this.accessTokenResponseClient()))
                         .userInfoEndpoint(userInfoEndpointConfig ->
                                 userInfoEndpointConfig.userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler())
+                        .loginPage("/auth/login")
                 )
+                .addFilterAt(customOAuth2LoginAuthenticationFilter(authenticationManager), OAuth2LoginAuthenticationFilter.class)
                 .addFilterAfter(new JwtAuthenticationFilter(jwtUtils), OAuth2LoginAuthenticationFilter.class);
 
 
