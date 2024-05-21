@@ -32,7 +32,6 @@ public class BookServiceTest extends ServiceTestConfig {
                 .author("브로디, 노아")
                 .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
                 .isbn("12987349382")
-                .itemId(1L)
                 .publisher("포레스트북스")
                 .publicationDate("2023-12-18")
                 .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
@@ -78,7 +77,7 @@ public class BookServiceTest extends ServiceTestConfig {
 
         //then
         assertEquals(11, bestSellerInfos.getTotalBooks());
-        assertEquals(1, bestSellerInfos.getBestSellerInfos().get(0).getRank());
+        assertEquals(1, bestSellerInfos.getBookPageElements().get(0).getRank());
     }
 
     @Test
@@ -112,6 +111,32 @@ public class BookServiceTest extends ServiceTestConfig {
         assertEquals("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.", bookInfo.getDescription());
         assertEquals(0, bookInfo.getStar());
         assertNull(bookInfo.getRank());
+
+    }
+
+    @Test
+    @Transactional
+    public void 도서_검색() {
+        ///given
+        SaveBookRequest request = SaveBookRequest.builder()
+                .itemId(1L)
+                .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
+                .author("브로디, 노아")
+                .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
+                .isbn("12987349382")
+                .publisher("포레스트북스")
+                .publicationDate("2023-12-18")
+                .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
+                .build();
+
+        //when
+        Pageable pageable = PageRequest.of(0, 20);
+        BookPageInfos bookPageInfos = bookService.searchBook("노아", pageable);
+
+        //then
+        assertEquals(1, bookPageInfos.getTotalBooks());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
+                bookPageInfos.getBestSellerInfos().get(0).getTitle());
 
     }
 
