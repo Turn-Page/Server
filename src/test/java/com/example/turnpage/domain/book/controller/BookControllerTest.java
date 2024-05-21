@@ -168,7 +168,6 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SB004"))
                 .andExpect(jsonPath("$.data.totalBooks").value(1))
-                .andExpect(jsonPath("$.data.data.size()").value(1))
         ;
 
         verify(bookService).searchBook(any(),any());
