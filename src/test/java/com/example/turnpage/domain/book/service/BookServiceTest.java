@@ -128,6 +128,7 @@ public class BookServiceTest extends ServiceTestConfig {
                 .publicationDate("2023-12-18")
                 .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
                 .build();
+        bookService.saveBook(request);
 
         //when
         Pageable pageable = PageRequest.of(0, 20);
