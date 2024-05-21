@@ -15,6 +15,7 @@ public interface BookService {
     void saveBestSeller();
     BookPageInfos fetchBestSeller(Pageable pageable);
     BookInfo getBookInfo(Long bookId);
+    BookPageInfos searchBook(String keyword, Pageable pageable);
 
 
 }

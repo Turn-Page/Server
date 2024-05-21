@@ -154,7 +154,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .isLast(false)
                 .build();
 
-        given(bookService.searchBoard(any(), any())).willReturn(response);
+        given(bookService.searchBook(any(), any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -171,6 +171,6 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.data.size()").value(1))
         ;
 
-        verify(bookService).searchBoard(any(),any());
+        verify(bookService).searchBook(any(),any());
     }
 }

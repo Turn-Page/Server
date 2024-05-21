@@ -131,12 +131,12 @@ public class BookServiceTest extends ServiceTestConfig {
 
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        BookPageInfos bookPageInfos = bookService.searchBook("노아", pageable);
+        BookPageInfos bookPageInfos = bookService.searchBook("목표", pageable);
 
         //then
         assertEquals(1, bookPageInfos.getTotalBooks());
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
-                bookPageInfos.getBestSellerInfos().get(0).getTitle());
+                bookPageInfos.getBookPageElements().get(0).getTitle());
 
     }
 

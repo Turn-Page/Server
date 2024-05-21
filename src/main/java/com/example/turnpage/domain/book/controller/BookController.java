@@ -53,5 +53,17 @@ public class BookController {
         return ResultResponse.of(BOOK_INFO.getResultCode(), bookService.getBookInfo(bookId));
     }
 
+    @GetMapping("/search")
+    @Parameters(value = {
+            @Parameter(name = "keyword", description = "파라미터로 keyword를 주세요."),
+            @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
+            @Parameter(name = "size", description = "한 페이지에 보일 book 개수를 입력해주세요.")
+    })
+    @Operation(summary = "책 검색 API", description = " 책 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다.")
+    public ResultResponse<BookPageInfos> searchBook(@RequestParam(name = "keyword") String keyword,
+                                                    @PageableDefault @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(SEARCH_BOOK.getResultCode(), bookService.searchBook(keyword, pageable));
+    }
+
 
 }
