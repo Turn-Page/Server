@@ -1,9 +1,9 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -11,14 +11,13 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -77,11 +76,11 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/bestSeller";
 
-        BookResponse.BookPageInfos response = BookResponse.BookPageInfos.builder()
+        BookPageInfos response = BookPageInfos.builder()
                 .page(0)
                 .totalPages(1)
                 .totalBooks(1)
-                .bestSellerInfos(new ArrayList<>())
+                .bookPageElements(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();
@@ -138,5 +137,39 @@ public class BookControllerTest extends ControllerTestConfig {
         ;
 
         verify(bookService).getBookInfo(any());
+    }
+
+    @Test
+    @DisplayName("책 검색 테스트")
+    public void searchBook() throws Exception {
+        //given
+        final String url = "/books/search";
+
+        BookPageInfos response = BookPageInfos.builder()
+                .page(0)
+                .totalPages(1)
+                .totalBooks(1)
+                .bookPageElements(new ArrayList<>())
+                .isFirst(true)
+                .isLast(false)
+                .build();
+
+        given(bookService.searchBook(any(), any())).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(url).param("keyword", "검색키워드").
+                        param("page", "0").
+                        param("size","20"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SB004"))
+                .andExpect(jsonPath("$.data.totalBooks").value(1))
+        ;
+
+        verify(bookService).searchBook(any(),any());
     }
 }

@@ -1,7 +1,7 @@
 package com.example.turnpage.domain.book.converter;
 
-import com.example.turnpage.domain.book.dto.BookResponse.BestSellerInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.BookPageElement;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Page;
@@ -27,8 +27,8 @@ public class BookConverter {
                 .build();
     }
 
-    public BestSellerInfo toBestSellerInfo(Book book) {
-        return BestSellerInfo.builder()
+    public BookPageElement toBookPageElement(Book book) {
+        return BookPageElement.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
@@ -42,11 +42,11 @@ public class BookConverter {
 
     public BookPageInfos toBookPageInfos(Page<Book> books) {
 
-        List<BestSellerInfo> bestSellerInfos = books.stream()
-                .map(this::toBestSellerInfo).toList();
+        List<BookPageElement> bookPageElements = books.stream()
+                .map(this::toBookPageElement).toList();
 
         return BookPageInfos.builder()
-                .bestSellerInfos(bestSellerInfos)
+                .bookPageElements(bookPageElements)
                 .page(books.getNumber())
                 .totalPages(books.getTotalPages())
                 .totalBooks((int) books.getTotalElements())
