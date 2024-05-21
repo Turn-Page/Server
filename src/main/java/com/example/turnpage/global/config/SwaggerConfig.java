@@ -22,7 +22,7 @@ public class SwaggerConfig {
         SecurityRequirement securityRequirement = new SecurityRequirement().addList("bearerAuth");
 
         Server server = new Server();
-        server.setUrl("https://43.203.224.233");
+        server.setUrl("http://43.203.224.233");
 
         Server local = new Server();
         local.setUrl("http://localhost:8080");
