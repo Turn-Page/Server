@@ -19,7 +19,7 @@ public class BookResponse {
 
     @Getter
     @SuperBuilder
-    public static class BookPageElement {
+    public static class BookInfo {
         private Long bookId;
         private String title;
         private String author;
@@ -32,7 +32,7 @@ public class BookResponse {
 
     @Getter
     @SuperBuilder
-    public static class BookInfo extends BookPageElement {
+    public static class BookDetailInfo extends BookInfo {
         private String isbn;
         private String description;
     }
@@ -43,7 +43,7 @@ public class BookResponse {
     @Builder
     public static class BookPageInfos {
         @Builder.Default
-        private List<BookPageElement> bookPageElements = new ArrayList<>();
+        private List<BookInfo> bookInfos = new ArrayList<>();
         private int page;
         private int totalPages;
         private int totalBooks;

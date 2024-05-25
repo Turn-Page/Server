@@ -1,7 +1,7 @@
 package com.example.turnpage.domain.book.converter;
 
+import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
-import com.example.turnpage.domain.book.dto.BookResponse.BookPageElement;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Page;
@@ -27,8 +27,8 @@ public class BookConverter {
                 .build();
     }
 
-    public BookPageElement toBookPageElement(Book book) {
-        return BookPageElement.builder()
+    public BookInfo tokBookInfo(Book book) {
+        return BookInfo.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
                 .author(book.getAuthor())
@@ -42,11 +42,11 @@ public class BookConverter {
 
     public BookPageInfos toBookPageInfos(Page<Book> books) {
 
-        List<BookPageElement> bookPageElements = books.stream()
-                .map(this::toBookPageElement).toList();
+        List<BookInfo> bookInfos = books.stream()
+                .map(this::tokBookInfo).toList();
 
         return BookPageInfos.builder()
-                .bookPageElements(bookPageElements)
+                .bookInfos(bookInfos)
                 .page(books.getNumber())
                 .totalPages(books.getTotalPages())
                 .totalBooks((int) books.getTotalElements())
@@ -55,8 +55,8 @@ public class BookConverter {
                 .build();
     }
 
-    public BookInfo toBookInfo(Book book) {
-        return BookInfo.builder()
+    public BookDetailInfo toBookDetailInfo(Book book) {
+        return BookDetailInfo.builder()
                 .title(book.getTitle())
                 .author(book.getAuthor())
                 .cover(book.getCover())

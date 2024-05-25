@@ -1,7 +1,7 @@
 package com.example.turnpage.domain.book.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse;
+import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -77,7 +77,7 @@ public class BookServiceTest extends ServiceTestConfig {
 
         //then
         assertEquals(11, bestSellerInfos.getTotalBooks());
-        assertEquals(1, bestSellerInfos.getBookPageElements().get(0).getRank());
+        assertEquals(1, bestSellerInfos.getBookInfos().get(0).getRank());
     }
 
     @Test
@@ -99,18 +99,18 @@ public class BookServiceTest extends ServiceTestConfig {
         Book book = bookService.findBook(bookService.saveBook(request).getBookId());
 
         //when
-        BookResponse.BookInfo bookInfo = bookService.getBookInfo(book.getId());
+        BookDetailInfo bookDetailInfo = bookService.getBookDetailInfo(book.getId());
 
         //then
-        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그", bookInfo.getTitle());
-        assertEquals("12987349382", bookInfo.getIsbn());
-        assertEquals("브로디, 노아", bookInfo.getAuthor());
-        assertEquals("https://image.aladin.co.kr/product/33948/74/cover500/k392930236_1.jpg", bookInfo.getCover());
-        assertEquals("2023-12-18", bookInfo.getPublicationDate());
-        assertEquals("포레스트북스", bookInfo.getPublisher());
-        assertEquals("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.", bookInfo.getDescription());
-        assertEquals(0, bookInfo.getStar());
-        assertNull(bookInfo.getRank());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그", bookDetailInfo.getTitle());
+        assertEquals("12987349382", bookDetailInfo.getIsbn());
+        assertEquals("브로디, 노아", bookDetailInfo.getAuthor());
+        assertEquals("https://image.aladin.co.kr/product/33948/74/cover500/k392930236_1.jpg", bookDetailInfo.getCover());
+        assertEquals("2023-12-18", bookDetailInfo.getPublicationDate());
+        assertEquals("포레스트북스", bookDetailInfo.getPublisher());
+        assertEquals("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.", bookDetailInfo.getDescription());
+        assertEquals(0, bookDetailInfo.getStar());
+        assertNull(bookDetailInfo.getRank());
 
     }
 
@@ -137,7 +137,7 @@ public class BookServiceTest extends ServiceTestConfig {
         //then
         assertEquals(1, bookPageInfos.getTotalBooks());
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
-                bookPageInfos.getBookPageElements().get(0).getTitle());
+                bookPageInfos.getBookInfos().get(0).getTitle());
 
     }
 

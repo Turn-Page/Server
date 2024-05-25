@@ -2,7 +2,7 @@ package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
-import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -80,7 +80,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .page(0)
                 .totalPages(1)
                 .totalBooks(1)
-                .bookPageElements(new ArrayList<>())
+                .bookInfos(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();
@@ -104,12 +104,12 @@ public class BookControllerTest extends ControllerTestConfig {
 
     @Test
     @DisplayName("책 상세 조회 테스트")
-    public void getBookInfo() throws Exception {
+    public void getBookDetailInfo() throws Exception {
 
         //given
         final String url = "/books/{bookId}";
 
-        BookInfo response = BookInfo.builder()
+        BookDetailInfo response = BookDetailInfo.builder()
                 .bookId(1L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
@@ -122,7 +122,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .star(0.0)
                 .build();
 
-        given(bookService.getBookInfo(any())).willReturn(response);
+        given(bookService.getBookDetailInfo(any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(get(url, 1L));
@@ -136,7 +136,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.isbn").value("12987349382"))
         ;
 
-        verify(bookService).getBookInfo(any());
+        verify(bookService).getBookDetailInfo(any());
     }
 
     @Test
@@ -149,7 +149,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .page(0)
                 .totalPages(1)
                 .totalBooks(1)
-                .bookPageElements(new ArrayList<>())
+                .bookInfos(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();

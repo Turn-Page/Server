@@ -4,7 +4,7 @@ package com.example.turnpage.domain.book.service;
 import com.example.turnpage.domain.book.client.BestSellerClient;
 import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
-import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
@@ -69,8 +69,8 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookInfo getBookInfo(Long bookId) {
-        return bookConverter.toBookInfo(findBook(bookId));
+    public BookDetailInfo getBookDetailInfo(Long bookId) {
+        return bookConverter.toBookDetailInfo(findBook(bookId));
     }
 
     @Override

@@ -15,7 +15,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
 import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
-import static com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import static com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import static com.example.turnpage.global.result.code.BookResultCode.*;
 
 @RestController
@@ -49,8 +49,8 @@ public class BookController {
             @Parameter(name = "bookId", description = "path variable로 bookId를 주세요."),
     })
     @Operation(summary = "책 정보 상세 조회 API", description = " 책 정보 상세 조회 API 입니다.")
-    public ResultResponse<BookInfo> getBookInfos(@PathVariable("bookId") Long bookId) {
-        return ResultResponse.of(BOOK_INFO.getResultCode(), bookService.getBookInfo(bookId));
+    public ResultResponse<BookDetailInfo> getBookDetailInfo(@PathVariable("bookId") Long bookId) {
+        return ResultResponse.of(BOOK_INFO.getResultCode(), bookService.getBookDetailInfo(bookId));
     }
 
     @GetMapping("/search")
