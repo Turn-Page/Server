@@ -8,16 +8,18 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
-@DisplayName("Sale Post 서비스의")
+@DisplayName("Sale Post Service 의")
 public class SalePostServiceTest extends ServiceTestConfig {
 
     @Autowired
     SalePostService salePostService;
     @Test
+    @Transactional
     @DisplayName("판매글 저장 성공 테스트")
     public void saveSalePost() {
         //given

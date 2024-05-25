@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
-@DisplayName("Member Service의")
+@DisplayName("Member Service 의")
 @SpringBootTest
 public class MemberServiceTest extends ServiceTestConfig {
     @Autowired protected MemberService memberService;
@@ -32,7 +32,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_조회() {
+    @DisplayName("마이페이지 내정보 조회 성공")
+    public void getMyPageInfo() {
 
         //when
         MyPageInfo memberInfo =  memberService.getMyPageInfo(member);
@@ -50,7 +51,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_조회_실패_해당멤버없음() {
+    @DisplayName("마이페이지 내정보 조회 실패 -> 해당 멤버 없음 에러")
+    public void getMyPageInfoFail_MEMBERNOTFOUND() {
 
         //given
         Member newMember =  Member.builder()
@@ -73,7 +75,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_수정() {
+    @DisplayName("마이페이지 내정보 수정 성공")
+    public void editMyPageInfo() {
 
         //given
         MemberRequest.EditMyPageRequest request = new MemberRequest.EditMyPageRequest("수밈");
@@ -92,7 +95,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 포인트_충전() {
+    @DisplayName("포인트 충전 성공")
+    public void chargeMyPoint() {
 
         //given
         int point = 500;
