@@ -40,8 +40,10 @@ public class SalePost extends BaseTimeEntity {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Lob
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, length = 1000)
     private String description;
 
     @Enumerated(EnumType.STRING)
