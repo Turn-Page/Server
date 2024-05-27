@@ -1,7 +1,6 @@
 package com.example.turnpage.domain.salePost.dto;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.salePost.entity.Grade;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

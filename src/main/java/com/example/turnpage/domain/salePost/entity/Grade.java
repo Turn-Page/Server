@@ -1,7 +1,6 @@
 package com.example.turnpage.domain.salePost.entity;
 
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.GlobalErrorCode;
 import com.example.turnpage.global.error.domain.SalePostErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -25,6 +24,5 @@ public enum Grade {
 
         throw new BusinessException(SalePostErrorCode.INVALID_GRADE_INPUT);
     }
-
 
 }
