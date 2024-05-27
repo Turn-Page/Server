@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public enum SalePostResultCode implements ResultCodeInterface {
     SAVE_SALE_POST(200, "SS001", "판매글을 성공적으로 저장하였습니다."),
+    EDIT_SALE_POST(200,"SS002", "판매글을 성공적으로 수정하였습니다."),
 
     ;
     private final int status;

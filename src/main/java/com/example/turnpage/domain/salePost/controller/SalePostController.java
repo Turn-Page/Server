@@ -1,6 +1,8 @@
 package com.example.turnpage.domain.salePost.controller;
 
 import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.salePost.dto.SalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.service.SalePostService;
@@ -10,11 +12,9 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
+import static com.example.turnpage.global.result.code.SalePostResultCode.EDIT_SALE_POST;
 import static com.example.turnpage.global.result.code.SalePostResultCode.SAVE_SALE_POST;
 
 @RestController
@@ -30,5 +30,13 @@ public class SalePostController {
     public ResultResponse<SalePostResponse.SalePostId> saveSalePost(@LoginMember Member member,
                                                                     @RequestBody @Valid SaveSalePostRequest request) {
         return ResultResponse.of(SAVE_SALE_POST.getResultCode(), salePostService.saveSalePost(member,request));
+    }
+
+    @Operation(summary = "판매글 수정 API", description = " 판매글 수정 API 입니다.")
+    @PatchMapping(value = "/{salePostId}")
+    public ResultResponse<SalePostResponse.SalePostId> editSalePost(@LoginMember Member member,
+                                                                    @PathVariable(value = "salePostId") Long salePostId,
+                                                                    @RequestBody @Valid EditSalePostRequest request) {
+        return ResultResponse.of(EDIT_SALE_POST.getResultCode(), salePostService.editSalePost(member, salePostId, request));
     }
 }

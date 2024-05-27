@@ -44,4 +44,11 @@ public class SalePost extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean isSold;
+
+    public void update(String title, String description, Grade grade, int price) {
+        this.title = title;
+        this.description = description;
+        this.grade = grade;
+        this.price = price;
+    }
 }

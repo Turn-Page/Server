@@ -21,4 +21,15 @@ public class SalePostRequest {
         @JsonProperty("bookInfo")
         private SaveBookRequest bookInfo;
     }
+
+    @Getter
+    @Builder
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EditSalePostRequest {
+        private String title;
+        private String description;
+        private String grade;
+        private Integer price;
+    }
 }
