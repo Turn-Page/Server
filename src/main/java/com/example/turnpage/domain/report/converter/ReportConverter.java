@@ -2,11 +2,13 @@ package com.example.turnpage.domain.report.converter;
 
 import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
+import com.example.turnpage.domain.member.converter.MemberConverter;
+import com.example.turnpage.domain.member.dto.MemberResponse;
+import com.example.turnpage.domain.member.dto.MemberResponse.WriterInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
-import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo.WriterInfo;
 import com.example.turnpage.domain.report.entity.Report;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Component
 public class ReportConverter {
+    private final MemberConverter memberConverter;
     private final BookConverter bookConverter;
 
     public Report toEntity(PostReportRequest request, Book book, Member member) {
@@ -28,7 +31,6 @@ public class ReportConverter {
                 .book(book)
                 .member(member)
                 .build();
-
     }
 
     public ReportId toReportId(Long reportId) {
@@ -50,14 +52,7 @@ public class ReportConverter {
                 .startDate(report.getStartDate())
                 .endDate(report.getEndDate())
                 .bookInfo(bookConverter.tokBookInfo(report.getBook()))
-                .writerInfo(this.toWriterInfo(report.getMember()))
-                .build();
-    }
-
-    public WriterInfo toWriterInfo(Member member) {
-        return WriterInfo.builder()
-                .writer(member.getName())
-                .profileImage(member.getImage())
+                .writerInfo(memberConverter.toWriterInfo(report.getMember()))
                 .build();
     }
 }

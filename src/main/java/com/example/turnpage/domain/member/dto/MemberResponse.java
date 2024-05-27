@@ -45,4 +45,12 @@ public class MemberResponse {
         private final String accessToken;
         private final String refreshToken;
     }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class WriterInfo {
+        private String writer;
+        private String profileImage;
+    }
 }

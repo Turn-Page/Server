@@ -2,6 +2,7 @@ package com.example.turnpage.domain.report.entity;
 
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
 import com.example.turnpage.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -55,4 +56,35 @@ public class Report extends BaseTimeEntity {
 
     @Column(name = "end_date")
     private LocalDate endDate;
+
+    public void edit(EditReportRequest request) {
+        editTitle(request.getTitle());
+        editContent(request.getContent());
+        editStartDate(request.getStartDate());
+        editEndDate(request.getEndDate());
+    }
+
+    private void editTitle(String title) {
+        if (!this.title.equals(title)) {
+            this.title = title;
+        }
+    }
+
+    private void editContent(String content) {
+        if (!this.content.equals(content)) {
+            this.content = content;
+        }
+    }
+
+    private void editStartDate(LocalDate startDate) {
+        if (!this.startDate.isEqual(startDate)) {
+            this.startDate = startDate;
+        }
+    }
+
+    private void editEndDate(LocalDate endDate) {
+        if (!this.endDate.isEqual(endDate)) {
+            this.endDate = endDate;
+        }
+    }
 }

@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 @SQLRestriction("deleted_at is NULL")
-public abstract class BaseTimeEntity implements Comparable<BaseTimeEntity> {
+public abstract class BaseTimeEntity {
     @CreatedDate
     @Column(name = "created_at", nullable = false)
     private LocalDateTime createdAt;
@@ -26,9 +26,4 @@ public abstract class BaseTimeEntity implements Comparable<BaseTimeEntity> {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
-
-    @Override
-    public int compareTo(BaseTimeEntity o) {
-        return this.createdAt.compareTo(o.getCreatedAt());
-    }
 }
