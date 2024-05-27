@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 
@@ -30,14 +31,18 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookId saveBook(SaveBookRequest request) {
+        return new BookId(saveBookInfo(request).getId());
+    }
+
+    @Override
+    @Transactional
+    public Book saveBookInfo(SaveBookRequest request) {
         String coverUrl = changeCoverImageSize(request.getCover());
 
-        Book book = bookRepository.save(bookConverter.toEntity(request.getItemId(),
+        return bookRepository.save(bookConverter.toEntity(request.getItemId(),
                 request.getTitle(),request.getAuthor(), coverUrl, request.getIsbn(),
                 request.getPublisher(), request.getPublicationDate(),
                 request.getDescription(), request.getRank()));
-
-        return new BookId(book.getId());
     }
 
     @Override
@@ -58,7 +63,7 @@ public class BookServiceImpl implements BookService {
     }
 
     private void updateRanking(Long itemId, int rank) {
-        Book book = bookRepository.findByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
+        Book book = findBookByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
         book.updateRanking(rank);
     }
 
@@ -85,6 +90,11 @@ public class BookServiceImpl implements BookService {
     public Book findBook(Long bookId) {
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
+    }
+
+    @Override
+    public Optional<Book> findBookByItemId(Long itemId) {
+        return bookRepository.findByItemId(itemId);
     }
 
     private String changeCoverImageSize(String cover) {

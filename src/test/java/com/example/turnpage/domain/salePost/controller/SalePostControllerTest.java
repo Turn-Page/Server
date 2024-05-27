@@ -1,8 +1,10 @@
 package com.example.turnpage.domain.salePost.controller;
 
-import com.example.turnpage.domain.book.dto.BookRequest;
+import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.salePost.entity.Grade;
+import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
+import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -29,16 +31,26 @@ public class SalePostControllerTest extends ControllerTestConfig {
 
         //given
         final String url = "/salePosts";
+        SaveBookRequest bookInfo = SaveBookRequest.builder()
+                .itemId(1L)
+                .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
+                .author("브로디, 노아")
+                .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
+                .isbn("12987349382")
+                .publisher("포레스트북스")
+                .publicationDate("2023-12-18")
+                .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
+                .build();
 
         SaveSalePostRequest request = SaveSalePostRequest.builder()
                 .title("제목")
                 .description("설명")
-                .grade(Grade.MINT)
+                .grade("최상")
                 .price(10000)
-                .bookInfo(any(BookRequest.SaveBookRequest.class))
+                .bookInfo(bookInfo)
                 .build();
 
-        SalePostResponse.SalePostId response = new SalePostResponse.SalePostId(1L);
+        SalePostId response = new SalePostId(1L);
 
         given(salePostService.saveSalePost(any(Member.class), any(SaveSalePostRequest.class))).willReturn(response);
 
@@ -55,9 +67,9 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SS001"))
-                .andExpect(jsonPath("$.data.salePostId").value("1"))
+                .andExpect(jsonPath("$.data.salePostId").value(1))
         ;
 
-        verify(salePostService.saveSalePost(any(Member.class), any(SaveSalePostRequest.class)));
+        verify(salePostService).saveSalePost(any(Member.class), any(SaveSalePostRequest.class));
     }
 }
