@@ -14,8 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.turnpage.global.result.code.SalePostResultCode.EDIT_SALE_POST;
-import static com.example.turnpage.global.result.code.SalePostResultCode.SAVE_SALE_POST;
+import static com.example.turnpage.global.result.code.SalePostResultCode.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -32,11 +31,18 @@ public class SalePostController {
         return ResultResponse.of(SAVE_SALE_POST.getResultCode(), salePostService.saveSalePost(member,request));
     }
 
-    @Operation(summary = "판매글 수정 API", description = " 판매글 수정 API 입니다.")
+    @Operation(summary = "판매글 수정 API", description = " 판매글 수정 API 입니다. path variable로 수정하고자 하는 salePostId를 주세요.")
     @PatchMapping(value = "/{salePostId}")
     public ResultResponse<SalePostResponse.SalePostId> editSalePost(@LoginMember Member member,
                                                                     @PathVariable(value = "salePostId") Long salePostId,
                                                                     @RequestBody @Valid EditSalePostRequest request) {
         return ResultResponse.of(EDIT_SALE_POST.getResultCode(), salePostService.editSalePost(member, salePostId, request));
+    }
+
+    @Operation(summary = "판매글 삭제 API", description = " 판매글 삭제 API 입니다. path variable로 삭제하고자 하는 salePostId를 주세요.")
+    @DeleteMapping(value = "/{salePostId}")
+    public ResultResponse<SalePostResponse.SalePostId> deleteSalePost(@LoginMember Member member,
+                                                                    @PathVariable(value = "salePostId") Long salePostId) {
+        return ResultResponse.of(DELETE_SALE_POST.getResultCode(), salePostService.deleteSalePost(member, salePostId));
     }
 }

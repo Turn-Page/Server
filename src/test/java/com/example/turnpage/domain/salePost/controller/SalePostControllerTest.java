@@ -16,8 +16,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -110,5 +109,34 @@ public class SalePostControllerTest extends ControllerTestConfig {
         ;
 
         verify(salePostService).editSalePost(any(Member.class), any(Long.class), any(EditSalePostRequest.class));
+    }
+
+    @Test
+    @DisplayName("판매글 정보 삭제 테스트")
+    public void deleteSalePostTest() throws Exception {
+
+        //given
+        final String url = "/salePosts/{salePostId}";
+
+        SalePostId response = new SalePostId(100L);
+
+        given(salePostService.deleteSalePost(any(Member.class), any(Long.class))).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                delete(url,100L)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwt)
+        );
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SS003"))
+                .andExpect(jsonPath("$.data.salePostId").value(100))
+        ;
+
+        verify(salePostService).deleteSalePost(any(Member.class), any(Long.class));
     }
 }

@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
+
 @Getter
 @Entity
 @Builder
@@ -51,4 +52,5 @@ public class SalePost extends BaseTimeEntity {
         this.grade = grade;
         this.price = price;
     }
+
 }

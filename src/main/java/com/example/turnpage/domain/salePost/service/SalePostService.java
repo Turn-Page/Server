@@ -9,5 +9,6 @@ import com.example.turnpage.domain.salePost.entity.SalePost;
 public interface SalePostService {
     SalePostId saveSalePost(Member loginMember, SaveSalePostRequest request);
     SalePostId editSalePost(Member loginMember, Long salePostId, EditSalePostRequest request);
+    SalePostId deleteSalePost(Member loginMember, Long salePostId);
     SalePost findSalePost(Long salePostId);
 }

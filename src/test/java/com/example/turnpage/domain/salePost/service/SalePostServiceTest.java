@@ -7,15 +7,16 @@ import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
 import com.example.turnpage.global.error.domain.SalePostErrorCode;
 import com.example.turnpage.support.ServiceTestConfig;
+import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
+
 import static com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @DisplayName("Sale Post Service 의")
@@ -113,5 +114,18 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals(salePost.getGrade(), Grade.TOP);
         assertEquals(salePost.getBook().getItemId(),1);
         assertEquals(salePost.getMember().getName(),"수밈");
+        assertNotNull(salePost.getUpdatedAt());
     }
+
+
+    //TODO : SQLDELETE 사용 여부 정해진 뒤 다시 TEST
+  /*  @Test
+    @Transactional
+    @DisplayName("판매글 삭제 성공 테스트")
+    public void deleteSalePost() {
+        //given //when
+        salePostService.deleteSalePost(testMember, testSalePost.getId());
+        //then
+        assertNotNull(salePost.getDeletedAt());
+    }*/
 }

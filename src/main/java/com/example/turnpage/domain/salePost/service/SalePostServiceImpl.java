@@ -5,7 +5,6 @@ import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.salePost.converter.SalePostConverter;
-import com.example.turnpage.domain.salePost.dto.SalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
@@ -57,6 +56,21 @@ public class SalePostServiceImpl implements SalePostService {
 
         return new SalePostId(salePost.getId());
     }
+
+    @Override
+    @Transactional
+    public SalePostId deleteSalePost(Member loginMember, Long salePostId) {
+        Member member = memberService.findMember(loginMember.getId());
+        SalePost salePost = findSalePost(salePostId);
+
+        if(!member.getId().equals(salePost.getMember().getId()))
+            throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
+
+        salePostRepository.deleteById(salePost.getId());
+
+        return new SalePostId(salePost.getId());
+    }
+
 
 
     @Override
