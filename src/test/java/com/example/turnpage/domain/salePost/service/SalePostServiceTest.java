@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.salePost.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
@@ -47,7 +48,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
                  .bookInfo(bookRequest)
                  .build();
         //when
-        SalePost salePost = salePostService.findSalePost(salePostService.saveSalePost(member, request).getSalePostId());
+        SalePost salePost = salePostService.findSalePost(salePostService.saveSalePost(testMember, request).getSalePostId());
 
         //then
         assertEquals(salePost.getTitle(), "제목");
@@ -83,7 +84,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
                 .build();
         //when
         BusinessException exception = assertThrows(BusinessException.class, () -> {
-            salePostService.saveSalePost(member, request);
+            salePostService.saveSalePost(testMember, request);
         });
 
         //then
@@ -93,7 +94,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
     @Test
     @Transactional
     @DisplayName("판매글 수정 성공 테스트")
-    public void saveSalePost() {
+    public void editSalePost() {
         //given
         EditSalePostRequest request = EditSalePostRequest.builder()
                 .title("수정제목")
@@ -101,8 +102,9 @@ public class SalePostServiceTest extends ServiceTestConfig {
                 .grade("상")
                 .price(20000)
                 .build();
+
         //when
-        SalePost salePost = salePostService.findSalePost(salePostService.editSalePost(member, request).getSalePostId());
+        SalePost salePost = salePostService.findSalePost(salePostService.editSalePost(testMember, testSalePost.getId(), request).getSalePostId());
 
         //then
         assertEquals(salePost.getTitle(), "수정제목");

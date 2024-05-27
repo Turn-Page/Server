@@ -2,6 +2,7 @@ package com.example.turnpage.domain.salePost.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.service.SalePostService;
@@ -79,7 +80,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
     public void editSalePostTest() throws Exception {
 
         //given
-        final String url = "/salePosts";
+        final String url = "/salePosts/{salePostId}";
 
         EditSalePostRequest request = EditSalePostRequest.builder()
                 .title("수정제목")
@@ -88,13 +89,13 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .price(20000)
                 .build();
 
-        SalePostId response = new SalePostId(1L);
+        SalePostId response = new SalePostId(100L);
 
-        given(salePostService.editSalePost(any(Member.class), any(EditSalePost.class))).willReturn(response);
+        given(salePostService.editSalePost(any(Member.class), any(Long.class), any(EditSalePostRequest.class))).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
-                patch(url)
+                patch(url,100L)
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .header("Authorization", "Bearer " + jwt)
@@ -105,9 +106,9 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SS002"))
-                .andExpect(jsonPath("$.data.salePostId").value(1))
+                .andExpect(jsonPath("$.data.salePostId").value(100))
         ;
 
-        verify(salePostService).saveSalePost(any(Member.class), any(EditSalePostRequest.class));
+        verify(salePostService).editSalePost(any(Member.class), any(Long.class), any(EditSalePostRequest.class));
     }
 }

@@ -36,12 +36,12 @@ public class MemberServiceTest extends ServiceTestConfig {
     public void getMyPageInfo() {
 
         //when
-        MyPageInfo memberInfo =  memberService.getMyPageInfo(member);
+        MyPageInfo memberInfo =  memberService.getMyPageInfo(testMember);
 
         //then
         assertEquals("수밈", memberInfo.getName());
         assertEquals("sumin@gmail.com", memberInfo.getEmail());
-        assertEquals(member.getImage(), memberInfo.getProfileImage());
+        assertEquals(testMember.getImage(), memberInfo.getProfileImage());
         assertEquals(0, memberInfo.getPoint());
         assertEquals(0, memberInfo.getReportCount());
         assertEquals(0, memberInfo.getSaleCount());
@@ -85,7 +85,7 @@ public class MemberServiceTest extends ServiceTestConfig {
         given(s3FileComponent.uploadFile(anyString(),any(MultipartFile.class))).willReturn("profile image url");
 
         //when
-        MemberResponse.MemberId memberId =  memberService.editMyPageInfo(member, request, profileImage);
+        MemberResponse.MemberId memberId =  memberService.editMyPageInfo(testMember, request, profileImage);
         Member editMember = memberService.findMember(memberId.getMemberId());
         //then
         assertEquals("수밈", editMember.getName());
@@ -102,10 +102,10 @@ public class MemberServiceTest extends ServiceTestConfig {
         int point = 500;
 
         //when
-        MemberResponse.MyPoint myPoint = memberService.chargeMyPoint(member, point);
+        MemberResponse.MyPoint myPoint = memberService.chargeMyPoint(testMember, point);
 
         //then
-        assertEquals(member.getId(), myPoint.getMemberId());
+        assertEquals(testMember.getId(), myPoint.getMemberId());
         assertEquals(500, myPoint.getTotalPoint());
     }
 }
