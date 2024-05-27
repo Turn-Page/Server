@@ -15,6 +15,7 @@ import org.springframework.test.web.servlet.ResultActions;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -71,5 +72,42 @@ public class SalePostControllerTest extends ControllerTestConfig {
         ;
 
         verify(salePostService).saveSalePost(any(Member.class), any(SaveSalePostRequest.class));
+    }
+
+    @Test
+    @DisplayName("판매글 정보 수정 테스트")
+    public void editSalePostTest() throws Exception {
+
+        //given
+        final String url = "/salePosts";
+
+        EditSalePostRequest request = EditSalePostRequest.builder()
+                .title("수정제목")
+                .description("수정설명")
+                .grade("상")
+                .price(20000)
+                .build();
+
+        SalePostId response = new SalePostId(1L);
+
+        given(salePostService.editSalePost(any(Member.class), any(EditSalePost.class))).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                patch(url)
+                        .content(objectMapper.writeValueAsString(request))
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .header("Authorization", "Bearer " + jwt)
+        );
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SS002"))
+                .andExpect(jsonPath("$.data.salePostId").value(1))
+        ;
+
+        verify(salePostService).saveSalePost(any(Member.class), any(EditSalePostRequest.class));
     }
 }

@@ -89,4 +89,27 @@ public class SalePostServiceTest extends ServiceTestConfig {
         //then
         assertEquals(SalePostErrorCode.INVALID_GRADE_INPUT.getCode(), exception.getErrorCode().getCode());
     }
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 수정 성공 테스트")
+    public void saveSalePost() {
+        //given
+        EditSalePostRequest request = EditSalePostRequest.builder()
+                .title("수정제목")
+                .description("수정설명")
+                .grade("상")
+                .price(20000)
+                .build();
+        //when
+        SalePost salePost = salePostService.findSalePost(salePostService.editSalePost(member, request).getSalePostId());
+
+        //then
+        assertEquals(salePost.getTitle(), "수정제목");
+        assertEquals(salePost.getDescription(), "수정설명");
+        assertEquals(salePost.getPrice(), 20000);
+        assertEquals(salePost.getGrade(), Grade.TOP);
+        assertEquals(salePost.getBook().getItemId(),1);
+        assertEquals(salePost.getMember().getName(),"수밈");
+    }
 }
