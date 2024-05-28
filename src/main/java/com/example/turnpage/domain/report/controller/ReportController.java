@@ -8,6 +8,9 @@ import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.service.ReportService;
 import com.example.turnpage.global.config.security.LoginMember;
 import com.example.turnpage.global.result.ResultResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -31,28 +34,39 @@ public class ReportController {
     private final ReportService reportService;
 
     @PostMapping()
+    @Operation(summary = "새 독후감 등록 API", description = "새 독후감 등록 API입니다.")
     public ResultResponse<ReportId> postReport(@LoginMember Member member,
                                                @Valid @RequestBody PostReportRequest request) {
         return ResultResponse.of(POST_REPORT, reportService.postReport(member, request));
     }
 
     @GetMapping("/my")
+    @Operation(summary = "내 독후감 목록 조회 API", description = "내 독후감 목록 조회 API입니다.")
     public ResultResponse<List<ReportInfo>> findMyReportList(@LoginMember Member member) {
         return ResultResponse.of(MY_REPORT_LIST, reportService.findMyReportList(member));
     }
 
     @GetMapping("/friends")
+    @Operation(summary = "친구들의 목록 조회 API", description = "친구들의 독후감 목록 조회 API입니다.")
     ResultResponse<List<ReportInfo>> findFriendsReportList(@LoginMember Member member) {
         return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findFriendsReportList(member));
     }
 
     @GetMapping("/{reportId}")
+    @Parameters(value = {
+            @Parameter(name = "reportId", description = "조회하고자 하는 독후감의 reportId를 입력해 주세요.")
+    })
+    @Operation(summary = "특정 독후감 조회 API", description = "reportId를 통한 특정 독후감 조회 API입니다.")
     ResultResponse<ReportInfo> getReport(@LoginMember Member member,
                                          @PathVariable("reportId") Long reportId) {
         return ResultResponse.of(GET_SPECIFIC_REPORT, reportService.getReport(member, reportId));
     }
 
     @PatchMapping("/{reportId}")
+    @Parameters(value = {
+            @Parameter(name = "reportId", description = "수정하고자 하는 독후감의 reportId를 입력해 주세요.")
+    })
+    @Operation(summary = "특정 독후감 수정 API", description = "reportId를 통한 특정 독후감 수정 API입니다.")
     ResultResponse<ReportId> editReport(@LoginMember Member member,
                                         @PathVariable("reportId") Long reportId,
                                         @Valid @RequestBody ReportRequest.EditReportRequest request) {
@@ -60,6 +74,10 @@ public class ReportController {
     }
 
     @DeleteMapping("/{reportId}")
+    @Parameters(value = {
+            @Parameter(name = "reportId", description = "삭제하고자 하는 독후감의 reportId를 입력해 주세요.")
+    })
+    @Operation(summary = "특정 독후감 삭제 API", description = "reportId를 통한 특정 독후감 삭제 API입니다.")
     ResultResponse<ReportId> deleteReport(@LoginMember Member member,
                                           @PathVariable("reportId") Long reportId) {
         return ResultResponse.of(DELETE_SPECIFIC_REPORT, reportService.deleteReport(member, reportId));
