@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
@@ -25,39 +26,40 @@ import static com.example.turnpage.global.result.code.ReportResultcode.*;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/reports")
 public class ReportController {
     private final ReportService reportService;
 
-    @PostMapping("/reports")
+    @PostMapping()
     public ResultResponse<ReportId> postReport(@LoginMember Member member,
                                                @Valid @RequestBody PostReportRequest request) {
         return ResultResponse.of(POST_REPORT, reportService.postReport(member, request));
     }
 
-    @GetMapping("/reports/my")
+    @GetMapping("/my")
     public ResultResponse<List<ReportInfo>> findMyReportList(@LoginMember Member member) {
         return ResultResponse.of(MY_REPORT_LIST, reportService.findMyReportList(member));
     }
 
-    @GetMapping("/reports/friends")
+    @GetMapping("/friends")
     ResultResponse<List<ReportInfo>> findFriendsReportList(@LoginMember Member member) {
         return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findFriendsReportList(member));
     }
 
-    @GetMapping("/reports/{reportId}")
+    @GetMapping("/{reportId}")
     ResultResponse<ReportInfo> getReport(@LoginMember Member member,
                                          @PathVariable("reportId") Long reportId) {
         return ResultResponse.of(GET_SPECIFIC_REPORT, reportService.getReport(member, reportId));
     }
 
-    @PatchMapping("/reports/{reportId}")
+    @PatchMapping("/{reportId}")
     ResultResponse<ReportId> editReport(@LoginMember Member member,
                                         @PathVariable("reportId") Long reportId,
                                         @Valid @RequestBody ReportRequest.EditReportRequest request) {
         return ResultResponse.of(UPDATE_SPECIFIC_REPORT, reportService.editReport(member, reportId, request));
     }
 
-    @DeleteMapping("/reports/{reportId}")
+    @DeleteMapping("/{reportId}")
     ResultResponse<ReportId> deleteReport(@LoginMember Member member,
                                           @PathVariable("reportId") Long reportId) {
         return ResultResponse.of(DELETE_SPECIFIC_REPORT, reportService.deleteReport(member, reportId));
