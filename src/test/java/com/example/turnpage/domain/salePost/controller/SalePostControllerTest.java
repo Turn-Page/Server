@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.salePost.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
@@ -12,6 +13,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -139,4 +143,39 @@ public class SalePostControllerTest extends ControllerTestConfig {
 
         verify(salePostService).deleteSalePost(any(Member.class), any(Long.class));
     }
+
+
+    @Test
+    @DisplayName("판매글 목록 조회 테스트")
+    public void fetchSalePostsTest() throws Exception {
+
+        //given
+        final String url = "/salePosts";
+        PagedSalePostList response = PagedSalePostList.builder()
+                .page(0)
+                .totalPages(1)
+                .totalElements(1)
+                .bookList(new ArrayList<>())
+                .isFirst(true)
+                .isLast(false)
+                .build();
+
+        given(salePostService.fetchSalePosts(any())).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(url).param("page", "0").param("size","20"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SS004"))
+                .andExpect(jsonPath("$.data.page").value(0))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
+        ;
+
+        verify(salePostService).fetchSalePosts(any());
+    }
+
 }
