@@ -2,12 +2,12 @@ package com.example.turnpage.domain.salePost.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
 import com.example.turnpage.global.error.domain.SalePostErrorCode;
 import com.example.turnpage.support.ServiceTestConfig;
-import jakarta.persistence.EntityManager;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +15,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
-
 
 import static com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import static org.junit.jupiter.api.Assertions.*;
@@ -164,12 +163,11 @@ public class SalePostServiceTest extends ServiceTestConfig {
 
         //then
         assertEquals(11, salePostList.getTotalElements());
-        assertEquals(0, salePostList.getSalePostList().getPage());
-        assertEquals(2, salePostList.getTotalPages());
-        assertEquals(salePostList.get(0).getTitle(), "제목");
-        assertEquals(salePostList.get(0).getMember().getName(),"수밈");
-        assertEquals(salePostList.get(0).getBook().getIsbn(), "12987349382");
-
+        assertEquals(0, salePostList.getPage());
+        assertEquals(1, salePostList.getTotalPages());
+        assertEquals(salePostList.getSalePostList().get(0).getTitle(), "제목");
+        assertEquals(salePostList.getSalePostList().get(0).getBookInfo().getTitle(),
+                "꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그");
     }
 
 

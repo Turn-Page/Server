@@ -5,6 +5,8 @@ import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -155,7 +157,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .page(0)
                 .totalPages(1)
                 .totalElements(1)
-                .bookList(new ArrayList<>())
+                .salePostList(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();

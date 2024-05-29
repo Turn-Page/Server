@@ -84,6 +84,8 @@ public class SecurityConfig {
                         .requestMatchers("/callback/oauth2/code/**").permitAll()
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
+                        .requestMatchers(HttpMethod.GET, "/salePosts/**").permitAll()
+
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",

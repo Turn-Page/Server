@@ -1,5 +1,6 @@
 package com.example.turnpage.domain.salePost.service;
 
+import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.domain.member.entity.Member;
@@ -7,6 +8,7 @@ import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.salePost.converter.SalePostConverter;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
@@ -14,6 +16,7 @@ import com.example.turnpage.domain.salePost.repository.SalePostRepository;
 import com.example.turnpage.global.error.BusinessException;
 import com.example.turnpage.global.error.domain.SalePostErrorCode;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,7 +43,8 @@ public class SalePostServiceImpl implements SalePostService {
 
         //판매글 저장
         SalePost salePost = salePostRepository.save(salePostConverter.toEntity(member, book,
-                request.getTitle(), request.getDescription(), Grade.toGrade(request.getGrade()), request.getPrice()));
+                                                        request.getTitle(), request.getDescription(),
+                                                        Grade.toGrade(request.getGrade()), request.getPrice()));
 
         return new SalePostId(salePost.getId());
     }
@@ -50,6 +54,8 @@ public class SalePostServiceImpl implements SalePostService {
     public SalePostId editSalePost(Member loginMember, Long salePostId, EditSalePostRequest request) {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
+
+        checkMember(member,salePost.getMember());
 
         salePost.update(request.getTitle(), request.getDescription(),
                 Grade.toGrade(request.getGrade()), request.getPrice());
@@ -63,20 +69,27 @@ public class SalePostServiceImpl implements SalePostService {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
 
-        if(!member.getId().equals(salePost.getMember().getId()))
-            throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
-
+        checkMember(member,salePost.getMember());
         salePostRepository.deleteById(salePost.getId());
 
         return new SalePostId(salePost.getId());
     }
 
-
+    @Override
+    public PagedSalePostList fetchSalePosts(Pageable pageable) {
+        return salePostConverter.toPagedSalePostList(
+                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(pageable));
+    }
 
     @Override
     public SalePost findSalePost(Long salePostId) {
         return salePostRepository.findById(salePostId).orElseThrow(
                 () -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
+    }
+
+    private void checkMember(Member loginMember, Member writer) {
+        if(!loginMember.getId().equals(writer.getId()))
+            throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
     }
 
 }
