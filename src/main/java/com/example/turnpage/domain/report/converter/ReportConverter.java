@@ -3,14 +3,14 @@ package com.example.turnpage.domain.report.converter;
 import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.converter.MemberConverter;
-import com.example.turnpage.domain.member.dto.MemberResponse;
-import com.example.turnpage.domain.member.dto.MemberResponse.WriterInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.entity.Report;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -37,13 +37,6 @@ public class ReportConverter {
         return new ReportId(reportId);
     }
 
-    public List<ReportInfo> toReportInfoList(List<Report> reportList) {
-        return reportList
-                .stream()
-                .map(report -> toReportInfo(report))
-                .collect(Collectors.toList());
-    }
-
     public ReportInfo toReportInfo(Report report) {
         return ReportInfo.builder()
                 .reportId(report.getId())
@@ -53,6 +46,22 @@ public class ReportConverter {
                 .endDate(report.getEndDate())
                 .bookInfo(bookConverter.tokBookInfo(report.getBook()))
                 .writerInfo(memberConverter.toWriterInfo(report.getMember()))
+                .build();
+    }
+
+    public PagedReportList toPagedReportList(Page<Report> reports) {
+        List<ReportInfo> reportInfoList = reports
+                .stream()
+                .map(report -> toReportInfo(report))
+                .collect(Collectors.toList());
+
+        return PagedReportList.builder()
+                .reportList(reportInfoList)
+                .page(reports.getNumber())
+                .totalPages(reports.getTotalPages())
+                .totalElements(Long.valueOf(reports.getTotalElements()).intValue())
+                .isFirst(reports.isFirst())
+                .isLast(reports.isLast())
                 .build();
     }
 }

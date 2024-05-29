@@ -7,12 +7,16 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.entity.Report;
 import com.example.turnpage.domain.report.repository.ReportRepository;
 import com.example.turnpage.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,22 +51,22 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public List<ReportInfo> findMyReportList(Member member) {
-        List<Report> reportList = reportRepository.findByMemberId(member.getId());
+    public PagedReportList findMyReportList(Member member, Pageable pageable) {
+        Page<Report> reports = reportRepository.findByMemberId(member.getId(), pageable);
 
-        return reportConverter.toReportInfoList(reportList);
+        return reportConverter.toPagedReportList(reports);
     }
 
     @Override
-    public List<ReportInfo> findFriendsReportList(Member member) {
+    public PagedReportList findFriendsReportList(Member member, Pageable pageable) {
         List<Long> friendIdList = friendService.getFriendList(member)
                 .stream()
                 .map(friend -> friend.getMemberId())
                 .collect(Collectors.toList());
 
-        List<Report> reportList = reportRepository.findByMemberIdInOrderByCreatedAtDesc(friendIdList);
+        Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(friendIdList, pageable);
 
-        return reportConverter.toReportInfoList(reportList);
+        return reportConverter.toPagedReportList(reports);
     }
 
     @Override
@@ -81,8 +85,6 @@ public class ReportServiceImpl implements ReportService {
 
         validateWriter(report, member);
         report.edit(request);
-        reportRepository.flush();
-
         return reportConverter.toReportId(report.getId());
     }
 
@@ -94,7 +96,6 @@ public class ReportServiceImpl implements ReportService {
 
         validateWriter(report, member);
         reportRepository.delete(report);
-        reportRepository.flush();
         return reportConverter.toReportId(reportId);
     }
 

@@ -3,6 +3,7 @@ package com.example.turnpage.domain.report.controller;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.service.ReportService;
@@ -13,6 +14,9 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -21,8 +25,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 import static com.example.turnpage.global.result.code.ReportResultcode.*;
 
@@ -42,14 +44,28 @@ public class ReportController {
 
     @GetMapping("/my")
     @Operation(summary = "내 독후감 목록 조회 API", description = "내 독후감 목록 조회 API입니다.")
-    public ResultResponse<List<ReportInfo>> findMyReportList(@LoginMember Member member) {
-        return ResultResponse.of(MY_REPORT_LIST, reportService.findMyReportList(member));
+    @Parameters(value = {
+            @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
+            @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
+    })
+    public ResultResponse<PagedReportList> findMyReportList(@LoginMember Member member,
+                                                            @PageableDefault(sort = "createdAt",
+                                                                     direction = Sort.Direction.DESC)
+                                                             Pageable pageable) {
+        return ResultResponse.of(MY_REPORT_LIST, reportService.findMyReportList(member, pageable));
     }
 
     @GetMapping("/friends")
     @Operation(summary = "친구들의 목록 조회 API", description = "친구들의 독후감 목록 조회 API입니다.")
-    ResultResponse<List<ReportInfo>> findFriendsReportList(@LoginMember Member member) {
-        return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findFriendsReportList(member));
+    @Parameters(value = {
+            @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
+            @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
+    })
+    ResultResponse<PagedReportList> findFriendsReportList(@LoginMember Member member,
+                                                           @PageableDefault(sort = "createdAt",
+                                                                   direction = Sort.Direction.DESC)
+                                                           Pageable pageable) {
+        return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findFriendsReportList(member, pageable));
     }
 
     @GetMapping("/{reportId}")

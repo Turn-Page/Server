@@ -6,6 +6,8 @@ import lombok.Builder;
 import lombok.Getter;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.example.turnpage.domain.member.dto.MemberResponse.WriterInfo;
 
@@ -28,5 +30,18 @@ public abstract class ReportResponse {
         private LocalDate endDate;
         private BookInfo bookInfo;
         private WriterInfo writerInfo;
+    }
+
+    @Getter
+    @Builder
+    @AllArgsConstructor
+    public static class PagedReportList {
+        @Builder.Default
+        private List<ReportInfo> reportList= new ArrayList<>();
+        private int page;
+        private int totalPages;
+        private int totalElements;
+        private Boolean isFirst;
+        private Boolean isLast;
     }
 }

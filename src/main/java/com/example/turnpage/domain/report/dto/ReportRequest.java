@@ -4,7 +4,6 @@ import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.report.dto.validation.DateRange;
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
