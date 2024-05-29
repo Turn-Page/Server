@@ -30,6 +30,7 @@ public abstract class ReportResponse {
         private LocalDate endDate;
         private BookInfo bookInfo;
         private WriterInfo writerInfo;
+        private LocalDate createdAt;
     }
 
     @Getter

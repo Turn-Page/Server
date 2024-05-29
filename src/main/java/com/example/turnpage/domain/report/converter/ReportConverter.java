@@ -46,6 +46,7 @@ public class ReportConverter {
                 .endDate(report.getEndDate())
                 .bookInfo(bookConverter.tokBookInfo(report.getBook()))
                 .writerInfo(memberConverter.toWriterInfo(report.getMember()))
+                .createdAt(report.getCreatedAt().toLocalDate())
                 .build();
     }
 
