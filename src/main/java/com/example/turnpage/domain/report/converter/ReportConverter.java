@@ -60,7 +60,7 @@ public class ReportConverter {
                 .reportList(reportInfoList)
                 .page(reports.getNumber())
                 .totalPages(reports.getTotalPages())
-                .totalElements(Long.valueOf(reports.getTotalElements()).intValue())
+                .totalElements(reports.getTotalElements())
                 .isFirst(reports.isFirst())
                 .isLast(reports.isLast())
                 .build();

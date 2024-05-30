@@ -41,7 +41,7 @@ public abstract class ReportResponse {
         private List<ReportInfo> reportList= new ArrayList<>();
         private int page;
         private int totalPages;
-        private int totalElements;
+        private long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
     }
