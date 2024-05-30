@@ -17,7 +17,7 @@ import java.time.LocalDateTime;
 @SQLRestriction("deleted_at is NULL")
 public abstract class BaseTimeEntity {
     @CreatedDate
-    @Column(name = "created_at", nullable = false)
+    @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @LastModifiedDate
@@ -26,4 +26,8 @@ public abstract class BaseTimeEntity {
 
     @Column(name = "deleted_at")
     private LocalDateTime deletedAt;
+
+    public void delete() {
+        this.deletedAt = LocalDateTime.now();
+    }
 }

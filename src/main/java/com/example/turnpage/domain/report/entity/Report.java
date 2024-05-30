@@ -18,7 +18,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 import java.time.LocalDate;
@@ -28,7 +27,6 @@ import java.time.LocalDate;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
 @Entity
-@SQLDelete(sql = "UPDATE report SET deleted_at = CURRENT_TIMESTAMP WHERE report_id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class Report extends BaseTimeEntity {
     @Id
