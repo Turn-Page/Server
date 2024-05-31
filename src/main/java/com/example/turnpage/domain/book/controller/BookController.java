@@ -30,7 +30,7 @@ public class BookController {
     @Operation(summary = "책 정보 저장 API", description = " 책 정보 저장 API 입니다.")
     public ResultResponse<BookId> saveBook(SaveBookRequest request) {
 
-        return ResultResponse.of(SAVE_BOOK.getResultCode(),  bookService.saveBook(request));
+        return ResultResponse.of(SAVE_BOOK,  bookService.saveBook(request));
     }
 
     @GetMapping("/bestSeller")
@@ -41,7 +41,7 @@ public class BookController {
     @Operation(summary = "베스트 셀러 목록 조회 API", description = " 베스트 셀러 목록 조회 API 입니다.")
     public ResultResponse<BookPageInfos> fetchBestSeller(@PageableDefault(sort = "ranking", direction = Sort.Direction.ASC)
                                                               @Parameter(hidden = true) Pageable pageable) {
-        return ResultResponse.of(FETCH_BESTSELLER.getResultCode(), bookService.fetchBestSeller(pageable));
+        return ResultResponse.of(FETCH_BESTSELLER, bookService.fetchBestSeller(pageable));
     }
 
     @GetMapping("/{bookId}")
@@ -50,7 +50,7 @@ public class BookController {
     })
     @Operation(summary = "책 정보 상세 조회 API", description = " 책 정보 상세 조회 API 입니다.")
     public ResultResponse<BookDetailInfo> getBookDetailInfo(@PathVariable("bookId") Long bookId) {
-        return ResultResponse.of(BOOK_INFO.getResultCode(), bookService.getBookDetailInfo(bookId));
+        return ResultResponse.of(BOOK_INFO, bookService.getBookDetailInfo(bookId));
     }
 
     @GetMapping("/search")
@@ -62,7 +62,7 @@ public class BookController {
     @Operation(summary = "책 검색 API", description = " 책 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다.")
     public ResultResponse<BookPageInfos> searchBook(@RequestParam(name = "keyword") String keyword,
                                                     @PageableDefault @Parameter(hidden = true) Pageable pageable) {
-        return ResultResponse.of(SEARCH_BOOK.getResultCode(), bookService.searchBook(keyword, pageable));
+        return ResultResponse.of(SEARCH_BOOK, bookService.searchBook(keyword, pageable));
     }
 
 

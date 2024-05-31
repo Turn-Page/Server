@@ -5,16 +5,14 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.global.entity.BaseTimeEntity;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 
 @Getter
 @Entity
 @Builder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE sale_post SET deleted_at = CURRENT_TIMESTAMP WHERE sale_post_id = ?")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is NULL")
 public class SalePost extends BaseTimeEntity {
     @Id

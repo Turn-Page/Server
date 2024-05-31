@@ -38,7 +38,6 @@ public class BookServiceImpl implements BookService {
     @Transactional
     public Book saveBookInfo(SaveBookRequest request) {
         String coverUrl = changeCoverImageSize(request.getCover());
-
         return bookRepository.save(bookConverter.toEntity(request.getItemId(),
                 request.getTitle(),request.getAuthor(), coverUrl, request.getIsbn(),
                 request.getPublisher(), request.getPublicationDate(),

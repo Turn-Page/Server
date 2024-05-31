@@ -27,7 +27,7 @@ public class MemberController {
     @Operation(summary = "마이페이지 프로필 조회 API", description = " 프로필 조회 API 입니다." )
     @GetMapping("/myPage")
     public ResultResponse<MyPageInfo> getMyPageInfo(@LoginMember Member member) {
-        return ResultResponse.of(MYPAGE_INFO.getResultCode(), memberService.getMyPageInfo(member));
+        return ResultResponse.of(MYPAGE_INFO, memberService.getMyPageInfo(member));
     }
 
     @Operation(summary = "마이페이지 프로필 수정 API", description = " 프로필 수정 API 입니다." +
@@ -36,7 +36,7 @@ public class MemberController {
     public ResultResponse<MemberId> editMyPageInfo(@LoginMember Member member,
                                                    @RequestPart(value = "request") EditMyPageRequest request,
                                                    @RequestPart(value = "profileImage", required = false) MultipartFile profileImage) {
-        return ResultResponse.of(EDIT_MYPAGE_INFO.getResultCode(), memberService.editMyPageInfo(member, request, profileImage));
+        return ResultResponse.of(EDIT_MYPAGE_INFO, memberService.editMyPageInfo(member, request, profileImage));
     }
 
     @Operation(summary = "포인트 충전 API", description = " 포인트 충전 API 입니다." +
@@ -44,6 +44,6 @@ public class MemberController {
     @PatchMapping(value = "/myPoint")
     public ResultResponse<MyPoint> chargeMyPoint(@LoginMember Member member,
                                                  @RequestParam(value = "point") int point) {
-        return ResultResponse.of(CHARGE_MY_POINT.getResultCode(), memberService.chargeMyPoint(member, point));
+        return ResultResponse.of(CHARGE_MY_POINT, memberService.chargeMyPoint(member, point));
     }
 }

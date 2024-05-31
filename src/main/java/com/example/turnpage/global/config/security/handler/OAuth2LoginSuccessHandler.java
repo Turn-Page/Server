@@ -67,7 +67,7 @@ public class OAuth2LoginSuccessHandler implements AuthenticationSuccessHandler {
         // 굳이 컨트롤러 보내지 말고, 여기서 response 만들어서 응답하자.
 
         MemberResponse.LoginInfo loginInfo = memberConverter.toLoginInfo(member.getId(), accessToken, refreshToken);
-        HandlerUtils.writeResponse(request, response, ResultResponse.of(LOGIN.getResultCode(), loginInfo));
+        HandlerUtils.writeResponse(request, response, ResultResponse.of(LOGIN, loginInfo));
     }
 
     private void clearAuthenticationAttributes(HttpServletRequest request, HttpServletResponse response) {
