@@ -2,7 +2,6 @@ package com.example.turnpage.domain.salePost.entity;
 
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.report.entity.Report;
 import com.example.turnpage.global.entity.BaseTimeEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -18,13 +17,11 @@ import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.SQLRestriction;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
-@SQLDelete(sql = "UPDATE sale_post SET deleted_at = CURRENT_TIMESTAMP WHERE sale_post_id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class SalePost extends BaseTimeEntity {
     @Id

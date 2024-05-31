@@ -12,6 +12,7 @@ import com.example.turnpage.global.result.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -32,6 +33,7 @@ import static com.example.turnpage.global.result.code.ReportResultcode.*;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/reports")
+@Tag(name = "독후감 API", description = "독후감 관련 API입니다.")
 public class ReportController {
     private final ReportService reportService;
 
@@ -56,7 +58,7 @@ public class ReportController {
     }
 
     @GetMapping("/friends")
-    @Operation(summary = "친구들의 목록 조회 API", description = "친구들의 독후감 목록 조회 API입니다.")
+    @Operation(summary = "친구들의 독후감 목록 조회 API", description = "친구들의 독후감 목록 조회 API입니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
             @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")

@@ -19,7 +19,6 @@ import java.time.LocalDate;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor
-@SQLDelete(sql = "UPDATE book SET deleted_at = CURRENT_TIMESTAMP WHERE book_id = ?")
 @SQLRestriction("deleted_at is NULL")
 public class Book extends BaseTimeEntity {
     @Id
