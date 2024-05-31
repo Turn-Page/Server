@@ -4,7 +4,7 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.global.config.security.LoginMember;
 import com.example.turnpage.global.result.ResultResponse;
