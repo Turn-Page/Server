@@ -1,12 +1,10 @@
 package com.example.turnpage.domain.salePost.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -17,7 +15,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -153,11 +150,11 @@ public class SalePostControllerTest extends ControllerTestConfig {
 
         //given
         final String url = "/salePosts";
-        PagedSalePostList response = PagedSalePostList.builder()
+        SalePostResponse.PagedSalePostInfo response = SalePostResponse.PagedSalePostInfo.builder()
                 .page(0)
                 .totalPages(1)
                 .totalElements(1)
-                .salePostList(new ArrayList<>())
+                .salePostInfoList(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();

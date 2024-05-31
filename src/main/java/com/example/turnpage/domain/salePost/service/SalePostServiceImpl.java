@@ -1,6 +1,5 @@
 package com.example.turnpage.domain.salePost.service;
 
-import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.domain.member.entity.Member;
@@ -8,7 +7,7 @@ import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.salePost.converter.SalePostConverter;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
@@ -76,7 +75,7 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
-    public PagedSalePostList fetchSalePosts(Pageable pageable) {
+    public PagedSalePostInfo fetchSalePosts(Pageable pageable) {
         return salePostConverter.toPagedSalePostList(
                 salePostRepository.findSalePostsWithBooksOrderByCreatedAt(pageable));
     }

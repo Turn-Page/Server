@@ -2,7 +2,6 @@ package com.example.turnpage.domain.salePost.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostList;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
@@ -17,6 +16,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
 import static com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import static com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
@@ -159,14 +159,14 @@ public class SalePostServiceTest extends ServiceTestConfig {
         }
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        PagedSalePostList salePostList = salePostService.fetchSalePosts(pageable);
+        PagedSalePostInfo salePostList = salePostService.fetchSalePosts(pageable);
 
         //then
         assertEquals(11, salePostList.getTotalElements());
         assertEquals(0, salePostList.getPage());
         assertEquals(1, salePostList.getTotalPages());
-        assertEquals(salePostList.getSalePostList().get(0).getTitle(), "제목");
-        assertEquals(salePostList.getSalePostList().get(0).getBookInfo().getTitle(),
+        assertEquals(salePostList.getSalePostInfoList().get(0).getTitle(), "제목");
+        assertEquals(salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle(),
                 "꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그");
     }
 

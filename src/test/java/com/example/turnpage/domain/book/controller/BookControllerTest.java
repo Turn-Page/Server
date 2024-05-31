@@ -1,9 +1,9 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
-import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
+import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -76,11 +76,11 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/bestSeller";
 
-        BookPageInfos response = BookPageInfos.builder()
+        BookResponse.PagedBookInfo response = BookResponse.PagedBookInfo.builder()
                 .page(0)
                 .totalPages(1)
-                .totalBooks(1)
-                .bookInfos(new ArrayList<>())
+                .totalElements(1)
+                .bookInfoList(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();
@@ -145,11 +145,11 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/search";
 
-        BookPageInfos response = BookPageInfos.builder()
+        BookResponse.PagedBookInfo response = BookResponse.PagedBookInfo.builder()
                 .page(0)
                 .totalPages(1)
-                .totalBooks(1)
-                .bookInfos(new ArrayList<>())
+                .totalElements(1)
+                .bookInfoList(new ArrayList<>())
                 .isFirst(true)
                 .isLast(false)
                 .build();

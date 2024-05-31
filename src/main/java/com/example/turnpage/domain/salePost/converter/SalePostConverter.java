@@ -4,6 +4,7 @@ import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostInfo;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
@@ -38,12 +39,12 @@ public class SalePostConverter {
                 .createdAt(salePost.getCreatedAt())
                 .build();
     }
-    public SalePostResponse.PagedSalePostList toPagedSalePostList(Page<SalePost> salePosts) {
+    public PagedSalePostInfo toPagedSalePostList(Page<SalePost> salePosts) {
         List<SalePostInfo> salePostList = salePosts.stream()
                 .map(this::toSalePostInfo).toList();
 
-        return SalePostResponse.PagedSalePostList.builder()
-                .salePostList(salePostList)
+        return PagedSalePostInfo.builder()
+                .salePostInfoList(salePostList)
                 .page(salePosts.getNumber())
                 .totalPages(salePosts.getTotalPages())
                 .totalElements((int) salePosts.getTotalElements())

@@ -37,9 +37,9 @@ public class SalePostResponse {
     @Builder
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class PagedSalePostList {
+    public static class PagedSalePostInfo {
         @Builder.Default
-        private List<SalePostInfo> salePostList = new ArrayList<>();
+        private List<SalePostInfo> salePostInfoList = new ArrayList<>();
         private int page;
         private int totalPages;
         private int totalElements;

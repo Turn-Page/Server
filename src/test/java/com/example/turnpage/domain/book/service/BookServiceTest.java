@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.book.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.support.ServiceTestConfig;
@@ -12,7 +13,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.transaction.annotation.Transactional;
 
-import static com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
@@ -76,11 +76,11 @@ public class BookServiceTest extends ServiceTestConfig {
         }
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        BookPageInfos bestSellerInfos = bookService.fetchBestSeller(pageable);
+        BookResponse.PagedBookInfo bestSellerInfos = bookService.fetchBestSeller(pageable);
 
         //then
-        assertEquals(11, bestSellerInfos.getTotalBooks());
-        assertEquals(1, bestSellerInfos.getBookInfos().get(0).getRank());
+        assertEquals(11, bestSellerInfos.getTotalElements());
+        assertEquals(1, bestSellerInfos.getBookInfoList().get(0).getRank());
     }
 
     @Test
@@ -137,12 +137,12 @@ public class BookServiceTest extends ServiceTestConfig {
 
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        BookPageInfos bookPageInfos = bookService.searchBook("목표", pageable);
+        BookResponse.PagedBookInfo bookPageInfos = bookService.searchBook("목표", pageable);
 
         //then
-        assertEquals(1, bookPageInfos.getTotalBooks());
+        assertEquals(1, bookPageInfos.getTotalPages());
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
-                bookPageInfos.getBookInfos().get(0).getTitle());
+                bookPageInfos.getBookInfoList().get(0).getTitle());
 
     }
 
