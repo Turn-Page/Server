@@ -1,7 +1,7 @@
 package com.example.turnpage.domain.book.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
+import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.global.result.ResultResponse;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,8 +14,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import static com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
+import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import static com.example.turnpage.global.result.code.BookResultCode.*;
 
 @RestController
@@ -39,7 +39,7 @@ public class BookController {
             @Parameter(name = "size", description = "한 페이지에 보일 book 개수를 입력해주세요.")
     })
     @Operation(summary = "베스트 셀러 목록 조회 API", description = " 베스트 셀러 목록 조회 API 입니다.")
-    public ResultResponse<BookPageInfos> fetchBestSeller(@PageableDefault(sort = "ranking", direction = Sort.Direction.ASC)
+    public ResultResponse<PagedBookInfo> fetchBestSeller(@PageableDefault(sort = "ranking", direction = Sort.Direction.ASC)
                                                               @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(FETCH_BESTSELLER, bookService.fetchBestSeller(pageable));
     }
@@ -60,7 +60,7 @@ public class BookController {
             @Parameter(name = "size", description = "한 페이지에 보일 book 개수를 입력해주세요.")
     })
     @Operation(summary = "책 검색 API", description = " 책 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다.")
-    public ResultResponse<BookPageInfos> searchBook(@RequestParam(name = "keyword") String keyword,
+    public ResultResponse<PagedBookInfo> searchBook(@RequestParam(name = "keyword") String keyword,
                                                     @PageableDefault @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_BOOK, bookService.searchBook(keyword, pageable));
     }
