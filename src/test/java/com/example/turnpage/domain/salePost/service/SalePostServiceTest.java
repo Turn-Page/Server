@@ -119,16 +119,16 @@ public class SalePostServiceTest extends ServiceTestConfig {
     }
 
 
-    //TODO : SQLDELETE 사용 여부 정해진 뒤 다시 TEST
-  /*  @Test
+
+    @Test
     @Transactional
     @DisplayName("판매글 삭제 성공 테스트")
     public void deleteSalePost() {
         //given //when
         salePostService.deleteSalePost(testMember, testSalePost.getId());
         //then
-        assertNotNull(salePost.getDeletedAt());
-    }*/
+        assertNotNull(testSalePost.getDeletedAt());
+    }
 
     @Test
     @Transactional

@@ -69,7 +69,8 @@ public class SalePostServiceImpl implements SalePostService {
         SalePost salePost = findSalePost(salePostId);
 
         checkMember(member,salePost.getMember());
-        salePostRepository.deleteById(salePost.getId());
+
+        salePost.delete();
 
         return new SalePostId(salePost.getId());
     }
