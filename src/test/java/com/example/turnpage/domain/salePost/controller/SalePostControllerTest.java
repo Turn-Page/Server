@@ -70,7 +70,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SS001"))
+                .andExpect(jsonPath("$.resultCode.code").value("SS001"))
                 .andExpect(jsonPath("$.data.salePostId").value(1))
         ;
 
@@ -107,7 +107,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SS002"))
+                .andExpect(jsonPath("$.resultCode.code").value("SS002"))
                 .andExpect(jsonPath("$.data.salePostId").value(100))
         ;
 
@@ -136,7 +136,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SS003"))
+                .andExpect(jsonPath("$.resultCode.code").value("SS003"))
                 .andExpect(jsonPath("$.data.salePostId").value(100))
         ;
 
@@ -169,7 +169,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
         resultActions
                 .andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.code").value("SS004"))
+                .andExpect(jsonPath("$.resultCode.code").value("SS004"))
                 .andExpect(jsonPath("$.data.page").value(0))
                 .andExpect(jsonPath("$.data.totalElements").value(1))
         ;
