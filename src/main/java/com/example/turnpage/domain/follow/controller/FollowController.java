@@ -32,10 +32,9 @@ public class FollowController {
 
     @PostMapping
     @Operation(summary = "회원 팔로우 API", description = "특정 회원을 팔로우합니다.")
-    public ResultResponse<Object> followMember(@LoginMember Member member,
+    public ResultResponse<FollowId> followMember(@LoginMember Member member,
                                                @RequestBody @Valid FollowMemberRequest request) {
-        followService.followMember(member, request);
-        return ResultResponse.of(FOLLOW_MEMBER, null);
+        return ResultResponse.of(FOLLOW_MEMBER, followService.followMember(member, request));
     }
 
     @GetMapping
