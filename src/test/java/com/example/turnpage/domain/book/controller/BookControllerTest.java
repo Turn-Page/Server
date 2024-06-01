@@ -4,6 +4,7 @@ import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.support.ControllerTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +77,7 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/bestSeller";
 
-        BookResponse.PagedBookInfo response = BookResponse.PagedBookInfo.builder()
+        PagedBookInfo response = PagedBookInfo.builder()
                 .page(0)
                 .totalPages(1)
                 .totalElements(1)
@@ -145,7 +146,7 @@ public class BookControllerTest extends ControllerTestConfig {
         //given
         final String url = "/books/search";
 
-        BookResponse.PagedBookInfo response = BookResponse.PagedBookInfo.builder()
+        PagedBookInfo response = PagedBookInfo.builder()
                 .page(0)
                 .totalPages(1)
                 .totalElements(1)

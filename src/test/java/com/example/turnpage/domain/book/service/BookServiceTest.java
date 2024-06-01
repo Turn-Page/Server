@@ -1,8 +1,8 @@
 package com.example.turnpage.domain.book.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
@@ -76,7 +76,7 @@ public class BookServiceTest extends ServiceTestConfig {
         }
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        BookResponse.PagedBookInfo bestSellerInfos = bookService.fetchBestSeller(pageable);
+        PagedBookInfo bestSellerInfos = bookService.fetchBestSeller(pageable);
 
         //then
         assertEquals(11, bestSellerInfos.getTotalElements());
@@ -137,7 +137,7 @@ public class BookServiceTest extends ServiceTestConfig {
 
         //when
         Pageable pageable = PageRequest.of(0, 20);
-        BookResponse.PagedBookInfo bookPageInfos = bookService.searchBook("목표", pageable);
+        PagedBookInfo bookPageInfos = bookService.searchBook("목표", pageable);
 
         //then
         assertEquals(1, bookPageInfos.getTotalPages());
