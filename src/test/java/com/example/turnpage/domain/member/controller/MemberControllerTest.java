@@ -1,8 +1,7 @@
 package com.example.turnpage.domain.member.controller;
 
-import com.example.turnpage.domain.member.dto.MemberRequest;
 import com.example.turnpage.domain.member.dto.MemberRequest.EditMyPageRequest;
-import com.example.turnpage.domain.member.dto.MemberResponse;
+import com.example.turnpage.domain.member.dto.MemberResponse.MemberId;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPoint;
 import com.example.turnpage.domain.member.entity.Member;
@@ -75,7 +74,7 @@ public class MemberControllerTest extends ControllerTestConfig {
         final String url = "/members/myPage";
 
         EditMyPageRequest editMyPageRequest = new EditMyPageRequest("수정된 닉네임");
-        MemberResponse.MemberId response = new MemberResponse.MemberId(member.getId());
+        MemberId response = new MemberId(member.getId());
 
         String requestJson = objectMapper.writeValueAsString(editMyPageRequest);
         MockMultipartFile request = new MockMultipartFile("request", "", "application/json", requestJson.getBytes(StandardCharsets.UTF_8));
