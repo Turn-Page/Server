@@ -1,6 +1,6 @@
 package com.example.turnpage.domain.follow.controller;
 
-import com.example.turnpage.domain.follow.dto.FollowRequest;
+import com.example.turnpage.domain.follow.dto.FollowRequest.FollowMemberRequest;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowId;
 import com.example.turnpage.domain.follow.service.FollowService;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
@@ -33,7 +33,7 @@ public class FollowController {
     @PostMapping
     @Operation(summary = "회원 팔로우 API", description = "특정 회원을 팔로우합니다.")
     public ResultResponse<Object> followMember(@LoginMember Member member,
-                                               @RequestBody @Valid FollowRequest.FollowMemberRequest request) {
+                                               @RequestBody @Valid FollowMemberRequest request) {
         followService.followMember(member, request);
         return ResultResponse.of(FOLLOW_MEMBER, null);
     }
