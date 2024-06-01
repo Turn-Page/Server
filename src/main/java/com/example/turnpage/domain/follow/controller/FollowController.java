@@ -43,10 +43,10 @@ public class FollowController {
         return ResultResponse.of(FOLLOWING_LIST, followService.getFollowingList(member));
     }
 
-    @DeleteMapping("/{memberId}")
+    @DeleteMapping("/{followerId}")
     @Operation(summary = "회원 언팔로우 API", description = "회원이 팔로우하고 있던 회원을 언팔로우합니다.")
     public ResultResponse<FollowId> unfollowMember(@LoginMember Member member,
-                                                   @PathVariable("memberId") Long memberId) {
-        return ResultResponse.of(UNFOLLOW_MEMBER, followService.unfollowMember(member, memberId));
+                                                   @PathVariable("followerId") Long followerId) {
+        return ResultResponse.of(UNFOLLOW_MEMBER, followService.unfollowMember(member, followerId));
     }
 }
