@@ -53,21 +53,21 @@ public class ReportController {
     public ResultResponse<PagedReportList> findMyReportList(@LoginMember Member member,
                                                             @PageableDefault(sort = "createdAt",
                                                                      direction = Sort.Direction.DESC)
-                                                             Pageable pageable) {
+                                                            @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(MY_REPORT_LIST, reportService.findMyReportList(member, pageable));
     }
 
-    @GetMapping("/friends")
-    @Operation(summary = "친구들의 독후감 목록 조회 API", description = "친구들의 독후감 목록 조회 API입니다.")
+    @GetMapping("/following")
+    @Operation(summary = "팔로우하고 있는 회원들의 독후감 목록 조회 API", description = "내가 팔로우하고 있는 회원들의 독후감 목록 조회 API입니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
             @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
     })
-    ResultResponse<PagedReportList> findFriendsReportList(@LoginMember Member member,
+    ResultResponse<PagedReportList> findReportListOfFollowingMembers(@LoginMember Member member,
                                                            @PageableDefault(sort = "createdAt",
                                                                    direction = Sort.Direction.DESC)
-                                                           Pageable pageable) {
-        return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findFriendsReportList(member, pageable));
+                                                           @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findReportListOfFollowingMembers(member, pageable));
     }
 
     @GetMapping("/{reportId}")
