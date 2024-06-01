@@ -2,12 +2,11 @@ package com.example.turnpage.domain.report.service;
 
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.service.BookService;
-import com.example.turnpage.domain.friend.service.FriendService;
+import com.example.turnpage.domain.follow.service.FollowService;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
-import com.example.turnpage.domain.report.dto.ReportResponse;
 import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
@@ -33,7 +32,7 @@ import static com.example.turnpage.global.error.domain.ReportErrorCode.WRITER_ON
 public class ReportServiceImpl implements ReportService {
     private final ReportRepository reportRepository;
     private final ReportConverter reportConverter;
-    private final FriendService friendService;
+    private final FollowService followService;
     private final BookService bookService;
 
 
@@ -58,14 +57,13 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public PagedReportList findFriendsReportList(Member member, Pageable pageable) {
-        List<Long> friendIdList = friendService.getFriendList(member)
+    public PagedReportList findReportListOfFollowingMembers(Member member, Pageable pageable) {
+        List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
-                .map(friend -> friend.getMemberId())
+                .map(following -> following.getMemberId())
                 .collect(Collectors.toList());
 
-        Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(friendIdList, pageable);
-
+        Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(followingIdList, pageable);
         return reportConverter.toPagedReportList(reports);
     }
 
