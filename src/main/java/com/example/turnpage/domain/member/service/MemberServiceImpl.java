@@ -39,6 +39,12 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMember(String email) {
+        return memberRepository.findByEmail(email)
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+    }
+
+    @Override
     @Transactional
     public MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage) {
         Member member = findMember(loginMember.getId());

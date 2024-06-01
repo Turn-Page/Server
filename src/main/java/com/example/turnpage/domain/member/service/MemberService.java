@@ -9,6 +9,7 @@ import static com.example.turnpage.domain.member.dto.MemberResponse.*;
 
 public interface MemberService {
     Member findMember(Long memberId);
+    Member findMember(String email);
     MyPageInfo getMyPageInfo(Member loginMember);
     MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage);
 

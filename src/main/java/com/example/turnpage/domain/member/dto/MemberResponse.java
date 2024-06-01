@@ -49,8 +49,9 @@ public class MemberResponse {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class WriterInfo {
-        private String writer;
+    public static class MemberInfo {
+        private Long memberId;
+        private String name;
         private String profileImage;
     }
 }

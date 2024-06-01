@@ -1,4 +1,4 @@
-package com.example.turnpage.domain.friend.entity;
+package com.example.turnpage.domain.follow.entity;
 
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.global.entity.BaseTimeEntity;
@@ -23,17 +23,17 @@ import org.hibernate.annotations.SQLRestriction;
 @AllArgsConstructor
 @Entity
 @SQLRestriction("deleted_at is NULL")
-public class Friend extends BaseTimeEntity {
+public class Follow extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "friend_id")
+    @Column(name = "follow_id")
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "sender_id", nullable = false)
-    private Member sender;
+    @JoinColumn(name = "member_id", nullable = false)
+    private Member member; // 팔로우를 하는 회원
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "receiver_id", nullable = false)
-    private Member receiver;
+    @JoinColumn(name = "follower_id", nullable = false)
+    private Member follower; // 팔로우를 당하는 회원
 }

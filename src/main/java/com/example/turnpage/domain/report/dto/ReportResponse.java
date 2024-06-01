@@ -9,7 +9,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.example.turnpage.domain.member.dto.MemberResponse.WriterInfo;
+import static com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 
 public abstract class ReportResponse {
 
@@ -29,7 +29,7 @@ public abstract class ReportResponse {
         private LocalDate startDate;
         private LocalDate endDate;
         private BookInfo bookInfo;
-        private WriterInfo writerInfo;
+        private MemberInfo memberInfo;
         private LocalDate createdAt;
     }
 

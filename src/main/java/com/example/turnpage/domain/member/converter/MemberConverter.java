@@ -1,11 +1,10 @@
 package com.example.turnpage.domain.member.converter;
 
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.LoginInfo;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberId;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPageInfo;
 import com.example.turnpage.domain.member.dto.MemberResponse.MyPoint;
-import com.example.turnpage.domain.member.dto.MemberResponse.WriterInfo;
+import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import org.springframework.stereotype.Component;
 
@@ -44,17 +43,18 @@ public class MemberConverter {
                 .build();
     }
 
-    public WriterInfo toWriterInfo(Member member) {
-        return WriterInfo.builder()
-                .writer(member.getName())
+    public MemberInfo toMemberInfo(Member member) {
+        return MemberInfo.builder()
+                .memberId(member.getId())
+                .name(member.getName())
                 .profileImage(member.getImage())
                 .build();
     }
 
-    public List<MemberId> toMemberIdList(List<Member> memberList) {
+    public List<MemberInfo> toMemberInfoList(List<Member> memberList) {
         return memberList
                 .stream()
-                .map(member -> toMemberId(member))
+                .map(member -> toMemberInfo(member))
                 .collect(Collectors.toList());
     }
 
