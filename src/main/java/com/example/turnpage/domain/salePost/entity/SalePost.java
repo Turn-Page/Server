@@ -31,7 +31,7 @@ public class SalePost extends BaseTimeEntity {
     @Column(nullable = false)
     private String title;
 
-    @Column(nullable = false, length = 1000)
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
