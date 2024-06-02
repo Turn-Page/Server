@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 
-@DisplayName("Member Service의")
+@DisplayName("Member Service 의")
 @SpringBootTest
 public class MemberServiceTest extends ServiceTestConfig {
     @Autowired protected MemberService memberService;
@@ -32,15 +32,16 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_조회() {
+    @DisplayName("마이페이지 내정보 조회 성공")
+    public void getMyPageInfo() {
 
         //when
-        MyPageInfo memberInfo =  memberService.getMyPageInfo(member);
+        MyPageInfo memberInfo =  memberService.getMyPageInfo(testMember);
 
         //then
         assertEquals("수밈", memberInfo.getName());
         assertEquals("sumin@gmail.com", memberInfo.getEmail());
-        assertEquals(member.getImage(), memberInfo.getProfileImage());
+        assertEquals(testMember.getImage(), memberInfo.getProfileImage());
         assertEquals(0, memberInfo.getPoint());
         assertEquals(0, memberInfo.getReportCount());
         assertEquals(0, memberInfo.getSaleCount());
@@ -50,7 +51,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_조회_실패_해당멤버없음() {
+    @DisplayName("마이페이지 내정보 조회 실패 -> 해당 멤버 없음 에러")
+    public void getMyPageInfoFail_MEMBERNOTFOUND() {
 
         //given
         Member newMember =  Member.builder()
@@ -73,7 +75,8 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 마이페이지_내정보_수정() {
+    @DisplayName("마이페이지 내정보 수정 성공")
+    public void editMyPageInfo() {
 
         //given
         MemberRequest.EditMyPageRequest request = new MemberRequest.EditMyPageRequest("수밈");
@@ -82,7 +85,7 @@ public class MemberServiceTest extends ServiceTestConfig {
         given(s3FileComponent.uploadFile(anyString(),any(MultipartFile.class))).willReturn("profile image url");
 
         //when
-        MemberResponse.MemberId memberId =  memberService.editMyPageInfo(member, request, profileImage);
+        MemberResponse.MemberId memberId =  memberService.editMyPageInfo(testMember, request, profileImage);
         Member editMember = memberService.findMember(memberId.getMemberId());
         //then
         assertEquals("수밈", editMember.getName());
@@ -92,16 +95,17 @@ public class MemberServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    public void 포인트_충전() {
+    @DisplayName("포인트 충전 성공")
+    public void chargeMyPoint() {
 
         //given
         int point = 500;
 
         //when
-        MemberResponse.MyPoint myPoint = memberService.chargeMyPoint(member, point);
+        MemberResponse.MyPoint myPoint = memberService.chargeMyPoint(testMember, point);
 
         //then
-        assertEquals(member.getId(), myPoint.getMemberId());
+        assertEquals(testMember.getId(), myPoint.getMemberId());
         assertEquals(500, myPoint.getTotalPoint());
     }
 }

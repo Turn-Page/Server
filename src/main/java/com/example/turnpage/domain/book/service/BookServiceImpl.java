@@ -3,9 +3,9 @@ package com.example.turnpage.domain.book.service;
 
 import com.example.turnpage.domain.book.client.BestSellerClient;
 import com.example.turnpage.domain.book.converter.BookConverter;
-import com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
-import com.example.turnpage.domain.book.dto.BookResponse.BookPageInfos;
+import com.example.turnpage.domain.book.dto.BookResponse.BookId;
+import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
 import com.example.turnpage.global.error.BusinessException;
@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 import static com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 
@@ -30,14 +31,17 @@ public class BookServiceImpl implements BookService {
     @Override
     @Transactional
     public BookId saveBook(SaveBookRequest request) {
-        String coverUrl = changeCoverImageSize(request.getCover());
+        return new BookId(saveBookInfo(request).getId());
+    }
 
-        Book book = bookRepository.save(bookConverter.toEntity(request.getItemId(),
+    @Override
+    @Transactional
+    public Book saveBookInfo(SaveBookRequest request) {
+        String coverUrl = changeCoverImageSize(request.getCover());
+        return bookRepository.save(bookConverter.toEntity(request.getItemId(),
                 request.getTitle(),request.getAuthor(), coverUrl, request.getIsbn(),
                 request.getPublisher(), request.getPublicationDate(),
                 request.getDescription(), request.getRank()));
-
-        return new BookId(book.getId());
     }
 
     @Override
@@ -58,13 +62,13 @@ public class BookServiceImpl implements BookService {
     }
 
     private void updateRanking(Long itemId, int rank) {
-        Book book = bookRepository.findByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
+        Book book = findBookByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
         book.updateRanking(rank);
     }
 
     @Override
-   public BookPageInfos fetchBestSeller(Pageable pageable) {
-        return bookConverter.toBookPageInfos(
+   public PagedBookInfo fetchBestSeller(Pageable pageable) {
+        return bookConverter.toPagedBookInfo(
                 bookRepository.findAllByRankingNotNullOrderByRanking(pageable));
     }
 
@@ -74,9 +78,9 @@ public class BookServiceImpl implements BookService {
     }
 
     @Override
-    public BookPageInfos searchBook(String keyword, Pageable pageable) {
+    public PagedBookInfo searchBook(String keyword, Pageable pageable) {
         keyword = keyword.replace(" ","");
-        return bookConverter.toBookPageInfos(
+        return bookConverter.toPagedBookInfo(
                 bookRepository.findByTitleOrAuthorContaining(keyword, pageable));
     }
 
@@ -85,6 +89,11 @@ public class BookServiceImpl implements BookService {
     public Book findBook(Long bookId) {
         return bookRepository.findById(bookId)
                 .orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
+    }
+
+    @Override
+    public Optional<Book> findBookByItemId(Long itemId) {
+        return bookRepository.findByItemId(itemId);
     }
 
     private String changeCoverImageSize(String cover) {

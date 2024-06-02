@@ -3,25 +3,16 @@ package com.example.turnpage.domain.salePost.entity;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.global.entity.BaseTimeEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.SQLRestriction;
 
+
 @Getter
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Entity
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SQLRestriction("deleted_at is NULL")
 public class SalePost extends BaseTimeEntity {
     @Id
@@ -37,8 +28,10 @@ public class SalePost extends BaseTimeEntity {
     @JoinColumn(name = "book_id", nullable = false)
     private Book book;
 
-    @Lob
     @Column(nullable = false)
+    private String title;
+
+    @Column(nullable = false, columnDefinition = "TEXT")
     private String description;
 
     @Enumerated(EnumType.STRING)
@@ -50,4 +43,12 @@ public class SalePost extends BaseTimeEntity {
 
     @Column(nullable = false)
     private boolean isSold;
+
+    public void update(String title, String description, Grade grade, int price) {
+        this.title = title;
+        this.description = description;
+        this.grade = grade;
+        this.price = price;
+    }
+
 }

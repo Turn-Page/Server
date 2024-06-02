@@ -43,7 +43,7 @@ public abstract class ControllerTestConfig {
 
     protected Member createMember() {
         return Member.builder()
-                .id(1L)
+                .id(100L)
                 .name("수밈")
                 .email("sumin@gmail.com")
                 .inviteCode("aaaaaa")

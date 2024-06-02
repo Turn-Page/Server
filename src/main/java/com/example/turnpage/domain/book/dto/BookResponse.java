@@ -41,12 +41,12 @@ public class BookResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class BookPageInfos {
+    public static class PagedBookInfo {
         @Builder.Default
-        private List<BookInfo> bookInfos = new ArrayList<>();
+        private List<BookInfo> bookInfoList = new ArrayList<>();
         private int page;
         private int totalPages;
-        private int totalBooks;
+        private long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
     }
