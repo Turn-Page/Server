@@ -7,7 +7,7 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
-import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.entity.Report;
@@ -50,21 +50,21 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public PagedReportList findMyReportList(Member member, Pageable pageable) {
+    public PagedReportInfo findMyReportList(Member member, Pageable pageable) {
         Page<Report> reports = reportRepository.findByMemberId(member.getId(), pageable);
 
-        return reportConverter.toPagedReportList(reports);
+        return reportConverter.toPagedReportInfo(reports);
     }
 
     @Override
-    public PagedReportList findReportListOfFollowingMembers(Member member, Pageable pageable) {
+    public PagedReportInfo findReportListOfFollowingMembers(Member member, Pageable pageable) {
         List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
                 .map(following -> following.getMemberId())
                 .collect(Collectors.toList());
 
         Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(followingIdList, pageable);
-        return reportConverter.toPagedReportList(reports);
+        return reportConverter.toPagedReportInfo(reports);
     }
 
     @Override

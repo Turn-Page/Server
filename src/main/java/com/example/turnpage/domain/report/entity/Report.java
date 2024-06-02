@@ -46,7 +46,7 @@ public class Report extends BaseTimeEntity {
     private String title;
 
     @Lob
-    @Column(nullable = false)
+    @Column(columnDefinition = "TEXT", nullable = false, length = 100000)
     private String content;
 
     @Column(name = "start_date")

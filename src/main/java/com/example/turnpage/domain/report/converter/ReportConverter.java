@@ -5,7 +5,7 @@ import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
-import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.entity.Report;
@@ -50,14 +50,14 @@ public class ReportConverter {
                 .build();
     }
 
-    public PagedReportList toPagedReportList(Page<Report> reports) {
+    public PagedReportInfo toPagedReportInfo(Page<Report> reports) {
         List<ReportInfo> reportInfoList = reports
                 .stream()
                 .map(report -> toReportInfo(report))
                 .collect(Collectors.toList());
 
-        return PagedReportList.builder()
-                .reportList(reportInfoList)
+        return PagedReportInfo.builder()
+                .reportInfoList(reportInfoList)
                 .page(reports.getNumber())
                 .totalPages(reports.getTotalPages())
                 .totalElements(reports.getTotalElements())
