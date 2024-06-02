@@ -4,10 +4,14 @@ import lombok.Getter;
 
 @Getter
 public class ResultResponse<T> {
-    private final ResultCodeInterface resultCode;
+    private int status;
+    private String code;
+    private String message;
     private T data;
     public ResultResponse(ResultCodeInterface resultCode, T data) {
-        this.resultCode = resultCode;
+        this.status = resultCode.getResultCode().getStatus();
+        this.code = resultCode.getResultCode().getCode();
+        this.message = resultCode.getResultCode().getMessage();
         this.data = data;
     }
 
@@ -17,9 +21,5 @@ public class ResultResponse<T> {
 
     public static <T> ResultResponse<T> of(ResultCodeInterface resultCode) {
         return new ResultResponse<>(resultCode, null);
-    }
-
-    public ResultCode getResultCode() {
-        return this.resultCode.getResultCode();
     }
 }

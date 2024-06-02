@@ -13,7 +13,7 @@ import java.io.OutputStream;
 public class HandlerUtils {
     public static void writeResponse(HttpServletRequest request, HttpServletResponse response,
                                      ResultResponse resultResponse) throws IOException, ServletException {
-        response.setStatus(resultResponse.getResultCode().getStatus());
+        response.setStatus(resultResponse.getStatus());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
 
         try (OutputStream os = response.getOutputStream()) {
