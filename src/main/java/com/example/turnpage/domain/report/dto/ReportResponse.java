@@ -12,7 +12,6 @@ import java.util.List;
 import static com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 
 public abstract class ReportResponse {
-
     @Getter
     @AllArgsConstructor
     public static class ReportId {
@@ -36,9 +35,9 @@ public abstract class ReportResponse {
     @Getter
     @Builder
     @AllArgsConstructor
-    public static class PagedReportList {
+    public static class PagedReportInfo {
         @Builder.Default
-        private List<ReportInfo> reportList= new ArrayList<>();
+        private List<ReportInfo> reportInfoList= new ArrayList<>();
         private int page;
         private int totalPages;
         private long totalElements;

@@ -3,7 +3,7 @@ package com.example.turnpage.domain.report.controller;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
-import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportList;
+import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.service.ReportService;
@@ -50,7 +50,7 @@ public class ReportController {
             @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
             @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
     })
-    public ResultResponse<PagedReportList> findMyReportList(@LoginMember Member member,
+    public ResultResponse<PagedReportInfo> findMyReportList(@LoginMember Member member,
                                                             @PageableDefault(sort = "createdAt",
                                                                      direction = Sort.Direction.DESC)
                                                             @Parameter(hidden = true) Pageable pageable) {
@@ -63,8 +63,8 @@ public class ReportController {
             @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
             @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
     })
-    ResultResponse<PagedReportList> findReportListOfFollowingMembers(@LoginMember Member member,
-                                                           @PageableDefault(sort = "createdAt",
+    ResultResponse<PagedReportInfo> findReportListOfFollowingMembers(@LoginMember Member member,
+                                                                     @PageableDefault(sort = "createdAt",
                                                                    direction = Sort.Direction.DESC)
                                                            @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findReportListOfFollowingMembers(member, pageable));
