@@ -16,4 +16,6 @@ public interface SalePostService {
     SalePostId deleteSalePost(Member loginMember, Long salePostId);
     SalePost findSalePost(Long salePostId);
     PagedSalePostInfo fetchSalePosts(Pageable pageable);
+    PagedSalePostInfo searchSalePost(String keyword, Pageable pageable);
+
 }

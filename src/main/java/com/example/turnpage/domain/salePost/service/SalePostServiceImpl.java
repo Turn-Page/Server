@@ -82,6 +82,14 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
+    public PagedSalePostInfo searchSalePost(String keyword, Pageable pageable) {
+        keyword = keyword.replace(" ","");
+
+        return salePostConverter.toPagedSalePostList(
+                salePostRepository.findByBookOrTitleContaining(keyword,pageable));
+    }
+
+    @Override
     public SalePost findSalePost(Long salePostId) {
         return salePostRepository.findById(salePostId).orElseThrow(
                 () -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));

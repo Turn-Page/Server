@@ -61,4 +61,16 @@ public class SalePostController {
                                                                                  @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(pageable));
     }
+
+    @Operation(summary = "판매 중인 도서 검색 API", description = " 판매 중인 도서 검색 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다.")
+    @Parameters(value = {
+            @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
+            @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
+    })
+    @GetMapping("/search")
+    public ResultResponse<PagedSalePostInfo> searchSalePost(@RequestParam(name = "keyword") String keyword,
+                                                            @PageableDefault(sort = "created_at", direction = Sort.Direction.DESC)
+                                                            @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(keyword, pageable));
+    }
 }
