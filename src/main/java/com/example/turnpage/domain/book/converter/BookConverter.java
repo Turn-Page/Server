@@ -1,8 +1,10 @@
 package com.example.turnpage.domain.book.converter;
 
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.SimpleBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -37,6 +39,14 @@ public class BookConverter {
                 .publicationDate(book.getPublicationDate())
                 .rank(book.getRanking())
                 .star(book.getStar())
+                .build();
+    }
+
+    public SimpleBookInfo toSimpleBookInfo(Book book) {
+        return SimpleBookInfo.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .cover(book.getCover())
                 .build();
     }
 

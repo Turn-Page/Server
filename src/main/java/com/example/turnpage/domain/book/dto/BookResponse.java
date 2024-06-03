@@ -38,6 +38,15 @@ public class BookResponse {
     }
 
     @Getter
+    @Builder
+    public static class SimpleBookInfo {
+        private Long bookId;
+        private String title;
+        private String cover;
+    }
+
+
+    @Getter
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder

@@ -3,7 +3,6 @@ package com.example.turnpage.domain.salePost.converter;
 import com.example.turnpage.domain.book.converter.BookConverter;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostInfo;
 import com.example.turnpage.domain.salePost.entity.Grade;
@@ -31,7 +30,7 @@ public class SalePostConverter {
 
     public SalePostInfo toSalePostInfo(SalePost salePost) {
         return SalePostInfo.builder()
-                .bookInfo(bookConverter.tokBookInfo(salePost.getBook()))
+                .bookInfo(bookConverter.toSimpleBookInfo(salePost.getBook()))
                 .title(salePost.getTitle())
                 .salePostId(salePost.getId())
                 .price(salePost.getPrice())

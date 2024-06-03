@@ -1,6 +1,6 @@
 package com.example.turnpage.domain.salePost.dto;
 
-import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.SimpleBookInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -25,7 +25,7 @@ public class SalePostResponse {
     @AllArgsConstructor
     public static class SalePostInfo {
         private Long salePostId;
-        private BookInfo bookInfo;
+        private SimpleBookInfo bookInfo;
         private String title;
         private Integer price;
         private String grade;
