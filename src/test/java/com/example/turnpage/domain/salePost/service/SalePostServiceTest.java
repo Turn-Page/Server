@@ -2,6 +2,8 @@ package com.example.turnpage.domain.salePost.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
@@ -185,7 +187,23 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals("최상", salePostList.getSalePostInfoList().get(0).getGrade());
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
                 salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle());
+    }
 
+    @Test
+    @Transactional
+    @DisplayName("판매글 상세 조회 성공 테스트")
+    public void getSalePostDetail() {
+
+        //given & when
+        SalePostDetailInfo detailInfo = salePostService.getSalePostDetail(testSalePost.getId());
+
+        //then
+        assertEquals("제목", detailInfo.getTitle());
+        assertEquals("설명", detailInfo.getDescription());
+        assertEquals(10000, detailInfo.getPrice());
+        assertEquals("최상", detailInfo.getGrade());
+        assertEquals(1, detailInfo.getBookInfo().getBookId());
+        assertEquals("수밈", detailInfo.getMemberInfo().getName());
     }
 
 

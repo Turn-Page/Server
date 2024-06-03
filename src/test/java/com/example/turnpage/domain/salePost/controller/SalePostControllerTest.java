@@ -1,10 +1,14 @@
 package com.example.turnpage.domain.salePost.controller;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
+import com.example.turnpage.domain.book.dto.BookResponse;
+import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.support.ControllerTestConfig;
@@ -14,6 +18,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
@@ -209,6 +214,44 @@ public class SalePostControllerTest extends ControllerTestConfig {
         ;
 
         verify(salePostService).searchSalePost(any(), any());
+    }
+
+    @Test
+    @DisplayName("판매글 상세 조회 테스트")
+    public void getSalePostDetailInfo() throws Exception {
+        //given
+        final String url = "/salePosts/{salePostId}";
+        SalePostDetailInfo response = SalePostDetailInfo.builder()
+                .salePostId(1L)
+                .memberInfo(new MemberResponse.MemberInfo(1L,"수밈","cover.jpg"))
+                .bookInfo(BookResponse.BookInfo.builder()
+                        .bookId(1L)
+                        .title("title")
+                        .build())
+                .title("제목")
+                .description("설명")
+                .price(10000)
+                .grade("최상")
+                .createdAt(LocalDateTime.now())
+                .build();
+
+        given(salePostService.getSalePostDetail(any())).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(url,1L));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SS006"))
+                .andExpect(jsonPath("$.data.salePostId").value(1))
+                .andExpect(jsonPath("$.data.memberInfo.memberId").value(1))
+                .andExpect(jsonPath("$.data.bookInfo.bookId").value(1))
+        ;
+
+        verify(salePostService).getSalePostDetail(any());
     }
 
 }
