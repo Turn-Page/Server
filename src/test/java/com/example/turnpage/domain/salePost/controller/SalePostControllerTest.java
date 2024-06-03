@@ -235,7 +235,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .createdAt(LocalDateTime.now())
                 .build();
 
-        given(salePostService.getSalePostDetail(any())).willReturn(response);
+        given(salePostService.getSalePostDetailInfo(any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -251,7 +251,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.bookInfo.bookId").value(1))
         ;
 
-        verify(salePostService).getSalePostDetail(any());
+        verify(salePostService).getSalePostDetailInfo(any());
     }
 
 }

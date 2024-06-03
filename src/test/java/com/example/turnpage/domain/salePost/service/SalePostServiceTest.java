@@ -195,14 +195,15 @@ public class SalePostServiceTest extends ServiceTestConfig {
     public void getSalePostDetail() {
 
         //given & when
-        SalePostDetailInfo detailInfo = salePostService.getSalePostDetail(testSalePost.getId());
+        SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(testSalePost.getId());
 
         //then
         assertEquals("제목", detailInfo.getTitle());
         assertEquals("설명", detailInfo.getDescription());
         assertEquals(10000, detailInfo.getPrice());
         assertEquals("최상", detailInfo.getGrade());
-        assertEquals(1, detailInfo.getBookInfo().getBookId());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
+                detailInfo.getBookInfo().getTitle());
         assertEquals("수밈", detailInfo.getMemberInfo().getName());
     }
 

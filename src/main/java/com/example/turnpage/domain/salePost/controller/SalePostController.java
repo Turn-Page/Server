@@ -3,6 +3,7 @@ package com.example.turnpage.domain.salePost.controller;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.global.config.security.LoginMember;
@@ -18,6 +19,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import static com.example.turnpage.domain.salePost.dto.SalePostResponse.*;
 import static com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import static com.example.turnpage.global.result.code.SalePostResultCode.*;
 
@@ -72,5 +74,11 @@ public class SalePostController {
                                                             @PageableDefault(sort = "created_at", direction = Sort.Direction.DESC)
                                                             @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(keyword, pageable));
+    }
+
+    @Operation(summary = "판매 중인 도서 상세 조회 API", description = " 판매 중인 도서 상세 조회 API 입니다. path variable로 salePostId를 주세요.")
+    @GetMapping("/{salePostId}")
+    public ResultResponse<SalePostDetailInfo> getSalePostDetailInfo(@PathVariable(value = "salePostId") Long salePostId) {
+        return ResultResponse.of(SALE_POST_DETAIL, salePostService.getSalePostDetailInfo(salePostId));
     }
 }

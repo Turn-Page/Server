@@ -8,6 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.Optional;
+
 public interface SalePostRepository extends JpaRepository<SalePost,Long> {
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book ORDER BY sp.createdAt DESC")
     Page<SalePost> findSalePostsWithBooksOrderByCreatedAt(Pageable pageable);
@@ -18,4 +20,6 @@ public interface SalePostRepository extends JpaRepository<SalePost,Long> {
             "ORDER BY sp.createdAt DESC")
     Page<SalePost> findByBookOrTitleContaining(@Param("keyword") String keyword, Pageable pageable);
 
+    @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.member JOIN FETCH sp.book WHERE sp.id = :salePostId")
+    Optional<SalePost> findSalePostWithMemberAndBook(@Param("salePostId") Long salePostId);
 }
