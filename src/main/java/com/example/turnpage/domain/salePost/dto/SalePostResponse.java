@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class SalePostResponse {
+public abstract class SalePostResponse {
 
     @Getter
     @AllArgsConstructor
@@ -42,7 +42,7 @@ public class SalePostResponse {
         private List<SalePostInfo> salePostInfoList = new ArrayList<>();
         private int page;
         private int totalPages;
-        private int totalElements;
+        private long totalElements;
         private Boolean isFirst;
         private Boolean isLast;
     }

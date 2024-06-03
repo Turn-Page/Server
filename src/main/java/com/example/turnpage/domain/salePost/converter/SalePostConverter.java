@@ -38,6 +38,7 @@ public class SalePostConverter {
                 .createdAt(salePost.getCreatedAt())
                 .build();
     }
+
     public PagedSalePostInfo toPagedSalePostList(Page<SalePost> salePosts) {
         List<SalePostInfo> salePostList = salePosts.stream()
                 .map(this::toSalePostInfo).toList();
@@ -46,7 +47,7 @@ public class SalePostConverter {
                 .salePostInfoList(salePostList)
                 .page(salePosts.getNumber())
                 .totalPages(salePosts.getTotalPages())
-                .totalElements((int) salePosts.getTotalElements())
+                .totalElements(salePosts.getTotalElements())
                 .isFirst(salePosts.isFirst())
                 .isLast(salePosts.isLast())
                 .build();

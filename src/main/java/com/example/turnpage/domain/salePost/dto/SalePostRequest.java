@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-public class SalePostRequest {
+public abstract class SalePostRequest {
 
     @Getter
     @Builder

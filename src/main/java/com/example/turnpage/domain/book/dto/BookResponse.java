@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookResponse {
+public abstract class BookResponse {
 
     @Getter
     @AllArgsConstructor
