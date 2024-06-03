@@ -177,4 +177,38 @@ public class SalePostControllerTest extends ControllerTestConfig {
         verify(salePostService).fetchSalePosts(any());
     }
 
+    @Test
+    @DisplayName("판매글 검색 성공 테스트")
+    public void searchSalePost() throws Exception {
+        //given
+        final String url = "/salePosts/search";
+        PagedSalePostInfo response = PagedSalePostInfo.builder()
+                .page(0)
+                .totalPages(1)
+                .totalElements(1)
+                .salePostInfoList(new ArrayList<>())
+                .isFirst(true)
+                .isLast(false)
+                .build();
+
+        given(salePostService.searchSalePost(any(),any())).willReturn(response);
+
+        //when
+        ResultActions resultActions = mockMvc.perform(
+                get(url).param("keyword","키워드")
+                        .param("page", "0")
+                        .param("size","20"));
+
+        //then
+        resultActions
+                .andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.code").value("SS005"))
+                .andExpect(jsonPath("$.data.page").value(0))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
+        ;
+
+        verify(salePostService).searchSalePost(any(), any());
+    }
+
 }

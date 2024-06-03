@@ -53,12 +53,12 @@ public class SalePostServiceTest extends ServiceTestConfig {
         SalePost salePost = salePostService.findSalePost(salePostService.saveSalePost(testMember, request).getSalePostId());
 
         //then
-        assertEquals(salePost.getTitle(), "제목");
-        assertEquals(salePost.getDescription(), "설명");
-        assertEquals(salePost.getPrice(), 10000);
-        assertEquals(salePost.getGrade(), Grade.MINT);
-        assertEquals(salePost.getBook().getItemId(),1);
-        assertEquals(salePost.getMember().getName(),"수밈");
+        assertEquals("제목", salePost.getTitle());
+        assertEquals("설명", salePost.getDescription());
+        assertEquals(10000, salePost.getPrice());
+        assertEquals(Grade.MINT, salePost.getGrade());
+        assertEquals(1, salePost.getBook().getItemId());
+        assertEquals("수밈", salePost.getMember().getName());
     }
 
     @Test
@@ -109,12 +109,12 @@ public class SalePostServiceTest extends ServiceTestConfig {
         SalePost salePost = salePostService.findSalePost(salePostService.editSalePost(testMember, testSalePost.getId(), request).getSalePostId());
 
         //then
-        assertEquals(salePost.getTitle(), "수정제목");
-        assertEquals(salePost.getDescription(), "수정설명");
-        assertEquals(salePost.getPrice(), 20000);
-        assertEquals(salePost.getGrade(), Grade.TOP);
-        assertEquals(salePost.getBook().getItemId(),1);
-        assertEquals(salePost.getMember().getName(),"수밈");
+        assertEquals("수정제목", salePost.getTitle());
+        assertEquals("수정설명", salePost.getDescription());
+        assertEquals(20000, salePost.getPrice());
+        assertEquals(Grade.TOP, salePost.getGrade());
+        assertEquals(1, salePost.getBook().getItemId());
+        assertEquals("수밈", salePost.getMember().getName());
         assertNotNull(salePost.getUpdatedAt());
     }
 
@@ -133,7 +133,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
     @Test
     @Transactional
     @DisplayName("판매글 목록 조회 성공 테스트")
-    public void fetchSalePoss() {
+    public void fetchSalePost() {
         //given
         for(int i=1;i<=10;i++) {
             SaveBookRequest bookRequest = SaveBookRequest.builder()
@@ -165,10 +165,29 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals(11, salePostList.getTotalElements());
         assertEquals(0, salePostList.getPage());
         assertEquals(1, salePostList.getTotalPages());
-        assertEquals(salePostList.getSalePostInfoList().get(0).getTitle(), "제목");
-        assertEquals(salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle(),
-                "꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그");
+        assertEquals("제목",salePostList.getSalePostInfoList().get(0).getTitle());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
+                salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle());
     }
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 검색 성공 테스트")
+    public void searchSalePost() {
+
+        //given & when
+        Pageable pageable = PageRequest.of(0, 20);
+        PagedSalePostInfo salePostList = salePostService.searchSalePost("제목",pageable);
+
+        assertEquals(0, salePostList.getPage());
+        assertEquals(1,salePostList.getTotalPages());
+        assertEquals(1, salePostList.getTotalElements());
+        assertEquals("최상", salePostList.getSalePostInfoList().get(0).getGrade());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
+                salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle());
+
+    }
+
 
 
 }
