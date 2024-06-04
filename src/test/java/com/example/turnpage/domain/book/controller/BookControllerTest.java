@@ -96,7 +96,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SB002"))
-                .andExpect(jsonPath("$.data.totalBooks").value(1))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
         ;
 
         verify(bookService).fetchBestSeller(any());
@@ -167,7 +167,7 @@ public class BookControllerTest extends ControllerTestConfig {
                 .andDo(print())
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.code").value("SB004"))
-                .andExpect(jsonPath("$.data.totalBooks").value(1))
+                .andExpect(jsonPath("$.data.totalElements").value(1))
         ;
 
         verify(bookService).searchBook(any(),any());

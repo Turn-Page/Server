@@ -9,7 +9,7 @@ import lombok.experimental.SuperBuilder;
 import java.util.ArrayList;
 import java.util.List;
 
-public class BookResponse {
+public abstract class BookResponse {
 
     @Getter
     @AllArgsConstructor
@@ -36,6 +36,15 @@ public class BookResponse {
         private String isbn;
         private String description;
     }
+
+    @Getter
+    @Builder
+    public static class SimpleBookInfo {
+        private Long bookId;
+        private String title;
+        private String cover;
+    }
+
 
     @Getter
     @NoArgsConstructor

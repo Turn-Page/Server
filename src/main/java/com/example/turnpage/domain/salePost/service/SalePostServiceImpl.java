@@ -7,7 +7,9 @@ import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.salePost.converter.SalePostConverter;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
+import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
@@ -80,6 +82,23 @@ public class SalePostServiceImpl implements SalePostService {
         return salePostConverter.toPagedSalePostList(
                 salePostRepository.findSalePostsWithBooksOrderByCreatedAt(pageable));
     }
+
+    @Override
+    public PagedSalePostInfo searchSalePost(String keyword, Pageable pageable) {
+        keyword = keyword.replace(" ","");
+
+        return salePostConverter.toPagedSalePostList(
+                salePostRepository.findByBookOrTitleContaining(keyword,pageable));
+    }
+
+    @Override
+    public SalePostDetailInfo getSalePostDetailInfo(Long salePostId) {
+        SalePost salePost = salePostRepository.findSalePostWithMemberAndBook(salePostId)
+                .orElseThrow(() -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
+
+        return salePostConverter.toSalePostDetailInfo(salePost);
+    }
+
 
     @Override
     public SalePost findSalePost(Long salePostId) {

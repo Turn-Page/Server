@@ -1,8 +1,10 @@
 package com.example.turnpage.domain.book.converter;
 
+import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
+import com.example.turnpage.domain.book.dto.BookResponse.SimpleBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
@@ -27,7 +29,7 @@ public class BookConverter {
                 .build();
     }
 
-    public BookInfo tokBookInfo(Book book) {
+    public BookInfo toBookInfo(Book book) {
         return BookInfo.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
@@ -40,10 +42,18 @@ public class BookConverter {
                 .build();
     }
 
+    public SimpleBookInfo toSimpleBookInfo(Book book) {
+        return SimpleBookInfo.builder()
+                .bookId(book.getId())
+                .title(book.getTitle())
+                .cover(book.getCover())
+                .build();
+    }
+
     public PagedBookInfo toPagedBookInfo(Page<Book> books) {
 
         List<BookInfo> bookInfoList = books.stream()
-                .map(this::tokBookInfo).toList();
+                .map(this::toBookInfo).toList();
 
         return PagedBookInfo.builder()
                 .bookInfoList(bookInfoList)
