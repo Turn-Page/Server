@@ -59,7 +59,7 @@ public class SalePostController {
             @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
     })
     @GetMapping
-    public ResultResponse<PagedSalePostInfo> fetchSalePosts(@PageableDefault(sort = "created_at", direction = Sort.Direction.DESC)
+    public ResultResponse<PagedSalePostInfo> fetchSalePosts(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                                                  @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(pageable));
     }
@@ -71,7 +71,7 @@ public class SalePostController {
     })
     @GetMapping("/search")
     public ResultResponse<PagedSalePostInfo> searchSalePost(@RequestParam(name = "keyword") String keyword,
-                                                            @PageableDefault(sort = "created_at", direction = Sort.Direction.DESC)
+                                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                             @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(keyword, pageable));
     }

@@ -85,7 +85,6 @@ public class SecurityConfig {
                         .requestMatchers("/error/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/books/**").permitAll()
                         .requestMatchers(HttpMethod.GET, "/salePosts/**").permitAll()
-
                         .requestMatchers(
                                 "/swagger-ui/**",
                                 "/swagger-resources/**",

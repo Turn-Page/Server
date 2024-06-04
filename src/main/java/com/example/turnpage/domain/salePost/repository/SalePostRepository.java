@@ -11,13 +11,12 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Optional;
 
 public interface SalePostRepository extends JpaRepository<SalePost,Long> {
-    @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book ORDER BY sp.createdAt DESC")
+    @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book")
     Page<SalePost> findSalePostsWithBooksOrderByCreatedAt(Pageable pageable);
 
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book WHERE REPLACE(sp.title,' ','') LIKE %:keyword% " +
             "OR REPLACE(sp.book.title,' ','') LIKE %:keyword% " +
-            "OR REPLACE(sp.book.author,' ','') LIKE %:keyword% " +
-            "ORDER BY sp.createdAt DESC")
+            "OR REPLACE(sp.book.author,' ','') LIKE %:keyword% ")
     Page<SalePost> findByBookOrTitleContaining(@Param("keyword") String keyword, Pageable pageable);
 
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.member JOIN FETCH sp.book WHERE sp.id = :salePostId")
