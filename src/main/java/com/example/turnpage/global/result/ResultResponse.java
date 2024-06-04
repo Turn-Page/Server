@@ -4,10 +4,10 @@ import lombok.Getter;
 
 @Getter
 public class ResultResponse<T> {
-    private int status;
-    private String code;
-    private String message;
-    private T data;
+    private final int status;
+    private final String code;
+    private final String message;
+    private final T data;
     public ResultResponse(ResultCodeInterface resultCode, T data) {
         this.status = resultCode.getResultCode().getStatus();
         this.code = resultCode.getResultCode().getCode();

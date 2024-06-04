@@ -4,6 +4,7 @@ import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.domain.follow.service.FollowService;
 import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
@@ -39,10 +40,9 @@ public class ReportServiceImpl implements ReportService {
     @Transactional
     @Override
     public ReportId postReport(Member member, ReportRequest.PostReportRequest request) {
-        Long bookId = bookService.saveBook(request.getBookInfo())
-                .getBookId();
+        Book book = bookService.findBookByItemId(request.getBookInfo().getItemId())
+                .orElseGet(() -> bookService.saveBookInfo(request.getBookInfo()));
 
-        Book book = bookService.findBook(bookId);
         Report report = reportConverter.toEntity(request, book, member);
         Long reportId = reportRepository.save(report).getId();
 
