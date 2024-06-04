@@ -29,7 +29,7 @@ public class BookConverter {
                 .build();
     }
 
-    public BookInfo tokBookInfo(Book book) {
+    public BookInfo toBookInfo(Book book) {
         return BookInfo.builder()
                 .bookId(book.getId())
                 .title(book.getTitle())
@@ -53,7 +53,7 @@ public class BookConverter {
     public PagedBookInfo toPagedBookInfo(Page<Book> books) {
 
         List<BookInfo> bookInfoList = books.stream()
-                .map(this::tokBookInfo).toList();
+                .map(this::toBookInfo).toList();
 
         return PagedBookInfo.builder()
                 .bookInfoList(bookInfoList)

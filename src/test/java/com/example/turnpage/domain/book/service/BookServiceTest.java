@@ -28,7 +28,7 @@ public class BookServiceTest extends ServiceTestConfig {
     public void saveBook() {
         //given
         SaveBookRequest request = SaveBookRequest.builder()
-                .itemId(1L)
+                .itemId(2L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
                 .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
@@ -42,7 +42,7 @@ public class BookServiceTest extends ServiceTestConfig {
         Book book = bookService.findBook(bookService.saveBook(request).getBookId());
 
         //then
-        assertEquals(1L, book.getItemId());
+        assertEquals(2L, book.getItemId());
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그", book.getTitle());
         assertEquals("브로디, 노아", book.getAuthor());
         assertEquals("12987349382", book.getIsbn());
@@ -62,7 +62,7 @@ public class BookServiceTest extends ServiceTestConfig {
         for(int i=1;i<=11;i++) {
             SaveBookRequest book = SaveBookRequest.builder()
                     .rank(i)
-                    .itemId(1L +i)
+                    .itemId(100L +i)
                     .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                     .author("브로디, 노아")
                     .isbn(Integer.toString(i))
@@ -90,7 +90,7 @@ public class BookServiceTest extends ServiceTestConfig {
         //given
         SaveBookRequest request = SaveBookRequest.builder()
                 .rank(null)
-                .itemId(1L)
+                .itemId(1000L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
                 .isbn("12987349382")
@@ -124,7 +124,7 @@ public class BookServiceTest extends ServiceTestConfig {
     public void searchBook() {
         ///given
         SaveBookRequest request = SaveBookRequest.builder()
-                .itemId(1L)
+                .itemId(10000L)
                 .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
                 .author("브로디, 노아")
                 .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")

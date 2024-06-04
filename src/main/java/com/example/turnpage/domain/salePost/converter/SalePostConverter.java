@@ -47,7 +47,7 @@ public class SalePostConverter {
 
     public SalePostDetailInfo toSalePostDetailInfo(SalePost salePost) {
         MemberResponse.MemberInfo memberInfo = memberConverter.toMemberInfo(salePost.getMember());
-        BookResponse.BookInfo bookInfo = bookConverter.tokBookInfo(salePost.getBook());
+        BookResponse.BookInfo bookInfo = bookConverter.toBookInfo(salePost.getBook());
         return SalePostDetailInfo.builder()
                 .salePostId(salePost.getId())
                 .memberInfo(memberInfo)
