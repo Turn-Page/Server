@@ -17,8 +17,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.turnpage.global.error.domain.FollowErrorCode.CANNOT_FOLLOW_MYSELF;
-import static com.example.turnpage.global.error.domain.FollowErrorCode.FOLLOW_NOT_FOUND;
+import static com.example.turnpage.global.error.code.FollowErrorCode.CANNOT_FOLLOW_MYSELF;
+import static com.example.turnpage.global.error.code.FollowErrorCode.FOLLOW_NOT_FOUND;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)

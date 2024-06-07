@@ -1,9 +1,5 @@
 package com.example.turnpage.global.result;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
 /**
  * 결과 코드에 대한 Enum class
  * 결과 코드 형식
@@ -12,11 +8,8 @@ import lombok.RequiredArgsConstructor;
  * ex) "M": Member, "SP": SalePost, "B": Book, "R": Report
  *
  */
-@Builder
-@Getter
-@RequiredArgsConstructor
-public class ResultCode {
-    private final int status;
-    private final String code;
-    private final String message;
+public interface ResultCode {
+    int getStatus();
+    String getCode();
+    String getMessage();
 }

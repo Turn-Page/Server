@@ -1,7 +1,7 @@
 package com.example.turnpage.domain.salePost.entity;
 
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.SalePostErrorCode;
+import com.example.turnpage.global.error.code.SalePostErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 

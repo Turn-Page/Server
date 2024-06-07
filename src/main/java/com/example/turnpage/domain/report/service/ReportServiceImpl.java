@@ -4,7 +4,6 @@ import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.service.BookService;
 import com.example.turnpage.domain.follow.service.FollowService;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
@@ -23,8 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static com.example.turnpage.global.error.domain.ReportErrorCode.REPORT_NOT_FOUND;
-import static com.example.turnpage.global.error.domain.ReportErrorCode.WRITER_ONLY_MODIFY_REPORT;
+import static com.example.turnpage.global.error.code.ReportErrorCode.REPORT_NOT_FOUND;
+import static com.example.turnpage.global.error.code.ReportErrorCode.WRITER_ONLY_MODIFY_REPORT;
 
 
 @RequiredArgsConstructor
