@@ -30,7 +30,7 @@ import org.springframework.util.StringUtils;
 import java.util.Map;
 import java.util.function.Consumer;
 
-import static com.example.turnpage.global.error.domain.MemberErrorCode.CLIENT_REGISTRATION_NOT_FOUND;
+import static com.example.turnpage.global.error.code.MemberErrorCode.CLIENT_REGISTRATION_NOT_FOUND;
 
 public class CustomOAuth2LoginAuthenticationFilter extends OAuth2LoginAuthenticationFilter {
     public static final String TURNPAGE_FILTER_PROCESSES_URI = "/auth/login/*";

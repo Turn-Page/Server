@@ -9,7 +9,7 @@ import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.BookErrorCode;
+import com.example.turnpage.global.error.code.BookErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;

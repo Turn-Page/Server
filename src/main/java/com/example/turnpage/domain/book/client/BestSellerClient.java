@@ -2,7 +2,7 @@ package com.example.turnpage.domain.book.client;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.BookErrorCode;
+import com.example.turnpage.global.error.code.BookErrorCode;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;

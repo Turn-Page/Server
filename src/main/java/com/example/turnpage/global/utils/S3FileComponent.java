@@ -4,7 +4,7 @@ package com.example.turnpage.global.utils;
 import com.amazonaws.services.s3.AmazonS3Client;
 import com.amazonaws.services.s3.model.*;
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.S3ErrorCode;
+import com.example.turnpage.global.error.code.S3ErrorCode;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
