@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.example.turnpage.global.error.domain.FollowErrorCode.CANNOT_FOLLOW_MYSELF;
 import static com.example.turnpage.global.error.domain.FollowErrorCode.FOLLOW_NOT_FOUND;
 
 @RequiredArgsConstructor
@@ -32,6 +33,8 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public FollowId followMember(Member member, FollowRequest.FollowMemberRequest request) {
         Member follower = memberService.findMember(request.getEmail());
+        validateFollowerIsNotMyself(member, follower);
+
         Follow follow = followConverter.toEntity(member, follower);
 
         followRepository.save(follow);
@@ -56,5 +59,11 @@ public class FollowServiceImpl implements FollowService {
 
         follow.delete();
         return followConverter.toFollowId(follow.getId());
+    }
+
+    private void validateFollowerIsNotMyself(Member member, Member follower) {
+        if (member == follower) {
+            throw new BusinessException(CANNOT_FOLLOW_MYSELF);
+        }
     }
 }
