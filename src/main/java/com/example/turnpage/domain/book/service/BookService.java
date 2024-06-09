@@ -6,6 +6,7 @@ import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.entity.Book;
 import org.springframework.data.domain.Pageable;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
@@ -19,6 +20,4 @@ public interface BookService {
     PagedBookInfo fetchBestSeller(Pageable pageable);
     BookDetailInfo getBookDetailInfo(Long bookId);
     PagedBookInfo searchBook(String keyword, Pageable pageable);
-
-
 }

@@ -84,7 +84,6 @@ public class BookServiceImpl implements BookService {
                 bookRepository.findByTitleOrAuthorContaining(keyword, pageable));
     }
 
-
     @Override
     public Book findBook(Long bookId) {
         return bookRepository.findById(bookId)

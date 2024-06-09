@@ -1,5 +1,6 @@
 package com.example.turnpage.domain.book.controller;
 
+import com.example.turnpage.domain.book.client.BookSearchClient;
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.book.dto.BookResponse.PagedBookInfo;
 import com.example.turnpage.domain.book.service.BookService;
@@ -14,6 +15,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 import static com.example.turnpage.domain.book.dto.BookResponse.BookDetailInfo;
 import static com.example.turnpage.domain.book.dto.BookResponse.BookId;
 import static com.example.turnpage.global.result.code.BookResultCode.*;
@@ -25,6 +28,7 @@ import static com.example.turnpage.global.result.code.BookResultCode.*;
 public class BookController {
 
     private final BookService bookService;
+    private final BookSearchClient bookSearchClient;
 
     @PostMapping()
     @Operation(summary = "책 정보 저장 API", description = " 책 정보 저장 API 입니다.")
@@ -63,6 +67,13 @@ public class BookController {
     public ResultResponse<PagedBookInfo> searchBook(@RequestParam(name = "keyword") String keyword,
                                                     @PageableDefault @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_BOOK, bookService.searchBook(keyword, pageable));
+    }
+
+    @GetMapping("/openAPI/search")
+    @Operation(summary = "알라딘 OPEN API에서 책 검색 API", description = " 알라딘 OPEN API 에서 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다." +
+            "검색 결과 10개까지 반환됩니다.")
+    public ResultResponse<List<SaveBookRequest>> openAPISearchBook(@RequestParam(name = "keyword") String keyword) {
+        return ResultResponse.of(SEARCH_BOOK, bookSearchClient.getSearchResult(keyword));
     }
 
 
