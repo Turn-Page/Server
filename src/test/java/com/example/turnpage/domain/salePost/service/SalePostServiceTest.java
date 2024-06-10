@@ -2,12 +2,11 @@ package com.example.turnpage.domain.salePost.service;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.global.error.BusinessException;
-import com.example.turnpage.global.error.domain.SalePostErrorCode;
+import com.example.turnpage.global.error.code.SalePostErrorCode;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -92,7 +91,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
         });
 
         //then
-        assertEquals(SalePostErrorCode.INVALID_GRADE_INPUT.getCode(), exception.getErrorCode().getCode());
+        assertEquals(SalePostErrorCode.INVALID_GRADE_INPUT, exception.getErrorCode());
     }
 
     @Test

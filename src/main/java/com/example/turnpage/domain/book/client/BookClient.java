@@ -8,6 +8,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
+import java.util.Optional;
+
 public class BookClient {
 
     /*
@@ -42,9 +44,13 @@ public class BookClient {
                 .publisher(item.get("publisher").toString())
                 .publicationDate(item.get("pubDate").toString())
                 .description(item.get("description").toString())
-                .rank(Integer.parseInt((item.get("bestRank")).toString()))
+                .rank(checkRank(Optional.ofNullable(item.get("rank"))))
                 .build();
 
+    }
+
+    public Integer checkRank(Optional rank) {
+        return (Integer) rank.orElse(null);
     }
 
 }
