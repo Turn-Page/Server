@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 @Getter
 @RequiredArgsConstructor
 public enum GlobalErrorCode implements ErrorCode {
+    BAD_REQUEST(400, "EG000", "올바르지 않은 요청입니다."),
     INVALID_INPUT(400, "EG001", "올바르지 않은 입력입니다."),
     NOT_FOUND(404, "EG002", "특정 자원이 존재하지 않습니다."),
     METHOD_NOT_ALLOWED(405, "EG003", "허용되지 않은 HTTP method입니다."),

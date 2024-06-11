@@ -3,20 +3,22 @@ package com.example.turnpage.domain.report.dto;
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.example.turnpage.domain.report.dto.validation.DateRange;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
 public abstract class ReportRequest {
     @Getter
     @SuperBuilder
+    @NoArgsConstructor
     @AllArgsConstructor
-    @DateRange
     public static class PostReportRequest extends EditReportRequest {
-        @NotBlank
+        @NotNull
         private SaveBookRequest bookInfo;
     }
 
@@ -30,9 +32,11 @@ public abstract class ReportRequest {
         private String title;
         @NotBlank
         private String content;
-        @NotBlank
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @NotNull
         private LocalDate startDate;
-        @NotBlank
+        @DateTimeFormat(pattern = "yyyy-MM-dd")
+        @NotNull
         private LocalDate endDate;
     }
 }

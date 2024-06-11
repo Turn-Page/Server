@@ -19,13 +19,8 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
     @Override
     public boolean isValid(Object obj, ConstraintValidatorContext context) {
         try {
-            Field startField = obj.getClass().getDeclaredField(startDateField);
-            Field endField = obj.getClass().getDeclaredField(endDateField);
-            startField.setAccessible(true);
-            endField.setAccessible(true);
-
-            LocalDate startDate = (LocalDate) startField.get(obj);
-            LocalDate endDate = (LocalDate) endField.get(obj);
+            LocalDate startDate = getFieldValue(obj, startDateField);
+            LocalDate endDate = getFieldValue(obj, endDateField);
 
             if (startDate == null || endDate == null) {
                 return true; // null인 경우에는 다른 Valid 어노테이션이 처리하도록 넘긴다.
@@ -36,5 +31,22 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, Object
             e.printStackTrace();
             return false;
         }
+    }
+
+    private LocalDate getFieldValue(Object obj, String fieldName) throws NoSuchFieldException, IllegalAccessException {
+        Class<?> currentClass = obj.getClass();
+        while (currentClass != null) {
+            try {
+                Field field = currentClass.getDeclaredField(fieldName);
+                field.setAccessible(true);
+
+                return (LocalDate) field.get(obj);
+            } catch (NoSuchFieldException e) {
+                // 상위 클래스 필드 탐색을 위해 클래스 이동
+                currentClass = currentClass.getSuperclass();
+            }
+        }
+
+        throw new NoSuchFieldException(String.format("%s 필드를 주어진 클래스에서 찾을 수 없습니다.", fieldName));
     }
 }
