@@ -1,13 +1,11 @@
 package com.example.turnpage.support;
 
-import com.example.turnpage.domain.book.dto.BookRequest;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.entity.Role;
 import com.example.turnpage.domain.member.entity.SocialType;
 import com.example.turnpage.domain.member.repository.MemberRepository;
-import com.example.turnpage.domain.salePost.dto.SalePostRequest;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.domain.salePost.repository.SalePostRepository;

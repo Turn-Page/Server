@@ -1,11 +1,9 @@
 package com.example.turnpage.domain.follow.controller;
 
 import com.example.turnpage.domain.follow.dto.FollowRequest.FollowMemberRequest;
-import com.example.turnpage.domain.follow.dto.FollowResponse;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowId;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowingFollowerList;
 import com.example.turnpage.domain.follow.service.FollowService;
-import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.global.config.security.LoginMember;
 import com.example.turnpage.global.result.ResultResponse;
@@ -13,15 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.turnpage.global.result.code.FollowResultCode.*;
 

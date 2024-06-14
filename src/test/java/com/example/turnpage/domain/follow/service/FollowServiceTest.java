@@ -2,9 +2,7 @@ package com.example.turnpage.domain.follow.service;
 
 
 import com.example.turnpage.domain.follow.dto.FollowRequest;
-import com.example.turnpage.domain.follow.dto.FollowResponse;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowingFollowerList;
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.support.ServiceTestConfig;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.turnpage.global.error.code.ReportErrorCode.REPORT_NOT_FOUND;
 import static com.example.turnpage.global.error.code.ReportErrorCode.WRITER_ONLY_MODIFY_REPORT;
