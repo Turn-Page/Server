@@ -1,7 +1,9 @@
 package com.example.turnpage.domain.follow.controller;
 
 import com.example.turnpage.domain.follow.dto.FollowRequest.FollowMemberRequest;
+import com.example.turnpage.domain.follow.dto.FollowResponse;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowId;
+import com.example.turnpage.domain.follow.dto.FollowResponse.FollowingFollowerList;
 import com.example.turnpage.domain.follow.service.FollowService;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 import com.example.turnpage.domain.member.entity.Member;
@@ -38,9 +40,9 @@ public class FollowController {
     }
 
     @GetMapping
-    @Operation(summary = "팔로잉 목록 조회 API", description = "회원이 팔로우하고 있는 회원의 목록을 조회합니다.")
-    public ResultResponse<List<MemberInfo>> getFollowingList(@LoginMember Member member) {
-        return ResultResponse.of(FOLLOWING_LIST, followService.getFollowingList(member));
+    @Operation(summary = "팔로잉, 팔로워 목록 조회 API", description = "회원의 팔로우, 팔로잉 목록을 조회합니다.")
+    public ResultResponse<FollowingFollowerList> getFollowingFollowerList(@LoginMember Member member) {
+        return ResultResponse.of(FOLLOWING_FOLLOWER_LIST, followService.getFollowingFollowerList(member));
     }
 
     @DeleteMapping("/{followerId}")

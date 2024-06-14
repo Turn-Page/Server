@@ -60,7 +60,7 @@ public class ReportServiceImpl implements ReportService {
         List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
                 .map(following -> following.getMemberId())
-                .collect(Collectors.toList());
+                .toList();
 
         Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(followingIdList, pageable);
         return reportConverter.toPagedReportInfo(reports);
