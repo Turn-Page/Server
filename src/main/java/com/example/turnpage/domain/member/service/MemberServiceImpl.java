@@ -19,9 +19,11 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberServiceImpl implements MemberService {
+    private static final int MAX_POINT = 50_000;
     private final MemberRepository memberRepository;
     private final MemberConverter memberConverter;
     private final S3FileComponent s3FileComponent;
+
 
     @Override
     public MyPageInfo getMyPageInfo(Member loginMember) {
@@ -59,8 +61,15 @@ public class MemberServiceImpl implements MemberService {
     public MemberResponse.MyPoint chargeMyPoint(Member loginMember, int point) {
         Member member = findMember(loginMember.getId());
 
+        validatePointIsUnderMaxPoint(point);
         int totalPoint = member.chargePoint(point);
 
+        return memberConverter.toMyPoint(member.getId(), totalPoint);
+    }
+
+    @Override
+    public MemberResponse.MyPoint getMyPoint(Member member) {
+        int totalPoint = member.getPoint();
         return memberConverter.toMyPoint(member.getId(), totalPoint);
     }
 
@@ -74,6 +83,13 @@ public class MemberServiceImpl implements MemberService {
             return s3FileComponent.uploadFile("member", profileImage);
         }
         return member.getImage();
+    }
+
+    // 최대 충전 금액 범위의 포인트인지 확인
+    private void validatePointIsUnderMaxPoint(int point) {
+        if (point > MAX_POINT) {
+            throw new BusinessException(MemberErrorCode.CANNOT_CHARGE_OVER_MAX_POINT);
+        }
     }
 
     //소셜로그인에서 받아온 프로필 이미지인지 확인

@@ -13,6 +13,8 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLRestriction;
@@ -23,6 +25,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 @EntityListeners(AuditingEntityListener.class)
 @Entity
 @Table(name = "orders")
@@ -41,8 +45,8 @@ public class Order {
     @JoinColumn(name = "sale_post_id", nullable = false)
     private SalePost salePost;
 
-    @Column(nullable = false, unique = true)
-    private String number;
+    @Column(name = "order_number", nullable = false, unique = true)
+    private String orderNumber;
 
     @CreatedDate
     @Column(name = "ordered_at", nullable = false)

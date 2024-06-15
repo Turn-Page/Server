@@ -14,4 +14,5 @@ public interface MemberService {
     MemberId editMyPageInfo(Member loginMember, EditMyPageRequest request, MultipartFile profileImage);
 
     MyPoint chargeMyPoint(Member loginMember, int point);
+    MyPoint getMyPoint(Member member);
 }

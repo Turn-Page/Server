@@ -51,4 +51,8 @@ public class SalePost extends BaseTimeEntity {
         this.price = price;
     }
 
+    public void setSold() {
+        this.isSold = true;
+    }
+
 }
