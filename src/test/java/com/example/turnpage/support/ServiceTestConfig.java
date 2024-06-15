@@ -1,13 +1,11 @@
 package com.example.turnpage.support;
 
-import com.example.turnpage.domain.book.dto.BookRequest;
 import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.book.repository.BookRepository;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.entity.Role;
 import com.example.turnpage.domain.member.entity.SocialType;
 import com.example.turnpage.domain.member.repository.MemberRepository;
-import com.example.turnpage.domain.salePost.dto.SalePostRequest;
 import com.example.turnpage.domain.salePost.entity.Grade;
 import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.domain.salePost.repository.SalePostRepository;
@@ -21,12 +19,16 @@ public abstract class ServiceTestConfig {
     @Autowired protected BookRepository bookRepository;
     @Autowired protected SalePostRepository salePostRepository;
     protected Member testMember;
+    protected Member testMember2;
+    protected Member testMember3;
     protected Book testBook;
     protected SalePost testSalePost;
 
     @BeforeEach
     public void setUp() {
         testMember = createMember();
+        testMember2 = createMember2();
+        testMember3 = createMember3();
         testBook = createBook();
         testSalePost = createSalePost();
     }
@@ -49,6 +51,41 @@ public abstract class ServiceTestConfig {
         );
     }
 
+    protected Member createMember2() {
+        return memberRepository.save(
+                Member.builder()
+                        .id(102L)
+                        .name("강연")
+                        .email("kangyeon@gmail.com")
+                        .inviteCode("aa2aaa")
+                        .image("http://t1.kakaocdn.net/account_images/default_profile.jpeg.twg.thumb.R640x640")
+                        .role(Role.USER)
+                        .socialType(SocialType.GOOGLE)
+                        .point(0)
+                        .reportCount(0)
+                        .purchaseCount(0)
+                        .saleCount(0)
+                        .build()
+        );
+    }
+
+    protected Member createMember3() {
+        return memberRepository.save(
+                Member.builder()
+                        .id(102L)
+                        .name("태혁님")
+                        .email("teahyuk@gmail.com")
+                        .inviteCode("akjhsd")
+                        .image("http://t1.kakaocdn.net/account_images/default_profile.jpeg.twg.thumb.R640x640")
+                        .role(Role.USER)
+                        .socialType(SocialType.GOOGLE)
+                        .point(0)
+                        .reportCount(0)
+                        .purchaseCount(0)
+                        .saleCount(0)
+                        .build()
+        );
+    }
     protected Book createBook() {
         return bookRepository.save(
                 Book.builder()

@@ -3,6 +3,7 @@ package com.example.turnpage.domain.follow.service;
 import com.example.turnpage.domain.follow.converter.FollowConverter;
 import com.example.turnpage.domain.follow.dto.FollowRequest;
 import com.example.turnpage.domain.follow.dto.FollowResponse.FollowId;
+import com.example.turnpage.domain.follow.dto.FollowResponse.FollowingFollowerList;
 import com.example.turnpage.domain.follow.entity.Follow;
 import com.example.turnpage.domain.follow.repository.FollowRepository;
 import com.example.turnpage.domain.member.converter.MemberConverter;
@@ -15,7 +16,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.turnpage.global.error.code.FollowErrorCode.CANNOT_FOLLOW_MYSELF;
 import static com.example.turnpage.global.error.code.FollowErrorCode.FOLLOW_NOT_FOUND;
@@ -46,9 +46,25 @@ public class FollowServiceImpl implements FollowService {
         List<Member> followingList = followRepository.findByMemberId(member.getId())
                 .stream()
                 .map(follow -> follow.getFollower())
-                .collect(Collectors.toList());
+                .toList();
 
         return memberConverter.toMemberInfoList(followingList);
+    }
+
+    @Override
+    public FollowingFollowerList getFollowingFollowerList(Member member) {
+        List<Member> followingList = followRepository.findByMemberId(member.getId())
+                .stream()
+                .map(follow -> follow.getFollower())
+                .toList();
+
+        List<Member> followerList = followRepository.findByFollowerId(member.getId())
+                .stream()
+                .map(follow -> follow.getMember())
+                .toList();
+
+        return followConverter.toFollowingFollowerList(followingList, followerList,
+                    followingList.size(), followerList.size());
     }
 
     @Transactional

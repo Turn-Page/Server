@@ -20,7 +20,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.example.turnpage.global.error.code.ReportErrorCode.REPORT_NOT_FOUND;
 import static com.example.turnpage.global.error.code.ReportErrorCode.WRITER_ONLY_MODIFY_REPORT;
@@ -60,7 +59,7 @@ public class ReportServiceImpl implements ReportService {
         List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
                 .map(following -> following.getMemberId())
-                .collect(Collectors.toList());
+                .toList();
 
         Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(followingIdList, pageable);
         return reportConverter.toPagedReportInfo(reports);

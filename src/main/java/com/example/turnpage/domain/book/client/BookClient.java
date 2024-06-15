@@ -39,7 +39,7 @@ public class BookClient {
                 .itemId(Long.parseLong(item.get("itemId").toString()))
                 .title(item.get("title").toString())
                 .author(item.get("author").toString())
-                .cover(item.get("cover").toString())
+                .cover(changeCoverImageSize(item.get("cover").toString()))
                 .isbn(item.get("isbn13").toString())
                 .publisher(item.get("publisher").toString())
                 .publicationDate(item.get("pubDate").toString())
@@ -49,8 +49,13 @@ public class BookClient {
 
     }
 
-    public Integer checkRank(Optional rank) {
+    private Integer checkRank(Optional rank) {
         return (Integer) rank.orElse(null);
     }
+
+    private String changeCoverImageSize(String cover) {
+        return cover.replace("coversum", "cover500");
+    }
+
 
 }
