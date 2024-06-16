@@ -16,13 +16,11 @@ public class OrderConverter {
 
     public Order toEntity(Member member, SalePost salePost) {
         // 겹치지 않는 주문 번호 생성 로직
-        String orderNumber = "testOrderNumber";
-
         return Order.builder()
                 .id(null)
                 .member(member)
                 .salePost(salePost)
-                .orderNumber(orderNumber)
+                .orderNumber(null) // 서비스 로직에서 설정
                 .orderedAt(LocalDateTime.now())
                 .build();
     }

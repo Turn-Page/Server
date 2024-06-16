@@ -22,6 +22,7 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -57,5 +58,12 @@ public class Order {
 
     public void cancel() {
         this.canceledAt = LocalDateTime.now();
+    }
+
+    public void generateOrderNumber(int orderNumberSequence) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+
+        this.orderNumber = String.format("%s%04d", formattedDateTime, orderNumberSequence);
     }
 }

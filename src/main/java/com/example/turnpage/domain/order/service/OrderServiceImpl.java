@@ -1,6 +1,7 @@
 package com.example.turnpage.domain.order.service;
 
 import com.example.turnpage.domain.member.entity.Member;
+import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.order.converter.OrderConverter;
 import com.example.turnpage.domain.order.dto.OrderRequest.CreateOrderRequest;
 import com.example.turnpage.domain.order.dto.OrderResponse.SimpleOrderInfo;
@@ -10,8 +11,11 @@ import com.example.turnpage.domain.salePost.entity.SalePost;
 import com.example.turnpage.domain.salePost.repository.SalePostRepository;
 import com.example.turnpage.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.turnpage.global.error.code.OrderErrorCode.NOT_ENOUGH_POINT_TO_ORDER;
 import static com.example.turnpage.global.error.code.OrderErrorCode.SALEPOST_IS_ALREADY_SOLD;
@@ -21,9 +25,11 @@ import static com.example.turnpage.global.error.code.SalePostErrorCode.SALE_POST
 @RequiredArgsConstructor
 @Service
 public class OrderServiceImpl implements OrderService {
+    private final MemberService memberService;
     private final OrderRepository orderRepository;
     private final SalePostRepository salePostRepository;
     private final OrderConverter orderConverter;
+    private AtomicInteger orderNumberSequence = new AtomicInteger(1);
 
     /**
      * createOrder()의 로직 순서
@@ -40,16 +46,21 @@ public class OrderServiceImpl implements OrderService {
     @Transactional
     @Override
     public SimpleOrderInfo createOrder(Member member, CreateOrderRequest request) {
+        Member persistedMember = memberService.findMember(member.getId());
+
         SalePost salePost = salePostRepository.findById(request.getSalePostId())
                         .orElseThrow(() -> new BusinessException(SALE_POST_NOT_FOUND));
 
         validateSalePostIsNotSold(salePost);
-        validateMemberHasPointMoreThanPaymentAmount(member.getPoint(), salePost.getPrice());
+        validateMemberHasPointMoreThanPaymentAmount(persistedMember.getPoint(), salePost.getPrice());
 
-        Order order = orderRepository.save(orderConverter.toEntity(member, salePost));
+        Order order = orderConverter.toEntity(persistedMember, salePost);
+        order.generateOrderNumber(orderNumberSequence.getAndIncrement());
+        orderRepository.save(order);
 
         salePost.setSold();
-        member.minusPoint(salePost.getPrice());
+        persistedMember.minusPoint(salePost.getPrice());
+
 
         return orderConverter.toSimpleOrderInfo(order);
     }
@@ -64,5 +75,16 @@ public class OrderServiceImpl implements OrderService {
         if (memberPoint < paymentAmount) {
             throw new BusinessException(NOT_ENOUGH_POINT_TO_ORDER);
         }
+    }
+
+    /**
+     * 스케줄러 실행 주기: 매일 자정(00시 00분)
+     * 스케줄러의 기능
+     * - 주문번호의 시퀀스 번호를 날짜가 바뀔 때마다 1로 초기화
+     */
+    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
+    public void autoInitializeOrderNumberSequence() {
+        System.out.println("======주문번호 시퀀스 초기화 스케줄러 실행======");
+        this.orderNumberSequence.set(1);
     }
 }
