@@ -21,13 +21,11 @@ import java.util.stream.Collectors;
 public class OrderConverter {
     private final SalePostConverter salePostConverter;
 
-    public Order toEntity(Member member, SalePost salePost) {
-        // 겹치지 않는 주문 번호 생성 로직
+    public Order toEntity(Member member, SalePost salePost, String orderNumber) {
         return Order.builder()
-                .id(null)
                 .member(member)
                 .salePost(salePost)
-                .orderNumber(null) // 서비스 로직에서 설정
+                .orderNumber(orderNumber)
                 .orderedAt(LocalDateTime.now())
                 .build();
     }
@@ -51,7 +49,7 @@ public class OrderConverter {
     public PagedOrderInfo toPagedOrderInfo(Page<Order> orders) {
         List<DetailedOrderInfo> orderInfoList = orders.stream()
                 .map(order -> toDetailedOrderInfo(order))
-                .collect(Collectors.toList());
+                .toList();
 
         return PagedOrderInfo.builder()
                 .orderInfoList(orderInfoList)

@@ -4,13 +4,12 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.member.service.MemberService;
 import com.example.turnpage.domain.order.converter.OrderConverter;
 import com.example.turnpage.domain.order.dto.OrderRequest.CreateOrderRequest;
-import com.example.turnpage.domain.order.dto.OrderResponse;
 import com.example.turnpage.domain.order.dto.OrderResponse.PagedOrderInfo;
 import com.example.turnpage.domain.order.dto.OrderResponse.SimpleOrderInfo;
 import com.example.turnpage.domain.order.entity.Order;
 import com.example.turnpage.domain.order.repository.OrderRepository;
 import com.example.turnpage.domain.salePost.entity.SalePost;
-import com.example.turnpage.domain.salePost.repository.SalePostRepository;
+import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.global.error.BusinessException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,11 +18,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static com.example.turnpage.global.error.code.OrderErrorCode.NOT_ENOUGH_POINT_TO_ORDER;
 import static com.example.turnpage.global.error.code.OrderErrorCode.SALEPOST_IS_ALREADY_SOLD;
-import static com.example.turnpage.global.error.code.SalePostErrorCode.SALE_POST_NOT_FOUND;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -31,9 +31,9 @@ import static com.example.turnpage.global.error.code.SalePostErrorCode.SALE_POST
 public class OrderServiceImpl implements OrderService {
     private final MemberService memberService;
     private final OrderRepository orderRepository;
-    private final SalePostRepository salePostRepository;
+    private final SalePostService salePostService;
     private final OrderConverter orderConverter;
-    private AtomicInteger orderNumberSequence = new AtomicInteger(1);
+    public final AtomicInteger orderNumberSequence = new AtomicInteger(1);
 
     /**
      * createOrder()의 로직 순서
@@ -51,15 +51,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public SimpleOrderInfo createOrder(Member member, CreateOrderRequest request) {
         Member persistedMember = memberService.findMember(member.getId());
-
-        SalePost salePost = salePostRepository.findById(request.getSalePostId())
-                        .orElseThrow(() -> new BusinessException(SALE_POST_NOT_FOUND));
+        SalePost salePost = salePostService.findSalePost(request.getSalePostId());
 
         validateSalePostIsNotSold(salePost);
         validateMemberHasPointMoreThanPaymentAmount(persistedMember.getPoint(), salePost.getPrice());
 
-        Order order = orderConverter.toEntity(persistedMember, salePost);
-        order.generateOrderNumber(orderNumberSequence.getAndIncrement());
+        String orderNumber = generateOrderNumber(orderNumberSequence.getAndIncrement());
+        Order order = orderConverter.toEntity(persistedMember, salePost, orderNumber);
         orderRepository.save(order);
 
         salePost.setSold();
@@ -76,8 +74,13 @@ public class OrderServiceImpl implements OrderService {
         return orderConverter.toPagedOrderInfo(orders);
     }
 
+    @Override
+    public void resetOrderNumberSequence() {
+        this.orderNumberSequence.set(1);
+    }
+
     private void validateSalePostIsNotSold(SalePost salePost) {
-        if (salePost.isSold() == true) {
+        if (salePost.isSold()) {
             throw new BusinessException(SALEPOST_IS_ALREADY_SOLD);
         }
     }
@@ -88,14 +91,10 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    /**
-     * 스케줄러 실행 주기: 매일 자정(00시 00분)
-     * 스케줄러의 기능
-     * - 주문번호의 시퀀스 번호를 날짜가 바뀔 때마다 1로 초기화
-     */
-    @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
-    public void autoInitializeOrderNumberSequence() {
-        System.out.println("======주문번호 시퀀스 초기화 스케줄러 실행======");
-        this.orderNumberSequence.set(1);
+    private String generateOrderNumber(int orderNumberSequence) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
+        String formattedDateTime = LocalDateTime.now().format(formatter);
+
+        return String.format("%s%04d", formattedDateTime, orderNumberSequence);
     }
 }

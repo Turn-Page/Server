@@ -10,4 +10,5 @@ import org.springframework.data.domain.Pageable;
 public interface OrderService {
     SimpleOrderInfo createOrder(Member member, CreateOrderRequest request);
     PagedOrderInfo findMyOrderList(Member member, Pageable pageable);
+    void resetOrderNumberSequence();
 }

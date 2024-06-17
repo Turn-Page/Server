@@ -59,11 +59,4 @@ public class Order {
     public void cancel() {
         this.canceledAt = LocalDateTime.now();
     }
-
-    public void generateOrderNumber(int orderNumberSequence) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
-        String formattedDateTime = LocalDateTime.now().format(formatter);
-
-        this.orderNumber = String.format("%s%04d", formattedDateTime, orderNumberSequence);
-    }
 }
