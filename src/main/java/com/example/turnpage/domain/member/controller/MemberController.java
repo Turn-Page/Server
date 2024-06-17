@@ -46,4 +46,10 @@ public class MemberController {
                                                  @RequestParam(value = "point") int point) {
         return ResultResponse.of(CHARGE_MY_POINT, memberService.chargeMyPoint(member, point));
     }
+
+    @Operation(summary = "포인트 조회 API", description = "내 포인트 조회 API입니다.")
+    @GetMapping(value = "/myPoint")
+    public ResultResponse<MyPoint> getMyPoint(@LoginMember Member member) {
+        return ResultResponse.of(GET_MY_POINT, memberService.getMyPoint(member));
+    }
 }
