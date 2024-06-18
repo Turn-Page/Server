@@ -1,5 +1,6 @@
 plugins {
 	id 'java'
+	id 'jacoco'
 	id 'org.springframework.boot' version '3.2.3'
 	id 'io.spring.dependency-management' version '1.1.4'
 }
@@ -55,6 +56,37 @@ dependencies {
 	testImplementation 'org.springframework.security:spring-security-test'
 }
 
-tasks.named('test') {
+test {
 	useJUnitPlatform()
+	finalizedBy 'jacocoTestReport' // test가 끝나면 jacocoTestReport 동작
+}
+
+jacocoTestReport {
+
+	reports {
+		// 리포트 타입마다 리포트 저장 경로를 설정할 수 있습니다.
+		html.destination file("jacoco/report.html")
+	}
+
+	//jacocoTestReport 가 끝나면 jacocoTestCoverageVerification 실행
+	finalizedBy 'jacocoTestCoverageVerification'
+}
+
+jacocoTestCoverageVerification {
+	// 커버리지의 범위와 퍼센테이지를 설정합니다.
+	violationRules {
+		rule {
+			enabled = true  // 커버리지 적용
+			element = 'CLASS'		// class 단위로 룰을 체크합니다.
+
+			// 라인 커버리지 설정
+			//한줄한줄 따졌을 때 테스트 코드가 작성되어있는 줄의 빈도
+			limit {
+				counter = 'LINE'
+				value = 'COVEREDRATIO'
+				minimum = 0.0 // minumum설정 시 해당 커버리지 이하일 경우 빌드 되지 않음
+			}
+
+		}
+	}
 }
