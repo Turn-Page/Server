@@ -31,11 +31,11 @@ public class SalePostController {
 
     private final SalePostService salePostService;
 
-    @Operation(summary = "판매글 저장 API", description = " 판매글 저장 API 입니다." )
+    @Operation(summary = "판매글 저장 API", description = " 판매글 저장 API 입니다.")
     @PostMapping
     public ResultResponse<SalePostId> saveSalePost(@LoginMember Member member,
                                                    @RequestBody @Valid SaveSalePostRequest request) {
-        return ResultResponse.of(SAVE_SALE_POST, salePostService.saveSalePost(member,request));
+        return ResultResponse.of(SAVE_SALE_POST, salePostService.saveSalePost(member, request));
     }
 
     @Operation(summary = "판매글 수정 API", description = " 판매글 수정 API 입니다. path variable로 수정하고자 하는 salePostId를 주세요.")
@@ -59,9 +59,10 @@ public class SalePostController {
             @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
     })
     @GetMapping
-    public ResultResponse<PagedSalePostInfo> fetchSalePosts(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                                                                 @Parameter(hidden = true) Pageable pageable) {
-        return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(pageable));
+    public ResultResponse<PagedSalePostInfo> fetchSalePosts(@RequestParam(name = "total") boolean total,
+                                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                                            @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(total, pageable));
     }
 
     @Operation(summary = "판매 중인 도서 검색 API", description = " 판매 중인 도서 검색 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다.")
@@ -70,10 +71,11 @@ public class SalePostController {
             @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
     })
     @GetMapping("/search")
-    public ResultResponse<PagedSalePostInfo> searchSalePost(@RequestParam(name = "keyword") String keyword,
+    public ResultResponse<PagedSalePostInfo> searchSalePost(@RequestParam(name = "total") boolean total,
+                                                            @RequestParam(name = "keyword") String keyword,
                                                             @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                             @Parameter(hidden = true) Pageable pageable) {
-        return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(keyword, pageable));
+        return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(total, keyword, pageable));
     }
 
     @Operation(summary = "판매 중인 도서 상세 조회 API", description = " 판매 중인 도서 상세 조회 API 입니다. path variable로 salePostId를 주세요.")

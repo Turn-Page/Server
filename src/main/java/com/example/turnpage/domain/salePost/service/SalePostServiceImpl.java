@@ -43,8 +43,8 @@ public class SalePostServiceImpl implements SalePostService {
 
         //판매글 저장
         SalePost salePost = salePostRepository.save(salePostConverter.toEntity(member, book,
-                                                        request.getTitle(), request.getDescription(),
-                                                        Grade.toGrade(request.getGrade()), request.getPrice()));
+                request.getTitle(), request.getDescription(),
+                Grade.toGrade(request.getGrade()), request.getPrice()));
 
         return new SalePostId(salePost.getId());
     }
@@ -57,7 +57,7 @@ public class SalePostServiceImpl implements SalePostService {
 
         checkIsSold(salePost);
 
-        checkMember(member,salePost.getMember());
+        checkMember(member, salePost.getMember());
 
         salePost.update(request.getTitle(), request.getDescription(),
                 Grade.toGrade(request.getGrade()), request.getPrice());
@@ -73,7 +73,7 @@ public class SalePostServiceImpl implements SalePostService {
 
         checkIsSold(salePost);
 
-        checkMember(member,salePost.getMember());
+        checkMember(member, salePost.getMember());
 
         salePost.delete();
 
@@ -81,17 +81,17 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
-    public PagedSalePostInfo fetchSalePosts(Pageable pageable) {
+    public PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable) {
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(pageable));
+                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(total, pageable));
     }
 
     @Override
-    public PagedSalePostInfo searchSalePost(String keyword, Pageable pageable) {
-        keyword = keyword.replace(" ","");
+    public PagedSalePostInfo searchSalePost(boolean total, String keyword, Pageable pageable) {
+        keyword = keyword.replace(" ", "");
 
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findByBookOrTitleContaining(keyword,pageable));
+                salePostRepository.findByBookOrTitleContaining(total, keyword, pageable));
     }
 
     @Override
@@ -112,19 +112,18 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     private void checkMember(Member loginMember, Member writer) {
-        if(!loginMember.getId().equals(writer.getId()))
+        if (!loginMember.getId().equals(writer.getId()))
             throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
     }
 
     private void checkIsSold(SalePost salePost) {
-        if(salePost.isSold())
+        if (salePost.isSold())
             throw new BusinessException(SalePostErrorCode.SALE_POST_NOT_ALLOWED);
     }
 
     private boolean checkIsMine(Member loginMember, Long writerId) {
-        if(loginMember!=null && writerId.equals(loginMember.getId()))
+        if (loginMember != null && writerId.equals(loginMember.getId()))
             return true;
         else return false;
     }
-
 }

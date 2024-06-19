@@ -197,11 +197,54 @@ public class SalePostServiceTest extends ServiceTestConfig {
             salePostService.saveSalePost(testMember, request);
         }
         //when
+        testSalePost.setSold();
         Pageable pageable = PageRequest.of(0, 20);
-        PagedSalePostInfo salePostList = salePostService.fetchSalePosts(pageable);
+        PagedSalePostInfo salePostList = salePostService.fetchSalePosts(true, pageable);
+
 
         //then
         assertEquals(11, salePostList.getTotalElements());
+        assertEquals(0, salePostList.getPage());
+        assertEquals(1, salePostList.getTotalPages());
+        assertEquals("제목",salePostList.getSalePostInfoList().get(0).getTitle());
+        assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
+                salePostList.getSalePostInfoList().get(0).getBookInfo().getTitle());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 목록 조회 성공 테스트 - 판매중인 게시글만 보기")
+    public void fetchSalePost2() {
+        //given
+        for(int i=1;i<=10;i++) {
+            SaveBookRequest bookRequest = SaveBookRequest.builder()
+                    .itemId((long) i)
+                    .title("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그")
+                    .author("브로디, 노아")
+                    .cover("https://image.aladin.co.kr/product/33948/74/coversum/k392930236_1.jpg")
+                    .isbn("12987349382")
+                    .publisher("포레스트북스")
+                    .publicationDate("2023-12-18")
+                    .description("삐까뚱씨라는 이름으로 유튜브를 하고 있는 브로디와 노아.")
+                    .build();
+
+            SaveSalePostRequest request = SaveSalePostRequest.builder()
+                    .title("제목")
+                    .description("설명")
+                    .grade("최상")
+                    .price(10000)
+                    .bookInfo(bookRequest)
+                    .build();
+
+            salePostService.saveSalePost(testMember, request);
+        }
+        //when
+        testSalePost.setSold();
+        Pageable pageable = PageRequest.of(0, 20);
+        PagedSalePostInfo salePostList = salePostService.fetchSalePosts(false, pageable);
+
+        //then
+        assertEquals(10, salePostList.getTotalElements());
         assertEquals(0, salePostList.getPage());
         assertEquals(1, salePostList.getTotalPages());
         assertEquals("제목",salePostList.getSalePostInfoList().get(0).getTitle());
@@ -216,7 +259,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
 
         //given & when
         Pageable pageable = PageRequest.of(0, 20);
-        PagedSalePostInfo salePostList = salePostService.searchSalePost("제목",pageable);
+        PagedSalePostInfo salePostList = salePostService.searchSalePost(false,"제목",pageable);
 
         assertEquals(0, salePostList.getPage());
         assertEquals(1,salePostList.getTotalPages());
