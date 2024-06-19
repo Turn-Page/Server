@@ -55,6 +55,8 @@ public class SalePostServiceImpl implements SalePostService {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
 
+        checkIsSold(salePost);
+
         checkMember(member,salePost.getMember());
 
         salePost.update(request.getTitle(), request.getDescription(),
@@ -68,6 +70,8 @@ public class SalePostServiceImpl implements SalePostService {
     public SalePostId deleteSalePost(Member loginMember, Long salePostId) {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
+
+        checkIsSold(salePost);
 
         checkMember(member,salePost.getMember());
 
@@ -91,11 +95,13 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
-    public SalePostDetailInfo getSalePostDetailInfo(Long salePostId) {
+    public SalePostDetailInfo getSalePostDetailInfo(Member loginMember, Long salePostId) {
         SalePost salePost = salePostRepository.findSalePostWithMemberAndBook(salePostId)
                 .orElseThrow(() -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
 
-        return salePostConverter.toSalePostDetailInfo(salePost);
+        boolean isMine = checkIsMine(loginMember, salePost.getMember().getId());
+
+        return salePostConverter.toSalePostDetailInfo(salePost, isMine);
     }
 
 
@@ -108,6 +114,17 @@ public class SalePostServiceImpl implements SalePostService {
     private void checkMember(Member loginMember, Member writer) {
         if(!loginMember.getId().equals(writer.getId()))
             throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
+    }
+
+    private void checkIsSold(SalePost salePost) {
+        if(salePost.isSold())
+            throw new BusinessException(SalePostErrorCode.SALE_POST_NOT_ALLOWED);
+    }
+
+    private boolean checkIsMine(Member loginMember, Long writerId) {
+        if(loginMember!=null && writerId.equals(loginMember.getId()))
+            return true;
+        else return false;
     }
 
 }

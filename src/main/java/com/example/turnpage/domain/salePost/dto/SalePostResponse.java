@@ -33,6 +33,7 @@ public abstract class SalePostResponse {
         private String title;
         private Integer price;
         private String grade;
+        private boolean isSold;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
     }
@@ -49,6 +50,8 @@ public abstract class SalePostResponse {
         private Integer price;
         private String grade;
         private String description;
+        private boolean isSold;
+        private boolean isMine;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
     }

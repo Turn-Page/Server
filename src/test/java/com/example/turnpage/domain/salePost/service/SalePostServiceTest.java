@@ -94,6 +94,27 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals(SalePostErrorCode.INVALID_GRADE_INPUT, exception.getErrorCode());
     }
 
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 수정 실패 테스트 - 판매 작성자가 로그인 멤버가 아님")
+    public void editSalePostFail() {
+        //given
+        EditSalePostRequest request = EditSalePostRequest.builder()
+                .title("수정제목")
+                .description("수정설명")
+                .grade("상")
+                .price(20000)
+                .build();
+
+        //when
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            salePostService.editSalePost(testMember2, testSalePost.getId(), request);
+        });
+
+        //then
+        assertEquals(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST, exception.getErrorCode());
+    }
     @Test
     @Transactional
     @DisplayName("판매글 수정 성공 테스트")
@@ -119,6 +140,23 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertNotNull(salePost.getUpdatedAt());
     }
 
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 삭제 실패 테스트 - 판매 완료된 게시글을 삭제할 수 없음")
+    public void deleteSalePostFail() {
+
+        //given
+        testSalePost.setSold();
+
+        //when
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            salePostService.deleteSalePost(testMember, testSalePost.getId());
+        });
+
+        //then
+        assertEquals(SalePostErrorCode.SALE_POST_NOT_ALLOWED, exception.getErrorCode());
+    }
 
 
     @Test
@@ -190,11 +228,11 @@ public class SalePostServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    @DisplayName("판매글 상세 조회 성공 테스트")
+    @DisplayName("판매글 상세 조회 성공 테스트 - 로그인 했을 경우")
     public void getSalePostDetail() {
 
         //given & when
-        SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(testSalePost.getId());
+        SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(testMember,testSalePost.getId());
 
         //then
         assertEquals("제목", detailInfo.getTitle());
@@ -204,6 +242,19 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
                 detailInfo.getBookInfo().getTitle());
         assertEquals("수밈", detailInfo.getMemberInfo().getName());
+        assertEquals(true, detailInfo.isMine());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 상세 조회 성공 테스트2 - 로그인 하지 않았을 경우")
+    public void getSalePostDetail2() {
+
+        //given & when
+        SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(null,testSalePost.getId());
+
+        //then
+        assertEquals(false, detailInfo.isMine());
     }
 
 

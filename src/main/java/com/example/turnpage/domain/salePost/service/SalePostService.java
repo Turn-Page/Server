@@ -18,6 +18,6 @@ public interface SalePostService {
     SalePost findSalePost(Long salePostId);
     PagedSalePostInfo fetchSalePosts(Pageable pageable);
     PagedSalePostInfo searchSalePost(String keyword, Pageable pageable);
-    SalePostDetailInfo getSalePostDetailInfo(Long salePostId);
+    SalePostDetailInfo getSalePostDetailInfo(Member member, Long salePostId);
 
 }

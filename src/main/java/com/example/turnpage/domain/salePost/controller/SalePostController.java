@@ -78,7 +78,7 @@ public class SalePostController {
 
     @Operation(summary = "판매 중인 도서 상세 조회 API", description = " 판매 중인 도서 상세 조회 API 입니다. path variable로 salePostId를 주세요.")
     @GetMapping("/{salePostId}")
-    public ResultResponse<SalePostDetailInfo> getSalePostDetailInfo(@PathVariable(value = "salePostId") Long salePostId) {
-        return ResultResponse.of(SALE_POST_DETAIL, salePostService.getSalePostDetailInfo(salePostId));
+    public ResultResponse<SalePostDetailInfo> getSalePostDetailInfo(@LoginMember Member member, @PathVariable(value = "salePostId") Long salePostId) {
+        return ResultResponse.of(SALE_POST_DETAIL, salePostService.getSalePostDetailInfo(member, salePostId));
     }
 }
