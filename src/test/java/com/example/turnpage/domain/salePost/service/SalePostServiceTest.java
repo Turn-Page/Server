@@ -271,8 +271,24 @@ public class SalePostServiceTest extends ServiceTestConfig {
 
     @Test
     @Transactional
-    @DisplayName("판매글 상세 조회 성공 테스트 - 로그인 했을 경우")
+    @DisplayName("판매글 상세 조회 실패 테스트 - salePostId를 찾을 수 없음")
     public void getSalePostDetail() {
+
+        //when
+        BusinessException exception = assertThrows(BusinessException.class, () -> {
+            salePostService.getSalePostDetailInfo(testMember,1001L);
+        });
+
+        //then
+        assertEquals(SalePostErrorCode.SALE_POST_NOT_FOUND, exception.getErrorCode());
+
+    }
+
+
+    @Test
+    @Transactional
+    @DisplayName("판매글 상세 조회 성공 테스트 - 로그인 했을 경우")
+    public void getSalePostDetailFail() {
 
         //given & when
         SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(testMember,testSalePost.getId());
