@@ -2,6 +2,10 @@ package com.example.turnpage.domain.salePost.dto;
 
 import com.example.turnpage.domain.book.dto.BookRequest.SaveBookRequest;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,11 +18,14 @@ public abstract class SalePostRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SaveSalePostRequest {
+        @NotEmpty
         private String title;
+        @NotEmpty
         private String description;
+        @NotBlank
         private String grade;
+        @Positive
         private Integer price;
-        @JsonProperty("bookInfo")
         private SaveBookRequest bookInfo;
     }
 
@@ -27,9 +34,13 @@ public abstract class SalePostRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EditSalePostRequest {
+        @NotEmpty
         private String title;
+        @NotEmpty
         private String description;
+        @NotBlank
         private String grade;
+        @Positive
         private Integer price;
     }
 }
