@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 public enum OrderErrorCode implements ErrorCode {
     SALEPOST_IS_ALREADY_SOLD(400, "EO000", "해당 판매 게시글은 이미 판매 완료된 글입니다."),
     NOT_ENOUGH_POINT_TO_ORDER(400, "EO000", "회원의 포인트가 부족합니다."),
+    CANNOT_ORDER_MY_SALEPOST(400, "EO000", "자신의 판매 게시글을 구매할 수 없습니다."),
     ;
 
     private final int status;

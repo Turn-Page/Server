@@ -22,8 +22,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import static com.example.turnpage.global.error.code.OrderErrorCode.NOT_ENOUGH_POINT_TO_ORDER;
-import static com.example.turnpage.global.error.code.OrderErrorCode.SALEPOST_IS_ALREADY_SOLD;
+import static com.example.turnpage.global.error.code.OrderErrorCode.*;
 
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -36,33 +35,40 @@ public class OrderServiceImpl implements OrderService {
     public final AtomicInteger orderNumberSequence = new AtomicInteger(1);
 
     /**
-     * createOrder()의 로직 순서
+     * createOrder()의 로직
      * - 해당 판매 게시글이 유효한지 확인
      * - 해당 판매 게시글이 '판매 중'인지 확인
      * - 해당 판매 게시글의 상품 금액보다 많은 포인트를 회원이 가지고 있는지 확인
+     * - 현재 주문 번호 시퀀스와 현재 시간을 바탕으로 주문 번호 생성
      * - 주문 엔티티 생성
-     * - {회원 보유 포인트 - 상품 금액 연산}을 진행해 회원 보유 포인트 update
      * - 판매 게시글 판매 완료로 상태 update
-     * @param member
+     * - {회원 보유 포인트 - 상품 금액 연산}을 진행해 회원 보유 포인트 update
+     * - 판매자 회원의 포인트를 상품 금액만큼 increase
+     *
+     * @param member salePost를 구매하고자 하는 회원
      * @param request
      * @return
      */
     @Transactional
     @Override
     public SimpleOrderInfo createOrder(Member member, CreateOrderRequest request) {
+        // 이후 회원의 포인트 변경사항이 DB에 반영되도록 하기 위해, 영속성 컨텍스트에 관리되도록 설정
         Member persistedMember = memberService.findMember(member.getId());
         SalePost salePost = salePostService.findSalePost(request.getSalePostId());
 
         validateSalePostIsNotSold(salePost);
-        validateMemberHasPointMoreThanPaymentAmount(persistedMember.getPoint(), salePost.getPrice());
+        validateSalePostIsNotMine(salePost, persistedMember);
+        final int paymentAmount = salePost.getPrice();
+        validateMemberHasPointMoreThanPaymentAmount(persistedMember.getPoint(), paymentAmount);
 
         String orderNumber = generateOrderNumber(orderNumberSequence.getAndIncrement());
         Order order = orderConverter.toEntity(persistedMember, salePost, orderNumber);
         orderRepository.save(order);
 
         salePost.setSold();
-        persistedMember.minusPoint(salePost.getPrice());
-
+        persistedMember.subtractPoint(paymentAmount);
+        final Member seller = salePost.getMember();
+        seller.addPoint(paymentAmount);
 
         return orderConverter.toSimpleOrderInfo(order);
     }
@@ -82,6 +88,12 @@ public class OrderServiceImpl implements OrderService {
     private void validateSalePostIsNotSold(SalePost salePost) {
         if (salePost.isSold()) {
             throw new BusinessException(SALEPOST_IS_ALREADY_SOLD);
+        }
+    }
+
+    private void validateSalePostIsNotMine(SalePost salePost, Member buyer) {
+        if (salePost.getMember() == buyer) {
+            throw new BusinessException(CANNOT_ORDER_MY_SALEPOST);
         }
     }
 
