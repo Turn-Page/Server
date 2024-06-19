@@ -1,9 +1,7 @@
 package com.example.turnpage.domain.salePost.dto;
 
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.SimpleBookInfo;
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;

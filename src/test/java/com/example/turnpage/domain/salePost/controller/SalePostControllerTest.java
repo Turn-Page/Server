@@ -6,7 +6,6 @@ import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;

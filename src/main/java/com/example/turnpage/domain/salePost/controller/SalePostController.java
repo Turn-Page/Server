@@ -3,7 +3,6 @@ package com.example.turnpage.domain.salePost.controller;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.EditSalePostRequest;
 import com.example.turnpage.domain.salePost.dto.SalePostRequest.SaveSalePostRequest;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.service.SalePostService;
 import com.example.turnpage.global.config.security.LoginMember;
@@ -19,7 +18,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
-import static com.example.turnpage.domain.salePost.dto.SalePostResponse.*;
+import static com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import static com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostId;
 import static com.example.turnpage.global.result.code.SalePostResultCode.*;
 
