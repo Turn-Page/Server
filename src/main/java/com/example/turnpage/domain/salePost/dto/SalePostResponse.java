@@ -1,9 +1,7 @@
 package com.example.turnpage.domain.salePost.dto;
 
-import com.example.turnpage.domain.book.dto.BookResponse;
 import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import com.example.turnpage.domain.book.dto.BookResponse.SimpleBookInfo;
-import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.dto.MemberResponse.MemberInfo;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
@@ -33,6 +31,7 @@ public abstract class SalePostResponse {
         private String title;
         private Integer price;
         private String grade;
+        private boolean isSold;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
     }
@@ -49,6 +48,8 @@ public abstract class SalePostResponse {
         private Integer price;
         private String grade;
         private String description;
+        private boolean isSold;
+        private boolean isMine;
         @JsonFormat(pattern = "yyyy-MM-dd")
         private LocalDateTime createdAt;
     }

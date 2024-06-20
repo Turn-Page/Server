@@ -43,8 +43,8 @@ public class SalePostServiceImpl implements SalePostService {
 
         //판매글 저장
         SalePost salePost = salePostRepository.save(salePostConverter.toEntity(member, book,
-                                                        request.getTitle(), request.getDescription(),
-                                                        Grade.toGrade(request.getGrade()), request.getPrice()));
+                request.getTitle(), request.getDescription(),
+                Grade.toGrade(request.getGrade()), request.getPrice()));
 
         return new SalePostId(salePost.getId());
     }
@@ -55,7 +55,9 @@ public class SalePostServiceImpl implements SalePostService {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
 
-        checkMember(member,salePost.getMember());
+        checkIsSold(salePost);
+
+        checkWriter(member, salePost.getMember());
 
         salePost.update(request.getTitle(), request.getDescription(),
                 Grade.toGrade(request.getGrade()), request.getPrice());
@@ -69,7 +71,9 @@ public class SalePostServiceImpl implements SalePostService {
         Member member = memberService.findMember(loginMember.getId());
         SalePost salePost = findSalePost(salePostId);
 
-        checkMember(member,salePost.getMember());
+        checkIsSold(salePost);
+
+        checkWriter(member, salePost.getMember());
 
         salePost.delete();
 
@@ -77,25 +81,27 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
-    public PagedSalePostInfo fetchSalePosts(Pageable pageable) {
+    public PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable) {
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(pageable));
+                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(total, pageable));
     }
 
     @Override
-    public PagedSalePostInfo searchSalePost(String keyword, Pageable pageable) {
-        keyword = keyword.replace(" ","");
+    public PagedSalePostInfo searchSalePost(boolean total, String keyword, Pageable pageable) {
+        keyword = keyword.replace(" ", "");
 
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findByBookOrTitleContaining(keyword,pageable));
+                salePostRepository.findByBookOrTitleContaining(total, keyword, pageable));
     }
 
     @Override
-    public SalePostDetailInfo getSalePostDetailInfo(Long salePostId) {
+    public SalePostDetailInfo getSalePostDetailInfo(Member loginMember, Long salePostId) {
         SalePost salePost = salePostRepository.findSalePostWithMemberAndBook(salePostId)
                 .orElseThrow(() -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
 
-        return salePostConverter.toSalePostDetailInfo(salePost);
+        boolean isMine = checkIsMine(loginMember, salePost.getMember());
+
+        return salePostConverter.toSalePostDetailInfo(salePost, isMine);
     }
 
 
@@ -105,9 +111,19 @@ public class SalePostServiceImpl implements SalePostService {
                 () -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
     }
 
-    private void checkMember(Member loginMember, Member writer) {
-        if(!loginMember.getId().equals(writer.getId()))
+    private void checkWriter(Member loginMember, Member writer) {
+        if (!loginMember.getId().equals(writer.getId()))
             throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
     }
 
+    private void checkIsSold(SalePost salePost) {
+        if (salePost.isSold())
+            throw new BusinessException(SalePostErrorCode.SALE_POST_NOT_ALLOWED);
+    }
+
+    private boolean checkIsMine(Member loginMember, Member writer) {
+        if (loginMember != null && writer.getId().equals(loginMember.getId()))
+            return true;
+        else return false;
+    }
 }
