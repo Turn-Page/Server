@@ -1,5 +1,7 @@
 package com.example.turnpage.domain.book.dto;
 
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -12,10 +14,15 @@ public abstract class BookRequest {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class SaveBookRequest {
+        @NotNull
         private Long itemId;
+        @NotEmpty
         private String title;
+        @NotEmpty
         private String author;
+        @NotEmpty
         private String cover;
+        @NotEmpty
         private String isbn;
         private String publisher;
         private String publicationDate;

@@ -6,7 +6,6 @@ import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.dto.MemberResponse;
 import com.example.turnpage.domain.member.entity.Member;
-import com.example.turnpage.domain.salePost.dto.SalePostResponse;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.PagedSalePostInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostDetailInfo;
 import com.example.turnpage.domain.salePost.dto.SalePostResponse.SalePostInfo;
@@ -41,11 +40,12 @@ public class SalePostConverter {
                 .salePostId(salePost.getId())
                 .price(salePost.getPrice())
                 .grade(salePost.getGrade().getToKorean())
+                .isSold(salePost.isSold())
                 .createdAt(salePost.getCreatedAt())
                 .build();
     }
 
-    public SalePostDetailInfo toSalePostDetailInfo(SalePost salePost) {
+    public SalePostDetailInfo toSalePostDetailInfo(SalePost salePost, boolean isMine) {
         MemberResponse.MemberInfo memberInfo = memberConverter.toMemberInfo(salePost.getMember());
         BookResponse.BookInfo bookInfo = bookConverter.toBookInfo(salePost.getBook());
         return SalePostDetailInfo.builder()
@@ -56,6 +56,8 @@ public class SalePostConverter {
                 .price(salePost.getPrice())
                 .grade(salePost.getGrade().getToKorean())
                 .description(salePost.getDescription())
+                .isSold(salePost.isSold())
+                .isMine(isMine)
                 .createdAt(salePost.getCreatedAt())
                 .build();
     }

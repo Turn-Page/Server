@@ -16,8 +16,8 @@ public interface SalePostService {
     SalePostId editSalePost(Member loginMember, Long salePostId, EditSalePostRequest request);
     SalePostId deleteSalePost(Member loginMember, Long salePostId);
     SalePost findSalePost(Long salePostId);
-    PagedSalePostInfo fetchSalePosts(Pageable pageable);
-    PagedSalePostInfo searchSalePost(String keyword, Pageable pageable);
-    SalePostDetailInfo getSalePostDetailInfo(Long salePostId);
+    PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable);
+    PagedSalePostInfo searchSalePost(boolean total, String keyword, Pageable pageable);
+    SalePostDetailInfo getSalePostDetailInfo(Member loginMember, Long salePostId);
 
 }
