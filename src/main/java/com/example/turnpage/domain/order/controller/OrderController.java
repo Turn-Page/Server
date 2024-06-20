@@ -40,7 +40,7 @@ public class OrderController {
     }
 
     @GetMapping("/my")
-    @Operation(summary = "내 주문 내역 목록 조회 API", description = "내 주문 내역 목록 목록 조회 API입니다.")
+    @Operation(summary = "내 주문 내역 목록 조회 API", description = "내 주문 내역 목록 목록 조회 API입니다. 주문 시간 기준 내림차순으로 조회합니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
             @Parameter(name = "size", description = "한 페이지에 나타낼 주문 내역 개수를 입력해주세요.")

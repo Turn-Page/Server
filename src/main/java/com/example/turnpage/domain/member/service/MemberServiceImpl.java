@@ -62,7 +62,7 @@ public class MemberServiceImpl implements MemberService {
         Member member = findMember(loginMember.getId());
 
         validatePointIsUnderMaxPoint(point);
-        int totalPoint = member.chargePoint(point);
+        int totalPoint = member.addPoint(point);
 
         return memberConverter.toMyPoint(member.getId(), totalPoint);
     }
