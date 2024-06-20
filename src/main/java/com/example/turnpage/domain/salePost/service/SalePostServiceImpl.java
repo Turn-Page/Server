@@ -57,7 +57,7 @@ public class SalePostServiceImpl implements SalePostService {
 
         checkIsSold(salePost);
 
-        checkMember(member, salePost.getMember());
+        checkWriter(member, salePost.getMember());
 
         salePost.update(request.getTitle(), request.getDescription(),
                 Grade.toGrade(request.getGrade()), request.getPrice());
@@ -73,7 +73,7 @@ public class SalePostServiceImpl implements SalePostService {
 
         checkIsSold(salePost);
 
-        checkMember(member, salePost.getMember());
+        checkWriter(member, salePost.getMember());
 
         salePost.delete();
 
@@ -99,7 +99,7 @@ public class SalePostServiceImpl implements SalePostService {
         SalePost salePost = salePostRepository.findSalePostWithMemberAndBook(salePostId)
                 .orElseThrow(() -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
 
-        boolean isMine = checkIsMine(loginMember, salePost.getMember().getId());
+        boolean isMine = checkIsMine(loginMember, salePost.getMember());
 
         return salePostConverter.toSalePostDetailInfo(salePost, isMine);
     }
@@ -111,7 +111,7 @@ public class SalePostServiceImpl implements SalePostService {
                 () -> new BusinessException(SalePostErrorCode.SALE_POST_NOT_FOUND));
     }
 
-    private void checkMember(Member loginMember, Member writer) {
+    private void checkWriter(Member loginMember, Member writer) {
         if (!loginMember.getId().equals(writer.getId()))
             throw new BusinessException(SalePostErrorCode.NO_AUTHORIZATION_SALE_POST);
     }
@@ -121,8 +121,8 @@ public class SalePostServiceImpl implements SalePostService {
             throw new BusinessException(SalePostErrorCode.SALE_POST_NOT_ALLOWED);
     }
 
-    private boolean checkIsMine(Member loginMember, Long writerId) {
-        if (loginMember != null && writerId.equals(loginMember.getId()))
+    private boolean checkIsMine(Member loginMember, Member writer) {
+        if (loginMember != null && writer.getId().equals(loginMember.getId()))
             return true;
         else return false;
     }
