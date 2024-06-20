@@ -55,11 +55,12 @@ public class OrderServiceImpl implements OrderService {
         // 이후 회원의 포인트 변경사항이 DB에 반영되도록 하기 위해, 영속성 컨텍스트에 관리되도록 설정
         Member persistedMember = memberService.findMember(member.getId());
         SalePost salePost = salePostService.findSalePost(request.getSalePostId());
+        final Member seller = salePost.getMember();
 
         validateSalePostIsNotSold(salePost);
-        validateSalePostIsNotMine(salePost, persistedMember);
+        validateSalePostIsNotMine(seller, persistedMember);
         final int paymentAmount = salePost.getPrice();
-        validateMemberHasPointMoreThanPaymentAmount(persistedMember.getPoint(), paymentAmount);
+        validateSufficientPoints(persistedMember.getPoint(), paymentAmount);
 
         String orderNumber = generateOrderNumber(orderNumberSequence.getAndIncrement());
         Order order = orderConverter.toEntity(persistedMember, salePost, orderNumber);
@@ -67,7 +68,6 @@ public class OrderServiceImpl implements OrderService {
 
         salePost.setSold();
         persistedMember.subtractPoint(paymentAmount);
-        final Member seller = salePost.getMember();
         seller.addPoint(paymentAmount);
 
         return orderConverter.toSimpleOrderInfo(order);
@@ -91,13 +91,13 @@ public class OrderServiceImpl implements OrderService {
         }
     }
 
-    private void validateSalePostIsNotMine(SalePost salePost, Member buyer) {
-        if (salePost.getMember() == buyer) {
+    private void validateSalePostIsNotMine(Member seller, Member buyer) {
+        if (seller.getId().equals(buyer.getId())) {
             throw new BusinessException(CANNOT_ORDER_MY_SALEPOST);
         }
     }
 
-    private void validateMemberHasPointMoreThanPaymentAmount(int memberPoint, int paymentAmount) {
+    private void validateSufficientPoints(int memberPoint, int paymentAmount) {
         if (memberPoint < paymentAmount) {
             throw new BusinessException(NOT_ENOUGH_POINT_TO_ORDER);
         }
