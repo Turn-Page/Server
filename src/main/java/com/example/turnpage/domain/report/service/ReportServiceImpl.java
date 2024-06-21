@@ -7,9 +7,9 @@ import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.converter.ReportConverter;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.EditReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse.DetailedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
-import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.entity.Report;
 import com.example.turnpage.domain.report.repository.ReportRepository;
 import com.example.turnpage.global.error.BusinessException;
@@ -66,11 +66,12 @@ public class ReportServiceImpl implements ReportService {
     }
 
     @Override
-    public ReportInfo getReport(Member member, Long reportId) {
+    public DetailedReportInfo getReport(Member member, Long reportId) {
         Report report = reportRepository.findById(reportId)
                 .orElseThrow(() -> new BusinessException(REPORT_NOT_FOUND));
 
-        return reportConverter.toReportInfo(report);
+        boolean isMine = checkIsMine(report, member);
+        return reportConverter.toDetailedReportInfo(report, isMine);
     }
 
     @Transactional
@@ -95,8 +96,18 @@ public class ReportServiceImpl implements ReportService {
         return reportConverter.toReportId(reportId);
     }
 
+    private boolean checkIsMine(Report report, Member viewer) {
+        Long writerId = report.getMember().getId();
+        Long viewerId = viewer.getId();
+
+        return writerId.equals(viewerId);
+    }
+
     private void validateWriter(Report report, Member member) {
-        if (!report.getMember().equals(member)) {
+        Long writerId = report.getMember().getId();
+        Long memberId = member.getId();
+
+        if (!writerId.equals(memberId)) {
             throw new BusinessException(WRITER_ONLY_MODIFY_REPORT);
         }
     }

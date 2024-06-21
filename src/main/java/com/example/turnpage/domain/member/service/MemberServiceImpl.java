@@ -43,7 +43,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public Member findMember(String email) {
         return memberRepository.findByEmail(email)
-                .orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND));
+                .orElseThrow(() -> new BusinessException(MemberErrorCode.MEMBER_NOT_FOUND_BY_EMAIL));
     }
 
     @Override

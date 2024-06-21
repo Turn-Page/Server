@@ -4,6 +4,8 @@ import com.example.turnpage.domain.book.dto.BookResponse.BookInfo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -19,17 +21,25 @@ public abstract class ReportResponse {
     }
 
     @Getter
-    @Builder
+    @SuperBuilder
+    @NoArgsConstructor
     @AllArgsConstructor
     public static class ReportInfo {
         private Long reportId;
         private String title;
         private String content;
-        private LocalDate startDate;
-        private LocalDate endDate;
         private BookInfo bookInfo;
         private MemberInfo memberInfo;
         private LocalDate createdAt;
+    }
+
+    @Getter
+    @SuperBuilder
+    @AllArgsConstructor
+    public static class DetailedReportInfo extends ReportInfo {
+        private LocalDate startDate;
+        private LocalDate endDate;
+        private Boolean isMine;
     }
 
     @Getter
