@@ -5,6 +5,8 @@ import com.example.turnpage.domain.book.entity.Book;
 import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse;
+import com.example.turnpage.domain.report.dto.ReportResponse.DetailedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
@@ -42,11 +44,23 @@ public class ReportConverter {
                 .reportId(report.getId())
                 .title(report.getTitle())
                 .content(report.getContent())
-                .startDate(report.getStartDate())
-                .endDate(report.getEndDate())
                 .bookInfo(bookConverter.toBookInfo(report.getBook()))
                 .memberInfo(memberConverter.toMemberInfo(report.getMember()))
                 .createdAt(report.getCreatedAt().toLocalDate())
+                .build();
+    }
+
+    public DetailedReportInfo toDetailedReportInfo(Report report, boolean isMine) {
+        return DetailedReportInfo.builder()
+                .reportId(report.getId())
+                .title(report.getTitle())
+                .content(report.getContent())
+                .bookInfo(bookConverter.toBookInfo(report.getBook()))
+                .memberInfo(memberConverter.toMemberInfo(report.getMember()))
+                .createdAt(report.getCreatedAt().toLocalDate())
+                .startDate(report.getStartDate())
+                .endDate(report.getEndDate())
+                .isMine(isMine)
                 .build();
     }
 
@@ -65,4 +79,5 @@ public class ReportConverter {
                 .isLast(reports.isLast())
                 .build();
     }
+
 }
