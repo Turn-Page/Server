@@ -20,18 +20,20 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import static com.example.turnpage.global.result.code.CommentResultCode.*;
 
+@RequestMapping("/comments")
 @Tag(name = "도서 리뷰 API", description = "도서 리뷰 관련 API입니다.")
 @RequiredArgsConstructor
 @RestController
 public class CommentController {
     private final CommentService commentService;
 
-    @PostMapping("/comments")
+    @PostMapping
     @Parameters(value = {
             @Parameter(name = "bookId", description = "리뷰를 작성할 도서의 bookId를 입력해 주세요.")
     })
@@ -41,7 +43,7 @@ public class CommentController {
         return ResultResponse.of(WRITE_COMMENT, commentService.writeComment(member, request));
     }
 
-    @GetMapping("/comments")
+    @GetMapping
     @Parameters(value = {
             @Parameter(name = "bookId", description = "리뷰를 조회할 도서의 bookId를 입력해 주세요."),
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
@@ -56,7 +58,7 @@ public class CommentController {
         return ResultResponse.of(SPECIFIC_BOOK_COMMENT_LIST, commentService.findCommentListByBookId(bookId, pageable));
     }
 
-    @DeleteMapping("/comments/{commentId}")
+    @DeleteMapping("/{commentId}")
     @Parameters(value = {
             @Parameter(name = "commentId", description = "삭제할 리뷰의 commentId를 입력해 주세요.")
     })
