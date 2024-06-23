@@ -54,7 +54,7 @@ public class CommentServiceImpl implements CommentService {
                 .orElseThrow(() -> new BusinessException(COMMENT_NOT_FOUND));
 
         validateWriter(comment, member);
-        commentRepository.delete(comment);
+        comment.delete();
 
         return commentConverter.toCommentId(comment.getId());
     }
