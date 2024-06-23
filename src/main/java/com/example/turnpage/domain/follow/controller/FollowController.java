@@ -15,9 +15,9 @@ import org.springframework.web.bind.annotation.*;
 
 import static com.example.turnpage.global.result.code.FollowResultCode.*;
 
-@RestController
 @RequiredArgsConstructor
 @RequestMapping("/follows")
+@RestController
 @Tag(name = "팔로우 API", description = "팔로우 관련 API입니다.")
 public class FollowController {
     private final FollowService followService;
