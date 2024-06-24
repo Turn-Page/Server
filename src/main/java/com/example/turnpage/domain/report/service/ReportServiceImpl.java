@@ -92,7 +92,7 @@ public class ReportServiceImpl implements ReportService {
                 .orElseThrow(() -> new BusinessException(REPORT_NOT_FOUND));
 
         validateWriter(report, member);
-        reportRepository.delete(report);
+        report.delete();
         return reportConverter.toReportId(reportId);
     }
 

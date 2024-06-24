@@ -32,8 +32,8 @@ public class FollowServiceImpl implements FollowService {
     @Override
     public FollowId followMember(Member member, FollowRequest.FollowMemberRequest request) {
         Member follower = memberService.findMember(request.getEmail());
-        validateFollowerIsNotMyself(member, follower);
-        validateNotAlreadyFollowing(member, follower);
+        validateNotMyself(member, follower);
+        validateAlreadyFollow(member, follower);
 
         Follow follow = followConverter.toEntity(member, follower);
 
@@ -77,7 +77,7 @@ public class FollowServiceImpl implements FollowService {
         return followConverter.toFollowId(follow.getId());
     }
 
-    private void validateFollowerIsNotMyself(Member member, Member follower) {
+    private void validateNotMyself(Member member, Member follower) {
         Long memberId = member.getId();
         Long followerId = follower.getId();
         if (memberId.equals(followerId)) {
@@ -85,7 +85,7 @@ public class FollowServiceImpl implements FollowService {
         }
     }
 
-    private void validateNotAlreadyFollowing(Member member, Member follower) {
+    private void validateAlreadyFollow(Member member, Member follower) {
         if (followRepository.existsByMemberIdAndFollowerId(member.getId(), follower.getId())) {
             throw new BusinessException(ALREADY_FOLLOWING);
         }
