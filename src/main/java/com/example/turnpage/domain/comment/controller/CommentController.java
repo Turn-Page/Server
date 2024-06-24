@@ -1,6 +1,8 @@
 package com.example.turnpage.domain.comment.controller;
 
 import com.example.turnpage.domain.comment.dto.CommentRequest.WriteCommentRequest;
+import com.example.turnpage.domain.comment.dto.CommentResponse;
+import com.example.turnpage.domain.comment.dto.CommentResponse.CommentId;
 import com.example.turnpage.domain.comment.dto.CommentResponse.PagedCommentInfo;
 import com.example.turnpage.domain.comment.service.CommentService;
 import com.example.turnpage.domain.member.entity.Member;
@@ -38,8 +40,8 @@ public class CommentController {
             @Parameter(name = "bookId", description = "리뷰를 작성할 도서의 bookId를 입력해 주세요.")
     })
     @Operation(summary = "새 도서 리뷰 작성 API", description = "특정 도서에 대하여 새 리뷰를 작성합니다.")
-    public ResultResponse<Object> writeComment(@LoginMember Member member,
-                                               @Valid @RequestBody WriteCommentRequest request) {
+    public ResultResponse<CommentId> writeComment(@LoginMember Member member,
+                                                  @Valid @RequestBody WriteCommentRequest request) {
         return ResultResponse.of(WRITE_COMMENT, commentService.writeComment(member, request));
     }
 
@@ -63,7 +65,7 @@ public class CommentController {
             @Parameter(name = "commentId", description = "삭제할 리뷰의 commentId를 입력해 주세요.")
     })
     @Operation(summary = "도서 리뷰 삭제 API", description = "특정 리뷰를 삭제합니다.")
-    public ResultResponse<Object> deleteComment(@LoginMember Member member,
+    public ResultResponse<CommentId> deleteComment(@LoginMember Member member,
                                                 @PathVariable("commentId") Long commentId) {
         return ResultResponse.of(DELETE_COMMENT, commentService.deleteComment(member, commentId));
     }
