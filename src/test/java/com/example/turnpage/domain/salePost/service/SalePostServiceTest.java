@@ -301,7 +301,7 @@ public class SalePostServiceTest extends ServiceTestConfig {
         assertEquals("꿈꾸지 않아도 빤짝이는 중 - 놀면서 일하는 두 남자 삐까뚱씨, 내일의 목표보단 오늘의 행복에 집중하는 인생로그",
                 detailInfo.getBookInfo().getTitle());
         assertEquals("수밈", detailInfo.getMemberInfo().getName());
-        assertEquals(true, detailInfo.isMine());
+        assertEquals(true, detailInfo.getIsMine());
     }
 
     @Test
@@ -313,9 +313,27 @@ public class SalePostServiceTest extends ServiceTestConfig {
         SalePostDetailInfo detailInfo = salePostService.getSalePostDetailInfo(null,testSalePost.getId());
 
         //then
-        assertEquals(false, detailInfo.isMine());
+        assertEquals(false, detailInfo.getIsMine());
     }
 
+    @Test
+    @Transactional
+    @DisplayName("내 판매글 목록 조회 성공 테스트")
+    public void fetchMySalePost() {
 
+        //given & when
+        testSalePost.setSold();
+
+        Pageable pageable = PageRequest.of(0, 20);
+        PagedSalePostInfo mySalePostList = salePostService.fetchMySalePosts(testMember, true, pageable);
+        //then
+        assertEquals(1, mySalePostList.getTotalElements());
+
+        //when
+        testSalePost.setSold();
+        PagedSalePostInfo mySalePostList2 = salePostService.fetchMySalePosts(testMember, false, pageable);
+        assertEquals(0, mySalePostList2.getTotalElements());
+
+    }
 
 }

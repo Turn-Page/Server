@@ -70,6 +70,9 @@ public class OrderServiceImpl implements OrderService {
         persistedMember.subtractPoint(paymentAmount);
         seller.addPoint(paymentAmount);
 
+        persistedMember.incrementPurchaseCount();
+        seller.incrementSaleCount();
+
         return orderConverter.toSimpleOrderInfo(order);
     }
 

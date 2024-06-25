@@ -83,7 +83,7 @@ public class SalePostServiceImpl implements SalePostService {
     @Override
     public PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable) {
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(total, pageable));
+                salePostRepository.findSalePostsWithBooksOrderByCreatedAtDesc(total, pageable));
     }
 
     @Override
@@ -102,6 +102,14 @@ public class SalePostServiceImpl implements SalePostService {
         boolean isMine = checkIsMine(loginMember, salePost.getMember());
 
         return salePostConverter.toSalePostDetailInfo(salePost, isMine);
+    }
+
+    @Override
+    public PagedSalePostInfo fetchMySalePosts(Member loginMember, boolean total, Pageable pageable) {
+        Member member = memberService.findMember(loginMember.getId());
+        return salePostConverter.toPagedSalePostList(
+                salePostRepository.findByMemberId(member.getId(), total, pageable)
+        );
     }
 
 
