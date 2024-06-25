@@ -83,7 +83,7 @@ public class SalePostServiceImpl implements SalePostService {
     @Override
     public PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable) {
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findSalePostsWithBooksOrderByCreatedAt(total, pageable));
+                salePostRepository.findSalePostsWithBooksOrderByCreatedAtDesc(total, pageable));
     }
 
     @Override

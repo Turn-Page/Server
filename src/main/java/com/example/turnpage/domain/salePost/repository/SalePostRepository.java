@@ -15,7 +15,7 @@ public interface SalePostRepository extends JpaRepository<SalePost, Long> {
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book " +
             "WHERE (:total = true OR sp.isSold = false) " +
             "ORDER BY sp.createdAt DESC ")
-    Page<SalePost> findSalePostsWithBooksOrderByCreatedAt(@Param("total") boolean total, Pageable pageable);
+    Page<SalePost> findSalePostsWithBooksOrderByCreatedAtDesc(@Param("total") boolean total, Pageable pageable);
 
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book WHERE REPLACE(sp.title,' ','') LIKE %:keyword% " +
             "OR REPLACE(sp.book.title,' ','') LIKE %:keyword% " +
