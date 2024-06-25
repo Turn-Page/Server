@@ -19,5 +19,7 @@ public interface SalePostService {
     PagedSalePostInfo fetchSalePosts(boolean total, Pageable pageable);
     PagedSalePostInfo searchSalePost(boolean total, String keyword, Pageable pageable);
     SalePostDetailInfo getSalePostDetailInfo(Member loginMember, Long salePostId);
+    PagedSalePostInfo fetchMySalePosts(Member loginMember, Pageable pageable);
+
 
 }

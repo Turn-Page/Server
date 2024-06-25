@@ -84,4 +84,18 @@ public class SalePostController {
     public ResultResponse<SalePostDetailInfo> getSalePostDetailInfo(@LoginMember Member member, @PathVariable(value = "salePostId") Long salePostId) {
         return ResultResponse.of(SALE_POST_DETAIL, salePostService.getSalePostDetailInfo(member, salePostId));
     }
+
+    @Operation(summary = "내 판매글 목록 조회 API", description = " 로그인 멤버가 작성한 판매글목록 조회 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
+            "total false 일 경우 판매 중인 도서만, true일 경우 판매완료된 도서도 함께 조회됩니다.")
+    @Parameters(value = {
+            @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
+            @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
+    })
+    @GetMapping("/my")
+    public ResultResponse<PagedSalePostInfo> fetchMySalePosts(@LoginMember Member member, @RequestParam
+                                                              @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                                              @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(SALE_POST_LIST, salePostService.fetchMySalePosts(member, pageable));
+    }
+
 }

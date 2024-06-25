@@ -104,6 +104,14 @@ public class SalePostServiceImpl implements SalePostService {
         return salePostConverter.toSalePostDetailInfo(salePost, isMine);
     }
 
+    @Override
+    public PagedSalePostInfo fetchMySalePosts(Member loginMember, Pageable pageable) {
+        Member member = memberService.findMember(loginMember.getId());
+        return salePostConverter.toPagedSalePostList(
+                salePostRepository.findByMemberId(member.getId(),pageable)
+        );
+    }
+
 
     @Override
     public SalePost findSalePost(Long salePostId) {
