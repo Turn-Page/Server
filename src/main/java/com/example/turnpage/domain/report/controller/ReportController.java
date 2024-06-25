@@ -3,9 +3,9 @@ package com.example.turnpage.domain.report.controller;
 import com.example.turnpage.domain.member.entity.Member;
 import com.example.turnpage.domain.report.dto.ReportRequest;
 import com.example.turnpage.domain.report.dto.ReportRequest.PostReportRequest;
+import com.example.turnpage.domain.report.dto.ReportResponse.DetailedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.PagedReportInfo;
 import com.example.turnpage.domain.report.dto.ReportResponse.ReportId;
-import com.example.turnpage.domain.report.dto.ReportResponse.ReportInfo;
 import com.example.turnpage.domain.report.service.ReportService;
 import com.example.turnpage.global.config.security.LoginMember;
 import com.example.turnpage.global.result.ResultResponse;
@@ -18,14 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import static com.example.turnpage.global.result.code.ReportResultcode.*;
 
@@ -75,8 +68,8 @@ public class ReportController {
             @Parameter(name = "reportId", description = "조회하고자 하는 독후감의 reportId를 입력해 주세요.")
     })
     @Operation(summary = "특정 독후감 조회 API", description = "reportId를 통한 특정 독후감 조회 API입니다.")
-    ResultResponse<ReportInfo> getReport(@LoginMember Member member,
-                                         @PathVariable("reportId") Long reportId) {
+    ResultResponse<DetailedReportInfo> getReport(@LoginMember Member member,
+                                                 @PathVariable("reportId") Long reportId) {
         return ResultResponse.of(GET_SPECIFIC_REPORT, reportService.getReport(member, reportId));
     }
 
