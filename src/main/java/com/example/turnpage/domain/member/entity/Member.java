@@ -90,4 +90,19 @@ public class Member extends BaseTimeEntity {
         this.point -= point;
         return this.point;
     }
+
+    public void incrementSaleCount() {
+        this.saleCount += 1;
+    }
+    public void incrementPurchaseCount() {
+        this.purchaseCount += 1;
+    }
+
+    public void incrementReportCount() {
+        this.reportCount += 1;
+    }
+
+    public void decrementReportCount() {
+        this.reportCount -= 1;
+    }
 }
