@@ -30,14 +30,14 @@ public class SalePostController {
 
     private final SalePostService salePostService;
 
-    @Operation(summary = "판매글 저장 API", description = " 판매글 저장 API 입니다.")
+    @Operation(summary = "판매글 저장 API", description = "판매글 저장 API 입니다.")
     @PostMapping
     public ResultResponse<SalePostId> saveSalePost(@LoginMember Member member,
                                                    @RequestBody @Valid SaveSalePostRequest request) {
         return ResultResponse.of(SAVE_SALE_POST, salePostService.saveSalePost(member, request));
     }
 
-    @Operation(summary = "판매글 수정 API", description = " 판매글 수정 API 입니다. path variable로 수정하고자 하는 salePostId를 주세요.")
+    @Operation(summary = "판매글 수정 API", description = "판매글 수정 API 입니다. path variable로 수정하고자 하는 salePostId를 주세요.")
     @PatchMapping(value = "/{salePostId}")
     public ResultResponse<SalePostId> editSalePost(@LoginMember Member member,
                                                    @PathVariable(value = "salePostId") Long salePostId,
@@ -45,14 +45,14 @@ public class SalePostController {
         return ResultResponse.of(EDIT_SALE_POST, salePostService.editSalePost(member, salePostId, request));
     }
 
-    @Operation(summary = "판매글 삭제 API", description = " 판매글 삭제 API 입니다. path variable로 삭제하고자 하는 salePostId를 주세요.")
+    @Operation(summary = "판매글 삭제 API", description = "판매글 삭제 API 입니다. path variable로 삭제하고자 하는 salePostId를 주세요.")
     @DeleteMapping(value = "/{salePostId}")
     public ResultResponse<SalePostId> deleteSalePost(@LoginMember Member member,
                                                      @PathVariable(value = "salePostId") Long salePostId) {
         return ResultResponse.of(DELETE_SALE_POST, salePostService.deleteSalePost(member, salePostId));
     }
 
-    @Operation(summary = "판매글 목록 조회 API", description = " 판매 중인 도서 목록 조회 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
+    @Operation(summary = "판매글 목록 조회 API", description = "판매 중인 도서 목록 조회 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
             "total false 일 경우 판매 중인 도서만, true일 경우 판매완료된 도서도 함께 조회됩니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
@@ -65,7 +65,7 @@ public class SalePostController {
         return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(total, pageable));
     }
 
-    @Operation(summary = "판매글 검색 API", description = " 판매 중인 도서 검색 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
+    @Operation(summary = "판매글 검색 API", description = "판매 중인 도서 검색 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
             "total false 일 경우 판매 중인 도서만, true일 경우 판매완료된 도서도 함께 조회됩니다. keyword는 필수입니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
@@ -79,13 +79,13 @@ public class SalePostController {
         return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(total, keyword, pageable));
     }
 
-    @Operation(summary = "판매글 상세 조회 API", description = " 판매글 상세 조회 API 입니다. path variable로 salePostId를 주세요.")
+    @Operation(summary = "판매글 상세 조회 API", description = "판매글 상세 조회 API 입니다. path variable로 salePostId를 주세요.")
     @GetMapping("/{salePostId}")
     public ResultResponse<SalePostDetailInfo> getSalePostDetailInfo(@LoginMember Member member, @PathVariable(value = "salePostId") Long salePostId) {
         return ResultResponse.of(SALE_POST_DETAIL, salePostService.getSalePostDetailInfo(member, salePostId));
     }
 
-    @Operation(summary = "내 판매글 목록 조회 API", description = " 로그인 멤버가 작성한 판매글목록 조회 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
+    @Operation(summary = "내 판매글 목록 조회 API", description = "로그인 멤버가 작성한 판매글목록 조회 API 입니다. page는 0부터 시작합니다. 생성일 내림차순으로 조회됩니다." +
             "total false 일 경우 판매 중인 도서만, true일 경우 판매완료된 도서도 함께 조회됩니다.")
     @Parameters(value = {
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),

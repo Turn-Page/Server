@@ -24,13 +24,13 @@ public class MemberController {
 
     private final MemberService memberService;
 
-    @Operation(summary = "마이페이지 프로필 조회 API", description = " 프로필 조회 API 입니다." )
+    @Operation(summary = "마이페이지 프로필 조회 API", description = "프로필 조회 API 입니다." )
     @GetMapping("/myPage")
     public ResultResponse<MyPageInfo> getMyPageInfo(@LoginMember Member member) {
         return ResultResponse.of(MYPAGE_INFO, memberService.getMyPageInfo(member));
     }
 
-    @Operation(summary = "마이페이지 프로필 수정 API", description = " 프로필 수정 API 입니다." +
+    @Operation(summary = "마이페이지 프로필 수정 API", description = "프로필 수정 API 입니다." +
             "사용자 닉네임과, 프로필 사진을 변경할 수 있습니다.")
     @PatchMapping(value = "/myPage")
     public ResultResponse<MemberId> editMyPageInfo(@LoginMember Member member,
@@ -39,7 +39,7 @@ public class MemberController {
         return ResultResponse.of(EDIT_MYPAGE_INFO, memberService.editMyPageInfo(member, request, profileImage));
     }
 
-    @Operation(summary = "포인트 충전 API", description = " 포인트 충전 API 입니다." +
+    @Operation(summary = "포인트 충전 API", description = "포인트 충전 API 입니다." +
             "파라미터로 충전할 포인트를 주세요.")
     @PatchMapping(value = "/myPoint")
     public ResultResponse<MyPoint> chargeMyPoint(@LoginMember Member member,

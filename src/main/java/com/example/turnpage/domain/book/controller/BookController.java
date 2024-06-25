@@ -31,7 +31,7 @@ public class BookController {
     private final BookSearchClient bookSearchClient;
 
     @PostMapping()
-    @Operation(summary = "책 정보 저장 API", description = " 책 정보 저장 API 입니다.")
+    @Operation(summary = "책 정보 저장 API", description = "책 정보 저장 API 입니다.")
     public ResultResponse<BookId> saveBook(SaveBookRequest request) {
 
         return ResultResponse.of(SAVE_BOOK,  bookService.saveBook(request));
@@ -42,7 +42,7 @@ public class BookController {
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
             @Parameter(name = "size", description = "한 페이지에 보일 book 개수를 입력해주세요.")
     })
-    @Operation(summary = "베스트 셀러 목록 조회 API", description = " 베스트 셀러 목록 조회 API 입니다.")
+    @Operation(summary = "베스트 셀러 목록 조회 API", description = "베스트 셀러 목록 조회 API 입니다.")
     public ResultResponse<PagedBookInfo> fetchBestSeller(@PageableDefault(sort = "ranking", direction = Sort.Direction.ASC)
                                                               @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(FETCH_BESTSELLER, bookService.fetchBestSeller(pageable));
@@ -52,7 +52,7 @@ public class BookController {
     @Parameters(value = {
             @Parameter(name = "bookId", description = "path variable로 bookId를 주세요."),
     })
-    @Operation(summary = "책 정보 상세 조회 API", description = " 책 정보 상세 조회 API 입니다.")
+    @Operation(summary = "책 정보 상세 조회 API", description = "책 정보 상세 조회 API 입니다.")
     public ResultResponse<BookDetailInfo> getBookDetailInfo(@PathVariable("bookId") Long bookId) {
         return ResultResponse.of(BOOK_INFO, bookService.getBookDetailInfo(bookId));
     }
@@ -63,14 +63,14 @@ public class BookController {
             @Parameter(name = "page", description = "page 시작은 0번부터입니다."),
             @Parameter(name = "size", description = "한 페이지에 보일 book 개수를 입력해주세요.")
     })
-    @Operation(summary = "책 검색 API", description = " 책 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다.")
+    @Operation(summary = "책 검색 API", description = "책 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다.")
     public ResultResponse<PagedBookInfo> searchBook(@RequestParam(name = "keyword") String keyword,
                                                     @PageableDefault @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_BOOK, bookService.searchBook(keyword, pageable));
     }
 
     @GetMapping("/openAPI/search")
-    @Operation(summary = "알라딘 OPEN API에서 책 검색 API", description = " 알라딘 OPEN API 에서 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다." +
+    @Operation(summary = "알라딘 OPEN API에서 책 검색 API", description = "알라딘 OPEN API 에서 검색 API 입니다. 책 이름이나 작가로 책을 검색할 수 있습니다." +
             "검색 결과 10개까지 반환됩니다.")
     public ResultResponse<List<SaveBookRequest>> openAPISearchBook(@RequestParam(name = "keyword") String keyword) {
         return ResultResponse.of(SEARCH_BOOK, bookSearchClient.getSearchResult(keyword));
