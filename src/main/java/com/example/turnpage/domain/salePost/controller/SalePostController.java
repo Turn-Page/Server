@@ -14,7 +14,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
@@ -60,8 +59,7 @@ public class SalePostController {
     })
     @GetMapping
     public ResultResponse<PagedSalePostInfo> fetchSalePosts(@RequestParam(name = "total", defaultValue = "false") boolean total,
-                                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                                            @Parameter(hidden = true) Pageable pageable) {
+                                                            @PageableDefault @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SALE_POST_LIST, salePostService.fetchSalePosts(total, pageable));
     }
 
@@ -74,8 +72,7 @@ public class SalePostController {
     @GetMapping("/search")
     public ResultResponse<PagedSalePostInfo> searchSalePost(@RequestParam(name = "total", defaultValue = "false") boolean total,
                                                             @RequestParam(name = "keyword") String keyword,
-                                                            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
-                                                            @Parameter(hidden = true) Pageable pageable) {
+                                                            @PageableDefault @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SEARCH_SALE_POST, salePostService.searchSalePost(total, keyword, pageable));
     }
 
@@ -94,8 +91,7 @@ public class SalePostController {
     @GetMapping("/my")
     public ResultResponse<PagedSalePostInfo> fetchMySalePosts(@LoginMember Member member,
                                                               @RequestParam(name = "total", defaultValue = "false") boolean total,
-                                                              @RequestParam
-                                                              @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
+                                                              @RequestParam @PageableDefault
                                                               @Parameter(hidden = true) Pageable pageable) {
         return ResultResponse.of(SALE_POST_LIST, salePostService.fetchMySalePosts(member, total, pageable));
     }

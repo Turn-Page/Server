@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyBoolean;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -163,7 +164,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .isLast(false)
                 .build();
 
-        given(salePostService.fetchSalePosts(any(),any())).willReturn(response);
+        given(salePostService.fetchSalePosts(anyBoolean(),any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -178,7 +179,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.totalElements").value(1))
         ;
 
-        verify(salePostService).fetchSalePosts(any(),any());
+        verify(salePostService).fetchSalePosts(anyBoolean(),any());
     }
 
     @Test
@@ -195,7 +196,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .isLast(false)
                 .build();
 
-        given(salePostService.searchSalePost(any(),any(),any())).willReturn(response);
+        given(salePostService.searchSalePost(anyBoolean(),any(),any())).willReturn(response);
 
         //when
         ResultActions resultActions = mockMvc.perform(
@@ -212,7 +213,7 @@ public class SalePostControllerTest extends ControllerTestConfig {
                 .andExpect(jsonPath("$.data.totalElements").value(1))
         ;
 
-        verify(salePostService).searchSalePost(any(), any(), any());
+        verify(salePostService).searchSalePost(anyBoolean(), any(), any());
     }
 
     @Test
