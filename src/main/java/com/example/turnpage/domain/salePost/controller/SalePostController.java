@@ -92,10 +92,12 @@ public class SalePostController {
             @Parameter(name = "size", description = "한 페이지에 보일 salePost 개수를 입력해주세요.")
     })
     @GetMapping("/my")
-    public ResultResponse<PagedSalePostInfo> fetchMySalePosts(@LoginMember Member member, @RequestParam
+    public ResultResponse<PagedSalePostInfo> fetchMySalePosts(@LoginMember Member member,
+                                                              @RequestParam(name = "total", defaultValue = "false") boolean total,
+                                                              @RequestParam
                                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC)
                                                               @Parameter(hidden = true) Pageable pageable) {
-        return ResultResponse.of(SALE_POST_LIST, salePostService.fetchMySalePosts(member, pageable));
+        return ResultResponse.of(SALE_POST_LIST, salePostService.fetchMySalePosts(member, total, pageable));
     }
 
 }

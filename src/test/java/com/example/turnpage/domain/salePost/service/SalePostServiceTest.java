@@ -322,11 +322,18 @@ public class SalePostServiceTest extends ServiceTestConfig {
     public void fetchMySalePost() {
 
         //given & when
-        Pageable pageable = PageRequest.of(0, 20);
-        PagedSalePostInfo mySalePostList = salePostService.fetchMySalePosts(testMember, pageable);
+        testSalePost.setSold();
 
+        Pageable pageable = PageRequest.of(0, 20);
+        PagedSalePostInfo mySalePostList = salePostService.fetchMySalePosts(testMember, true, pageable);
         //then
         assertEquals(1, mySalePostList.getTotalElements());
+
+        //when
+        testSalePost.setSold();
+        PagedSalePostInfo mySalePostList2 = salePostService.fetchMySalePosts(testMember, false, pageable);
+        assertEquals(0, mySalePostList2.getTotalElements());
+
     }
 
 }

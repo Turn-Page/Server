@@ -105,10 +105,10 @@ public class SalePostServiceImpl implements SalePostService {
     }
 
     @Override
-    public PagedSalePostInfo fetchMySalePosts(Member loginMember, Pageable pageable) {
+    public PagedSalePostInfo fetchMySalePosts(Member loginMember, boolean total, Pageable pageable) {
         Member member = memberService.findMember(loginMember.getId());
         return salePostConverter.toPagedSalePostList(
-                salePostRepository.findByMemberId(member.getId(),pageable)
+                salePostRepository.findByMemberId(member.getId(), total, pageable)
         );
     }
 

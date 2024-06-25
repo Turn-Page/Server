@@ -25,6 +25,7 @@ public interface SalePostRepository extends JpaRepository<SalePost, Long> {
     @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.member JOIN FETCH sp.book WHERE sp.id = :salePostId")
     Optional<SalePost> findSalePostWithMemberAndBook(@Param("salePostId") Long salePostId);
 
-    @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book WHERE sp.member.id = :memberId ORDER BY sp.createdAt DESC")
-    Page<SalePost> findByMemberId(@Param("memberId") Long memberId, Pageable pageable);
+    @Query("SELECT sp FROM SalePost sp JOIN FETCH sp.book WHERE sp.member.id = :memberId" +
+            " AND (:total = true OR sp.isSold = false) ORDER BY sp.createdAt DESC")
+    Page<SalePost> findByMemberId(@Param("memberId") Long memberId, @Param("total") boolean total, Pageable pageable);
 }
