@@ -44,13 +44,15 @@ public class BookClient {
                 .publisher(item.get("publisher").toString())
                 .publicationDate(item.get("pubDate").toString())
                 .description(item.get("description").toString())
-                .rank(Integer.valueOf(checkRank(Optional.ofNullable(item.get("bestRank"))).toString()))
+                .rank(checkRank(Optional.ofNullable(item.get("bestRank"))))
                 .build();
 
     }
 
-    private Object checkRank(Optional rank) {
-        return rank.orElse(null);
+    private Integer checkRank(Optional rank) {
+        if(rank.isPresent())
+            return Integer.valueOf(rank.get().toString());
+        else return null;
     }
 
     private String changeCoverImageSize(String cover) {
