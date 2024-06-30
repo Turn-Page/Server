@@ -63,6 +63,19 @@ public class ReportController {
         return ResultResponse.of(FRIENDS_REPORT_LIST, reportService.findReportListOfFollowingMembers(member, pageable));
     }
 
+    @GetMapping
+    @Parameters(value = {
+            @Parameter(name = "keyword", description = "검색하고자 하는 문자열을 입력해 주세요. 독후감 제목, 독후감 대상 도서 제목 및 저자명, 독후감 작성자명을 검색합니다."),
+            @Parameter(name = "page", description = "조회할 페이지를 입력해 주세요.(0번부터 시작)"),
+            @Parameter(name = "size", description = "한 페이지에 나타낼 독후감 개수를 입력해주세요.")
+    })
+    @Operation(summary = "독후감 검색 API", description = "특정 문자열을 통해 독후감을 검색하는 API입니다.")
+    ResultResponse<PagedReportInfo> searchReports(@LoginMember Member member,
+                                                  @RequestParam("keyword") String keyword,
+                                                  @PageableDefault @Parameter(hidden = true) Pageable pageable) {
+        return ResultResponse.of(SEARCH_REPORT_LIST, reportService.searchReportList(member, keyword, pageable));
+    }
+
     @GetMapping("/{reportId}")
     @Parameters(value = {
             @Parameter(name = "reportId", description = "조회하고자 하는 독후감의 reportId를 입력해 주세요.")

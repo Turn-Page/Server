@@ -63,11 +63,22 @@ public class ReportServiceImpl implements ReportService {
     public PagedReportInfo findReportListOfFollowingMembers(Member member, Pageable pageable) {
         List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
-                .map(following -> following.getMemberId())
+                .map(memberInfo -> memberInfo.getMemberId())
                 .toList();
 
         Page<Report> reports = reportRepository.findByMemberIdInOrderByCreatedAtDesc(followingIdList, pageable);
         return reportConverter.toPagedReportInfo(reports);
+    }
+
+    @Override
+    public PagedReportInfo searchReportList(Member member, String keyword, Pageable pageable) {
+        List<Long> followingIdList = followService.getFollowingList(member)
+                .stream()
+                .map(following -> following.getMemberId())
+                .toList();
+
+        Page<Report> reportList = reportRepository.searchByTitleOrBookOrWriter(followingIdList, keyword, pageable);
+        return reportConverter.toPagedReportInfo(reportList);
     }
 
     @Override
