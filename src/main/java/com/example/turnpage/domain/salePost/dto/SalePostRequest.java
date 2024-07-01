@@ -18,7 +18,7 @@ public abstract class SalePostRequest {
         @Size(max = 30)
         @NotEmpty
         private String title;
-        @Size(max = 1000)
+        @Size(max = 5000)
         @NotEmpty
         private String description;
         @NotBlank
@@ -36,7 +36,7 @@ public abstract class SalePostRequest {
         @Size(max = 30)
         @NotEmpty
         private String title;
-        @Size(max = 1000)
+        @Size(max = 5000)
         @NotEmpty
         private String description;
         @NotBlank
