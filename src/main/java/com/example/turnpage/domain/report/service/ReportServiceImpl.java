@@ -77,6 +77,8 @@ public class ReportServiceImpl implements ReportService {
                 .map(memberInfo -> memberInfo.getMemberId())
                 .toList();
 
+        keyword = keyword.replace(" ", "");
+
         Page<Report> reportList = reportRepository.searchByTitleOrBookOrWriter(followingIdList, keyword, pageable);
         return reportConverter.toPagedReportInfo(reportList);
     }
