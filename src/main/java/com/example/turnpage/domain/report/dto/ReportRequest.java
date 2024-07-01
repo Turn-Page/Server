@@ -32,7 +32,7 @@ public abstract class ReportRequest {
         @Size(max = 30, message = "독후감 제목은 최대 30자까지 작성할 수 있습니다.")
         @NotBlank
         private String title;
-        @Size(max = 1000, message = "독후감 내용은 최대 1000자까지 작성할 수 있습니다.")
+        @Size(max = 5000, message = "독후감 내용은 최대 5000자까지 작성할 수 있습니다.")
         @NotBlank
         private String content;
         @DateTimeFormat(pattern = "yyyy-MM-dd")

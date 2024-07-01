@@ -12,6 +12,7 @@ public interface ReportService {
     ReportId postReport(Member member, PostReportRequest request);
     PagedReportInfo findMyReportList(Member member, Pageable pageable);
     PagedReportInfo findReportListOfFollowingMembers(Member member, Pageable pageable);
+    PagedReportInfo searchReportList(Member member, String keyword, Pageable pageable);
     DetailedReportInfo getReport(Member member, Long reportId);
     ReportId editReport(Member member, Long reportId, EditReportRequest request);
     ReportId deleteReport(Member member, Long reportId);

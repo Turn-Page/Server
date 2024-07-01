@@ -11,7 +11,6 @@ import java.util.List;
 public interface FollowService {
     FollowId followMember(Member member, FollowMemberRequest request);
     List<MemberInfo> getFollowingList(Member member);
-
     FollowingFollowerList getFollowingFollowerList(Member member);
     FollowId unfollowMember(Member member, Long followerId);
 }
