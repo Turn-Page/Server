@@ -74,7 +74,7 @@ public class ReportServiceImpl implements ReportService {
     public PagedReportInfo searchReportList(Member member, String keyword, Pageable pageable) {
         List<Long> followingIdList = followService.getFollowingList(member)
                 .stream()
-                .map(following -> following.getMemberId())
+                .map(memberInfo -> memberInfo.getMemberId())
                 .toList();
 
         Page<Report> reportList = reportRepository.searchByTitleOrBookOrWriter(followingIdList, keyword, pageable);

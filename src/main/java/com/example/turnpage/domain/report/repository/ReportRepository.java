@@ -22,10 +22,10 @@ public interface ReportRepository extends JpaRepository<Report, Long> {
             + "JOIN FETCH r.member "
             + "WHERE r.member.id IN :followingIdList "
             + "AND ( "
-            + "r.title LIKE %:keyword% "
-            + "OR r.book.title LIKE %:keyword% "
-            + "OR r.book.author LIKE %:keyword% "
-            + "OR r.member.name LIKE %:keyword% ) "
+            + "REPLACE(r.title, ' ', '')  LIKE %:keyword% "
+            + "OR REPLACE(r.book.title, ' ', '') LIKE %:keyword% "
+            + "OR REPLACE(r.book.author, ' ', '') LIKE %:keyword% "
+            + "OR REPLACE(r.member.name, ' ', '') LIKE %:keyword% ) "
             + "ORDER BY r.createdAt DESC ")
     Page<Report> searchByTitleOrBookOrWriter(List<Long> followingIdList, String keyword, Pageable pageable);
 }
