@@ -49,21 +49,19 @@ public class BookServiceImpl implements BookService {
     public void saveBestSeller() {
         //이미 있는 BOOK인지 확인, 있는 BOOK이면 rank update, 없는 BOOK이면 saveBook
         List<SaveBookRequest> bestSellerBooks = bestSellerClient.getBestSellerBooks();
-        List<Long> oldBestSellerItemId =  bookRepository.findAllItemIdByRankingNotNull();
+        bookRepository.updateRankToNull();
+        bookRepository.flush(); // 변경 내용 데이터베이스에 반영
 
-        bestSellerBooks.forEach(book -> {
-            if(oldBestSellerItemId.contains(book.getItemId()))
-                updateRanking(book.getItemId(),book.getRank());
-            else saveBook(book);
+        // 랭킹 업데이트
+        bestSellerBooks.forEach(b -> {
+            Optional<Book> book = findBookByItemId(b.getItemId());
+            if (book.isPresent()) {
+                book.get().updateRanking(b.getRank());
+            } else {
+                saveBook(b); // 존재하지 않는 책은 새로 저장
+            }
         });
-
     }
-
-    private void updateRanking(Long itemId, int rank) {
-        Book book = findBookByItemId(itemId).orElseThrow(() -> new BusinessException(BookErrorCode.BOOK_NOT_FOUND));
-        book.updateRanking(rank);
-    }
-
     @Override
    public PagedBookInfo fetchBestSeller(Pageable pageable) {
         return bookConverter.toPagedBookInfo(

@@ -20,12 +20,10 @@ public interface BookRepository extends JpaRepository<Book, Long> {
     //띄어쓰기 무시하고 검색하기
      @Query("SELECT b FROM Book b WHERE REPLACE(b.title, ' ', '') LIKE %:keyword% OR REPLACE(b.author, ' ', '') LIKE %:keyword%")
     Page<Book> findByTitleOrAuthorContaining(@Param("keyword") String keyword, Pageable pageable);
-    @Modifying
+
+     @Modifying
     @Query("UPDATE Book b SET b.ranking = null WHERE b.ranking IS NOT NULL")
     void updateRankToNull();
-
-    @Query("SELECT b.itemId FROM Book b WHERE b.ranking IS NOT NULL")
-    List<Long> findAllItemIdByRankingNotNull();
 
     Optional<Book> findByItemId(Long itemId);
 }
