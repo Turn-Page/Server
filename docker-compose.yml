@@ -4,6 +4,8 @@ services:
     image: ${DOCKER_USER_NAME}/${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}
     ports:
       - ${SPRING_OUTER_PORT}:${SPRING_INNER_PORT}
+    volumes:
+      - /turnpage/logs:/app/logs
 
   nginx:
     container_name: nginx-dev
