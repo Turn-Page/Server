@@ -19,7 +19,7 @@ public class BookScheduler {
             bookService.saveBestSeller();
             log.info("베스트셀러 저장이 완료되었습니다.");
         } catch (Exception e) {
-            log.info("Batch 시스템이 예기치 않게 종료되었습니다. Message: {}", e.getMessage());
+            log.info("베스트셀러 저장이 예기치 않게 종료되었습니다. Message: {}", e.getMessage());
         }
     }
 }

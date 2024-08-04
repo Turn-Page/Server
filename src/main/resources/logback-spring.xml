@@ -46,8 +46,12 @@
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ROLLING_LOG_FILE"/>
     </logger>
+    <logger name="org.springframework.security" level="DEBUG" additivity="false">
+        <appender-ref ref="STDOUT"/>
+        <appender-ref ref="ROLLING_LOG_FILE"/>
+    </logger>
 
-    <root level="INFO" additivity = "false">
+    <root level="INFO">
         <appender-ref ref="STDOUT"/>
         <appender-ref ref="ROLLING_LOG_FILE"/>
     </root>
