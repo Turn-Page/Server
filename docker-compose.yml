@@ -5,7 +5,7 @@ services:
     ports:
       - ${SPRING_OUTER_PORT}:${SPRING_INNER_PORT}
     volumes:
-      - /turnpage/logs:/app/logs
+      - ./turnpage/logs:/app/logs
 
   nginx:
     container_name: nginx-dev
