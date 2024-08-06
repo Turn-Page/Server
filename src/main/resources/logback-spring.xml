@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
-    <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS} %magenta([%thread]) %highlight([%-3level]) %logger{5} - %msg %n" />
-    <property name="ROLLING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS}  %logger{5} - %msg %n" />
-    <property name="LOG_NAME_PATTERN" value="./logs/turnpage-%d{yyyy-MM-dd}.%i.log" />
+    <property name="CONSOLE_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS, Asia/Seoul} %magenta([%thread]) %highlight([%-3level]) %logger{5} - %msg %n" />
+    <property name="ROLLING_PATTERN" value="%d{yyyy-MM-dd HH:mm:ss.SSS, Asia/Seoul}  %logger{5} - %msg %n" />
+    <property name="LOG_NAME_PATTERN" value="./logs/turnpage-%d{yyyy-MM-dd, Asia/Seoul}.%i.log" />
     <property name="MAX_FILE_SIZE" value="10MB" />
     <property name="TOTAL_SIZE" value="310MB" />
     <property name="MAX_HISTORY" value="31" />

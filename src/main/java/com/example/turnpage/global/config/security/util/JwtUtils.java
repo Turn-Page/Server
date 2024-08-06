@@ -4,6 +4,7 @@ import com.example.turnpage.global.config.security.service.MemberDetails;
 import com.example.turnpage.global.config.security.service.MemberDetailsService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -21,6 +22,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Component
 public class JwtUtils {
     private final SecretKey secretKey;
@@ -33,7 +35,7 @@ public class JwtUtils {
 
     JwtUtils(@Value("${jwt.secret}") String secret, MemberDetailsService memberDetailsService) {
         this.memberDetailsService = memberDetailsService;
-        System.out.println("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
+        log.info("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SIGNATURE_ALGORITHM);
     }
 
