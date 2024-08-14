@@ -31,7 +31,7 @@ public class LoggingAspect {
 
         for (Object arg : joinPoint.getArgs()) {
             if (arg != null) {
-                sb.append("PARAM =>");
+                sb.append("PARAM => ");
                 sb.append(arg).append("\n");
             } else {
                 sb.append("NO PARAM\n");
