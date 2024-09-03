@@ -2,8 +2,9 @@ package com.example.turnpage.global.config.security.util;
 
 import com.example.turnpage.global.config.security.service.MemberDetails;
 import com.example.turnpage.global.config.security.service.MemberDetailsService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.example.turnpage.global.error.BusinessException;
+import com.example.turnpage.global.error.code.AuthErrorCode;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -58,13 +59,20 @@ public class JwtUtils {
                 .get("role", String.class);
     }
 
-    public Boolean isExpired(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration().before(new Date());
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            return true;
+        } catch (SecurityException | MalformedJwtException e) {
+            throw new BusinessException(AuthErrorCode.INVALID_ACCESS_TOKEN);
+        } catch (ExpiredJwtException e) {
+            throw new BusinessException(AuthErrorCode.EXPIRED_MEMBER_JWT);
+        } catch (UnsupportedJwtException e) {
+            throw new BusinessException(AuthErrorCode.UNSUPPORTED_JWT);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(AuthErrorCode.EMPTY_JWT);
+        }
     }
 
     public String createJwt(String email, String role, Long seconds) {
