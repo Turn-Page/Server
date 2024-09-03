@@ -32,14 +32,13 @@ public class JwtUtils {
     // "HMACSHA256" 알고리즘명을 저장
     private static final String SIGNATURE_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private static final String PAYLOAD_ROLE_KEY = "role";
-    private static final String PAYLOAD_MEMBER_ID_KEY = "memberId";
+
 
     JwtUtils(@Value("${jwt.secret}") String secret, MemberDetailsService memberDetailsService) {
         this.memberDetailsService = memberDetailsService;
         log.info("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SIGNATURE_ALGORITHM);
     }
-
 
     public String getEmail(String token) {
         return Jwts.parser()

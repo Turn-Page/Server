@@ -3,10 +3,10 @@ package com.example.turnpage.global.config;
 import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
+import com.example.turnpage.global.config.security.filter.CustomAuthenticationEntryPoint;
 import com.example.turnpage.global.config.security.filter.CustomOAuth2LoginAuthenticationFilter;
 import com.example.turnpage.global.config.security.filter.JwtAuthenticationFilter;
 import com.example.turnpage.global.config.security.filter.JwtExceptionFilter;
-import com.example.turnpage.global.config.security.handler.CustomAccessDeniedHandler;
 import com.example.turnpage.global.config.security.handler.OAuth2LoginSuccessHandler;
 import com.example.turnpage.global.config.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.turnpage.global.config.security.service.CustomOAuth2UserService;
@@ -38,7 +38,7 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final RefreshTokenService refreshTokenService;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
 
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
@@ -95,7 +95,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
                                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))

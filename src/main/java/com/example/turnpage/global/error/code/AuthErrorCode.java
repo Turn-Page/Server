@@ -15,6 +15,7 @@ public enum AuthErrorCode implements ErrorCode {
     INVALID_ACCESS_TOKEN(400, "AUTH005", "유효하지 않은 ACCESS TOKEN입니다."),
     INVALID_REFRESH_TOKEN(400, "AUTH006", "유효하지 않은 REFRESH TOKEN입니다."),
     FAILED_SOCIAL_LOGIN(500, "AUTH007", "소셜 로그인에 실패하였습니다."),
+    NO_AUTHENTICATION(401, "AUTH008", "인증이 필요합니다."),
     ;
 
     private final int status;
