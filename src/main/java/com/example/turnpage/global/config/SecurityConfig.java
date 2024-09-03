@@ -5,13 +5,13 @@ import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
 import com.example.turnpage.global.config.security.filter.CustomOAuth2LoginAuthenticationFilter;
 import com.example.turnpage.global.config.security.filter.JwtAuthenticationFilter;
+import com.example.turnpage.global.config.security.filter.JwtExceptionFilter;
 import com.example.turnpage.global.config.security.handler.CustomAccessDeniedHandler;
 import com.example.turnpage.global.config.security.handler.OAuth2LoginSuccessHandler;
 import com.example.turnpage.global.config.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.turnpage.global.config.security.service.CustomOAuth2UserService;
 import com.example.turnpage.global.config.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -105,7 +105,9 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                 )
                 .addFilterAt(customOAuth2LoginAuthenticationFilter(authenticationManager), OAuth2LoginAuthenticationFilter.class)
-                .addFilterAfter(new JwtAuthenticationFilter(jwtUtils), OAuth2LoginAuthenticationFilter.class);
+                .addFilterAfter(new JwtAuthenticationFilter(jwtUtils), OAuth2LoginAuthenticationFilter.class)
+                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+        ;
 
 
         return http.build();
