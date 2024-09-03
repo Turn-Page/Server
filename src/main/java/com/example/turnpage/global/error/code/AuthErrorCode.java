@@ -3,7 +3,6 @@ package com.example.turnpage.global.error.code;
 import com.example.turnpage.global.error.ErrorCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 
 @Getter
 @RequiredArgsConstructor

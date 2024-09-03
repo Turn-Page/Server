@@ -42,7 +42,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             Authentication authentication = jwtUtils.getAuthentication(jwt);
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
+
+        filterChain.doFilter(request, response);
     }
+
     private void validateJwtAuthorizationType(String authorization) {
         if (!authorization.startsWith(AUTHORIZATION_TYPE))
             throw new BusinessException(AuthErrorCode.UNSUPPORTED_JWT);
