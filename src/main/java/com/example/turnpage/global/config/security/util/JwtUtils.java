@@ -67,7 +67,7 @@ public class JwtUtils {
             throw new BusinessException(AuthErrorCode.INVALID_ACCESS_TOKEN);
         } catch (ExpiredJwtException e) {
             throw new BusinessException(AuthErrorCode.EXPIRED_MEMBER_JWT);
-        } catch (UnsupportedJwtException e) {
+        } catch (UnsupportedJwtException | SignatureException e) {
             throw new BusinessException(AuthErrorCode.UNSUPPORTED_JWT);
         } catch (IllegalArgumentException e) {
             throw new BusinessException(AuthErrorCode.EMPTY_JWT);
