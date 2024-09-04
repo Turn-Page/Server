@@ -39,6 +39,8 @@ public class SecurityConfig {
     private final CustomOAuth2UserService customOAuth2UserService;
     private final RefreshTokenService refreshTokenService;
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
@@ -105,11 +107,9 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                 )
                 .addFilterAt(customOAuth2LoginAuthenticationFilter(authenticationManager), OAuth2LoginAuthenticationFilter.class)
-                .addFilterAfter(new JwtAuthenticationFilter(jwtUtils), OAuth2LoginAuthenticationFilter.class)
-                .addFilterBefore(new JwtExceptionFilter(), JwtAuthenticationFilter.class)
+                .addFilterAfter(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
         ;
-
-
         return http.build();
     }
 
