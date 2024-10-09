@@ -3,15 +3,15 @@ package com.example.turnpage.global.config;
 import com.example.turnpage.domain.member.converter.MemberConverter;
 import com.example.turnpage.domain.member.repository.MemberRepository;
 import com.example.turnpage.domain.member.service.redis.RefreshTokenService;
+import com.example.turnpage.global.config.security.filter.CustomAuthenticationEntryPoint;
 import com.example.turnpage.global.config.security.filter.CustomOAuth2LoginAuthenticationFilter;
 import com.example.turnpage.global.config.security.filter.JwtAuthenticationFilter;
-import com.example.turnpage.global.config.security.handler.CustomAccessDeniedHandler;
+import com.example.turnpage.global.config.security.filter.JwtExceptionFilter;
 import com.example.turnpage.global.config.security.handler.OAuth2LoginSuccessHandler;
 import com.example.turnpage.global.config.security.repository.OAuth2AuthorizationRequestBasedOnCookieRepository;
 import com.example.turnpage.global.config.security.service.CustomOAuth2UserService;
 import com.example.turnpage.global.config.security.util.JwtUtils;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -38,7 +38,9 @@ public class SecurityConfig {
     private final MemberRepository memberRepository;
     private final CustomOAuth2UserService customOAuth2UserService;
     private final RefreshTokenService refreshTokenService;
-    private final CustomAccessDeniedHandler customAccessDeniedHandler;
+    private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtExceptionFilter jwtExceptionFilter;
 
     private final ClientRegistrationRepository clientRegistrationRepository;
     private final OAuth2AuthorizedClientRepository oAuth2AuthorizedClientRepository;
@@ -95,7 +97,7 @@ public class SecurityConfig {
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
-                .exceptionHandling(exception -> exception.accessDeniedHandler(customAccessDeniedHandler))
+                .exceptionHandling(exception -> exception.authenticationEntryPoint(customAuthenticationEntryPoint))
                 .oauth2Login(oauth2 -> oauth2
                         .authorizationEndpoint(endpoint -> endpoint
                                 .authorizationRequestRepository(oAuth2AuthorizationRequestBasedOnCookieRepository()))
@@ -105,9 +107,9 @@ public class SecurityConfig {
                         .loginPage("/auth/login")
                 )
                 .addFilterAt(customOAuth2LoginAuthenticationFilter(authenticationManager), OAuth2LoginAuthenticationFilter.class)
-                .addFilterAfter(new JwtAuthenticationFilter(jwtUtils), OAuth2LoginAuthenticationFilter.class);
-
-
+                .addFilterAfter(jwtAuthenticationFilter, OAuth2LoginAuthenticationFilter.class)
+                .addFilterBefore(jwtExceptionFilter, JwtAuthenticationFilter.class)
+        ;
         return http.build();
     }
 

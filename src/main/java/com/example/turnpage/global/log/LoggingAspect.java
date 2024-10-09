@@ -42,13 +42,13 @@ public class LoggingAspect {
         Object returnObj = joinPoint.proceed();
 
         long executionTime = System.currentTimeMillis() - startTime;
-        sb.append(String.format("RESULT: %s%n", returnObj.getClass().getSimpleName()));
+        if(returnObj != null)
+            sb.append(String.format("RESULT: %s%n", returnObj.getClass().getSimpleName()));
         sb.append(String.format("EXECUTION TIME: %d ms ===", executionTime));
 
         log.info(sb.toString());
         return returnObj;
     }
-
 
     private Method getMethod(ProceedingJoinPoint proceedingJoinPoint) {
         MethodSignature signature = (MethodSignature) proceedingJoinPoint.getSignature();

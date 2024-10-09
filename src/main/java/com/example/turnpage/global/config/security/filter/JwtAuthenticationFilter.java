@@ -1,10 +1,13 @@
 package com.example.turnpage.global.config.security.filter;
 
 import com.example.turnpage.global.config.security.util.JwtUtils;
+import com.example.turnpage.global.error.BusinessException;
+import com.example.turnpage.global.error.code.AuthErrorCode;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -12,46 +15,42 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Base64;
 
 @Slf4j
+@Component
+@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String AUTHORIZATION_TYPE = "Bearer ";
     private final JwtUtils jwtUtils;
-    public JwtAuthenticationFilter(JwtUtils jwtUtils) {
-        this.jwtUtils = jwtUtils;
-    }
+
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
 
         String authorization = request.getHeader("Authorization");
 
-        if (!validateJwtIsPresent(authorization)) {
+        //token이 없으면 anonymous User
+        if (authorization == null) {
             filterChain.doFilter(request, response);
             return;
         }
 
+        validateJwtAuthorizationType(authorization);
         String jwt = authorization.substring(AUTHORIZATION_TYPE.length());
-        System.out.println("jwt: " + jwt);
-        if (jwtUtils.isExpired(jwt)) {
-            log.info("토큰이 만료되었습니다.");
-            filterChain.doFilter(request, response);
-            return;
+
+        //token 검증이 완료된 경우에만 authentication을 부여
+        if (jwtUtils.validateToken(jwt)) {
+            System.out.println("jwt: " + jwt);
+            Authentication authentication = jwtUtils.getAuthentication(jwt);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 
-        Authentication authentication = jwtUtils.getAuthentication(jwt);
-
-        SecurityContextHolder.getContext().setAuthentication(authentication);
         filterChain.doFilter(request, response);
     }
 
-    private boolean validateJwtIsPresent(String authorization) {
-        if (authorization == null || !authorization.startsWith(AUTHORIZATION_TYPE)) {
-            log.info("토큰이 존재하지 않거나, 인증 타입이 Bearer가 아닙니다.");
-            return false;
-        }
-
-        return true;
+    private void validateJwtAuthorizationType(String authorization) {
+        if (!authorization.startsWith(AUTHORIZATION_TYPE))
+            throw new BusinessException(AuthErrorCode.UNSUPPORTED_JWT);
     }
+
 }

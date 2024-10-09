@@ -2,8 +2,9 @@ package com.example.turnpage.global.config.security.util;
 
 import com.example.turnpage.global.config.security.service.MemberDetails;
 import com.example.turnpage.global.config.security.service.MemberDetailsService;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
+import com.example.turnpage.global.error.BusinessException;
+import com.example.turnpage.global.error.code.AuthErrorCode;
+import io.jsonwebtoken.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,14 +32,13 @@ public class JwtUtils {
     // "HMACSHA256" 알고리즘명을 저장
     private static final String SIGNATURE_ALGORITHM = Jwts.SIG.HS256.key().build().getAlgorithm();
     private static final String PAYLOAD_ROLE_KEY = "role";
-    private static final String PAYLOAD_MEMBER_ID_KEY = "memberId";
+
 
     JwtUtils(@Value("${jwt.secret}") String secret, MemberDetailsService memberDetailsService) {
         this.memberDetailsService = memberDetailsService;
         log.info("===키 바이트 길이: " + secret.getBytes(StandardCharsets.UTF_8).length + "===");
         this.secretKey = new SecretKeySpec(secret.getBytes(StandardCharsets.UTF_8), SIGNATURE_ALGORITHM);
     }
-
 
     public String getEmail(String token) {
         return Jwts.parser()
@@ -58,13 +58,20 @@ public class JwtUtils {
                 .get("role", String.class);
     }
 
-    public Boolean isExpired(String token) {
-        return Jwts.parser()
-                .verifyWith(secretKey)
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getExpiration().before(new Date());
+
+    public boolean validateToken(String token) {
+        try {
+            Jwts.parser().verifyWith(secretKey).build().parseSignedClaims(token);
+            return true;
+        } catch (SecurityException | MalformedJwtException e) {
+            throw new BusinessException(AuthErrorCode.INVALID_ACCESS_TOKEN);
+        } catch (ExpiredJwtException e) {
+            throw new BusinessException(AuthErrorCode.EXPIRED_MEMBER_JWT);
+        } catch (UnsupportedJwtException | SignatureException e) {
+            throw new BusinessException(AuthErrorCode.UNSUPPORTED_JWT);
+        } catch (IllegalArgumentException e) {
+            throw new BusinessException(AuthErrorCode.EMPTY_JWT);
+        }
     }
 
     public String createJwt(String email, String role, Long seconds) {
